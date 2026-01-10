@@ -51,15 +51,13 @@ export default function BudgetItemCard({ item, onEdit, onDelete, onTogglePaid }:
             >
               <Edit size={16} className="text-pink-primary" />
             </button>
-            {item.is_custom && (
-              <button
-                onClick={() => onDelete(item.id)}
-                className="p-2 hover:bg-red-50 rounded-lg transition-colors"
-                aria-label="Delete budget item"
-              >
-                <Trash2 size={16} className="text-red-500" />
-              </button>
-            )}
+            <button
+              onClick={() => onDelete(item.id)}
+              className="p-2 hover:bg-red-50 rounded-lg transition-colors"
+              aria-label="Delete budget item"
+            >
+              <Trash2 size={16} className="text-red-500" />
+            </button>
           </div>
         </div>
 

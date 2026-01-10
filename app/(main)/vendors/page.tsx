@@ -14,12 +14,13 @@ export default function VendorsPage() {
   
   // Query wedding and vendors
   const { data, isLoading: dataLoading, error } = db.useQuery({
-    weddings: {},
-    vendors: {},
+    weddings: {
+      vendors: {},
+    },
   })
   
   const wedding = data?.weddings?.[0]
-  const vendors = data?.vendors || []
+  const vendors = wedding?.vendors || []
   
   const [searchQuery, setSearchQuery] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -71,15 +72,16 @@ export default function VendorsPage() {
         // Add new vendor
         const vendorId = id()
         await db.transact([
-          db.tx.vendors[vendorId].update({
-            wedding_id: wedding.id,
-            vendor_name: vendorData.vendor_name || '',
-            contact_name: vendorData.contact_name || '',
-            email: vendorData.email || '',
-            phone: vendorData.phone || '',
-            website: vendorData.website || '',
-            notes: vendorData.notes || '',
-          }),
+          db.tx.vendors[vendorId]
+            .update({
+              vendor_name: vendorData.vendor_name || '',
+              contact_name: vendorData.contact_name || '',
+              email: vendorData.email || '',
+              phone: vendorData.phone || '',
+              website: vendorData.website || '',
+              notes: vendorData.notes || '',
+            })
+            .link({ wedding: wedding.id }),
         ])
       }
     } catch (error) {

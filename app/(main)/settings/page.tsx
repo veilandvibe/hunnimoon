@@ -6,7 +6,7 @@ import Card from '@/components/ui/Card'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import db from '@/lib/instant'
-import { Copy, Check, Calendar, Link as LinkIcon, User, LogOut, Loader2 } from 'lucide-react'
+import { Copy, Check, Calendar, User, LogOut, Loader2 } from 'lucide-react'
 
 export default function SettingsPage() {
   const router = useRouter()
@@ -14,12 +14,13 @@ export default function SettingsPage() {
   
   // Query wedding data
   const { data, isLoading: dataLoading, error } = db.useQuery({
-    weddings: {},
-    rsvpSettings: {},
+    weddings: {
+      rsvpSettings: {},
+    },
   })
   
   const wedding = data?.weddings?.[0]
-  const rsvpSettings = data?.rsvpSettings?.[0]
+  const rsvpSettings = wedding?.rsvpSettings
   
   const [weddingDetails, setWeddingDetails] = useState({
     partner1_name: '',
@@ -27,7 +28,6 @@ export default function SettingsPage() {
     wedding_date: '',
     wedding_slug: '',
   })
-  const [copied, setCopied] = useState(false)
   const [signingOut, setSigningOut] = useState(false)
   const [saving, setSaving] = useState(false)
   
@@ -42,14 +42,6 @@ export default function SettingsPage() {
       })
     }
   }, [wedding])
-
-  const rsvpUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/rsvp/${weddingDetails.wedding_slug}`
-
-  const handleCopyUrl = async () => {
-    await navigator.clipboard.writeText(rsvpUrl)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
 
   const handleSaveChanges = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -220,42 +212,6 @@ export default function SettingsPage() {
             )}
           </Button>
         </form>
-      </Card>
-
-      {/* RSVP URL */}
-      <Card>
-        <div className="space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-pink-primary/10 rounded-xl flex items-center justify-center">
-              <LinkIcon size={20} className="text-pink-primary" />
-            </div>
-            <h2 className="text-xl font-black text-pink-primary">
-              Your RSVP Link
-            </h2>
-          </div>
-
-          <p className="text-sm text-pink-primary/70">
-            Share this link with your guests so they can RSVP online
-          </p>
-
-          <div className="flex gap-2">
-            <Input
-              value={rsvpUrl}
-              readOnly
-              className="flex-1"
-            />
-            <Button onClick={handleCopyUrl} variant="outline">
-              {copied ? <Check size={20} /> : <Copy size={20} />}
-              {copied ? 'Copied!' : 'Copy'}
-            </Button>
-          </div>
-
-          <div className="p-4 bg-pink-light rounded-xl">
-            <p className="text-sm text-pink-primary">
-              💡 <strong>Tip:</strong> You can customize your slug above to make it more memorable, like "sarah-mike-wedding" or "smith-jones-2026"
-            </p>
-          </div>
-        </div>
       </Card>
 
       {/* Account */}

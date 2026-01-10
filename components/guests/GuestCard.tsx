@@ -2,15 +2,16 @@ import Card from '../ui/Card'
 import Badge from '../ui/Badge'
 import Button from '../ui/Button'
 import { Guest } from '@/lib/dummyData'
-import { Mail, Phone, Edit, Trash2, Users } from 'lucide-react'
+import { Mail, Phone, Edit, Trash2, Users, Eye } from 'lucide-react'
 
 interface GuestCardProps {
   guest: Guest
   onEdit: (guest: Guest) => void
   onDelete: (guestId: string) => void
+  onView: (guest: Guest) => void
 }
 
-export default function GuestCard({ guest, onEdit, onDelete }: GuestCardProps) {
+export default function GuestCard({ guest, onEdit, onDelete, onView }: GuestCardProps) {
   const getStatusVariant = (status: string) => {
     switch (status) {
       case 'Yes':
@@ -41,6 +42,13 @@ export default function GuestCard({ guest, onEdit, onDelete }: GuestCardProps) {
             </div>
           </div>
           <div className="flex gap-1">
+            <button
+              onClick={() => onView(guest)}
+              className="p-2 hover:bg-blue-50 rounded-lg transition-colors"
+              aria-label="View guest details"
+            >
+              <Eye size={16} className="text-blue-600" />
+            </button>
             <button
               onClick={() => onEdit(guest)}
               className="p-2 hover:bg-pink-light rounded-lg transition-colors"

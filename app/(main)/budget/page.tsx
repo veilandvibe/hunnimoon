@@ -14,12 +14,13 @@ export default function BudgetPage() {
   
   // Query wedding and budget items
   const { data, isLoading: dataLoading, error } = db.useQuery({
-    weddings: {},
-    budgetItems: {},
+    weddings: {
+      budgetItems: {},
+    },
   })
   
   const wedding = data?.weddings?.[0]
-  const budgetItems = data?.budgetItems || []
+  const budgetItems = wedding?.budgetItems || []
   
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<any | null>(null)
@@ -32,8 +33,8 @@ export default function BudgetPage() {
   const allocated = activeItems.reduce((sum, item) => sum + item.estimated_cost, 0)
   const actualSpent = activeItems.reduce((sum, item) => sum + item.actual_cost, 0)
   const unallocated = totalBudget - allocated
-  const percentSpent = allocated > 0 ? Math.round((actualSpent / allocated) * 100) : 0
-  const isOverBudget = actualSpent > allocated
+  const percentSpent = totalBudget > 0 ? Math.round((actualSpent / totalBudget) * 100) : 0
+  const isOverBudget = actualSpent > totalBudget
   const isOverAllocated = allocated > totalBudget
 
   const formatCurrency = (amount: number) => {
@@ -315,7 +316,7 @@ export default function BudgetPage() {
               Spending Progress
             </h3>
             <span className="text-sm text-pink-primary/60">
-              {percentSpent}% of allocated spent
+              {percentSpent}% of total budget spent
             </span>
           </div>
           <div className="h-4 bg-pink-light rounded-full overflow-hidden">
@@ -327,7 +328,7 @@ export default function BudgetPage() {
             />
           </div>
           <div className="text-sm text-center text-pink-primary/60">
-            {formatCurrency(actualSpent)} of {formatCurrency(allocated)} allocated
+            {formatCurrency(actualSpent)} of {formatCurrency(totalBudget)} total budget
           </div>
         </div>
       </Card>

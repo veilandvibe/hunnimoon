@@ -97,13 +97,13 @@ export default function BudgetFormModal({ isOpen, onClose, onSave, editingItem }
         )}
 
         {(isCustom || editingItem) && (
-          <Input
-            label="Category Name"
-            required
-            value={formData.category_name}
-            onChange={(e) => setFormData({ ...formData, category_name: e.target.value })}
-            placeholder="e.g., Venue, Catering, Photography"
-          />
+        <Input
+          label="Category Name"
+          required
+          value={formData.category_name}
+          onChange={(e) => setFormData({ ...formData, category_name: e.target.value })}
+          placeholder="e.g., Venue, Catering, Photography"
+        />
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

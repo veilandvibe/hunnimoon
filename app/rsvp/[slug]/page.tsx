@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useParams } from 'next/navigation'
 import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
+import Select from '@/components/ui/Select'
 import Textarea from '@/components/ui/Textarea'
 import Card from '@/components/ui/Card'
 import db from '@/lib/instant'
@@ -22,25 +23,38 @@ export default function RSVPPage() {
           wedding_slug: slug,
         },
       },
+      guests: {},
+      rsvpSettings: {},
     },
-    guests: {},
-    rsvpSettings: {},
   })
 
   const wedding = data?.weddings?.[0]
-  const allGuests = data?.guests || []
-  const rsvpSettings = data?.rsvpSettings?.[0]
-  
-  // Filter guests for this wedding
-  const weddingGuests = wedding ? allGuests.filter((g: any) => g.wedding_id === wedding.id) : []
+  const weddingGuests = wedding?.guests || []
+  const rsvpSettings = wedding?.rsvpSettings
+
+  // Debug logging
+  console.log('RSVP Form Debug:', {
+    wedding: wedding?.id,
+    hasRsvpSettings: !!rsvpSettings,
+    rsvpSettings,
+    shuttleAvailable: rsvpSettings?.shuttle_service_available,
+    showMeal: rsvpSettings?.show_meal_choice,
+    showSong: rsvpSettings?.show_song_request,
+    showAccommodation: rsvpSettings?.show_accommodation_question,
+  })
 
   const [guestName, setGuestName] = useState('')
   const [suggestions, setSuggestions] = useState<any[]>([])
   const [selectedGuest, setSelectedGuest] = useState<any | null>(null)
+  const [householdMembers, setHouseholdMembers] = useState<any[]>([])
+  const [householdResponses, setHouseholdResponses] = useState<{[key: string]: any}>({})
   const [rsvpStatus, setRsvpStatus] = useState<'Yes' | 'No' | null>(null)
   const [plusOneName, setPlusOneName] = useState('')
   const [mealChoice, setMealChoice] = useState('')
   const [dietaryNotes, setDietaryNotes] = useState('')
+  const [shuttleNeeded, setShuttleNeeded] = useState<boolean | null>(null)
+  const [songRequest, setSongRequest] = useState('')
+  const [needsAccommodation, setNeedsAccommodation] = useState<boolean | null>(null)
   const [notes, setNotes] = useState('')
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -76,6 +90,15 @@ export default function RSVPPage() {
   // Handle guest search
   const handleGuestSearch = (value: string) => {
     setGuestName(value)
+    
+    // Clear selected guest if they're typing something different
+    if (selectedGuest && value !== selectedGuest.full_name) {
+      setSelectedGuest(null)
+      setPlusOneName('')
+      setMealChoice('')
+      setDietaryNotes('')
+    }
+    
     if (value.length > 2) {
       const matches = weddingGuests.filter((guest: any) =>
         guest.full_name.toLowerCase().includes(value.toLowerCase())
@@ -90,21 +113,88 @@ export default function RSVPPage() {
     setSelectedGuest(guest)
     setGuestName(guest.full_name)
     setSuggestions([])
-    setRsvpStatus(guest.rsvp_status === 'Pending' ? null : guest.rsvp_status)
-    setPlusOneName(guest.plus_one_name || '')
-    setMealChoice(guest.meal_choice || '')
-    setDietaryNotes(guest.dietary_notes || '')
+    
+    // Check if guest has a household
+    if (guest.household_id && guest.household_id.trim()) {
+      // Find all household members
+      const members = weddingGuests.filter(
+        (g: any) => g.household_id === guest.household_id
+      )
+      setHouseholdMembers(members)
+      
+      // Initialize responses for each household member
+      const initialResponses: {[key: string]: any} = {}
+      members.forEach((member: any) => {
+        initialResponses[member.id] = {
+          rsvp_status: member.rsvp_status === 'Pending' ? null : member.rsvp_status,
+          meal_choice: member.meal_choice || '',
+          dietary_notes: member.dietary_notes || '',
+          shuttle_needed: member.shuttle_needed ?? null,
+          song_request: member.song_request || '',
+          needs_accommodation: member.needs_accommodation ?? null,
+          rsvp_notes: member.rsvp_notes || '',
+        }
+      })
+      setHouseholdResponses(initialResponses)
+    } else {
+      // Single guest (no household)
+      setHouseholdMembers([])
+      setHouseholdResponses({})
+      setRsvpStatus(guest.rsvp_status === 'Pending' ? null : guest.rsvp_status)
+      setPlusOneName(guest.plus_one_name || '')
+      setMealChoice(guest.meal_choice || '')
+      setDietaryNotes(guest.dietary_notes || '')
+      setShuttleNeeded(guest.shuttle_needed ?? null)
+      setSongRequest(guest.song_request || '')
+      setNeedsAccommodation(guest.needs_accommodation ?? null)
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!rsvpStatus || !wedding) return
+    if (!wedding) return
+
+    // Validate: If household, check that at least one member has responded
+    if (householdMembers.length > 0) {
+      const hasResponses = Object.values(householdResponses).some(
+        (response: any) => response.rsvp_status !== null
+      )
+      if (!hasResponses) {
+        alert('Please RSVP for at least one household member')
+        return
+      }
+    } else {
+      // Single guest validation
+      if (!rsvpStatus) {
+        alert('Please select if you will be attending')
+        return
+      }
+    }
 
     setIsSubmitting(true)
 
     try {
-      if (selectedGuest) {
-        // Update existing guest
+      if (householdMembers.length > 0) {
+        // Multi-member household RSVP
+        const transactions = householdMembers
+          .filter((member: any) => householdResponses[member.id]?.rsvp_status !== null)
+          .map((member: any) => {
+            const response = householdResponses[member.id]
+            return db.tx.guests[member.id].update({
+              rsvp_status: response.rsvp_status,
+              meal_choice: response.meal_choice || '',
+              dietary_notes: response.dietary_notes || '',
+              shuttle_needed: response.shuttle_needed ?? false,
+              song_request: response.song_request || '',
+              needs_accommodation: response.needs_accommodation ?? false,
+              rsvp_notes: response.rsvp_notes || '',
+              last_updated: Date.now(),
+            })
+          })
+        
+        await db.transact(transactions)
+      } else if (selectedGuest) {
+        // Single existing guest
         await db.transact([
           db.tx.guests[selectedGuest.id].update({
             rsvp_status: rsvpStatus,
@@ -112,6 +202,9 @@ export default function RSVPPage() {
             meal_choice: mealChoice,
             dietary_notes: dietaryNotes,
             rsvp_notes: notes,
+            shuttle_needed: shuttleNeeded ?? false,
+            song_request: songRequest,
+            needs_accommodation: needsAccommodation ?? false,
             last_updated: Date.now(),
           }),
         ])
@@ -119,28 +212,31 @@ export default function RSVPPage() {
         // Create new guest from RSVP
         const guestId = id()
         await db.transact([
-          db.tx.guests[guestId].update({
-            wedding_id: wedding.id,
-            full_name: guestName,
-            email: '',
-            phone: '',
-            side: 'Unknown',
-            plus_one_allowed: false,
-            plus_one_name: plusOneName,
-            invite_sent: false,
-            rsvp_status: rsvpStatus,
-            meal_choice: mealChoice,
-            dietary_notes: dietaryNotes,
-            rsvp_notes: notes,
-            shuttle_needed: false,
-            address_street: '',
-            address_city: '',
-            address_state: '',
-            address_postal: '',
-            address_country: '',
-            source: 'RSVP',
-            last_updated: Date.now(),
-          }),
+          db.tx.guests[guestId]
+            .update({
+              full_name: guestName,
+              email: '',
+              phone: '',
+              side: 'Unknown',
+              plus_one_allowed: false,
+              plus_one_name: plusOneName,
+              invite_sent: false,
+              rsvp_status: rsvpStatus,
+              meal_choice: mealChoice,
+              dietary_notes: dietaryNotes,
+              rsvp_notes: notes,
+              shuttle_needed: shuttleNeeded ?? false,
+              song_request: songRequest,
+              needs_accommodation: needsAccommodation ?? false,
+              address_street: '',
+              address_city: '',
+              address_state: '',
+              address_postal: '',
+              address_country: '',
+              source: 'RSVP Submission',
+              last_updated: Date.now(),
+            })
+            .link({ wedding: wedding.id }),
         ])
       }
 
@@ -242,43 +338,274 @@ export default function RSVPPage() {
                       className="w-full px-4 py-3 text-left hover:bg-pink-light transition-colors border-b border-pink-primary/10 last:border-b-0"
                     >
                       <div className="font-medium text-pink-primary">{guest.full_name}</div>
-                      <div className="text-xs text-pink-primary/60">{guest.email}</div>
                     </button>
                   ))}
                 </div>
               )}
             </div>
 
-            {/* RSVP Status */}
-            <div>
-              <label className="block text-sm font-medium text-pink-primary mb-3">
-                Will you be attending? <span className="text-red-500">*</span>
-              </label>
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setRsvpStatus('Yes')}
-                  className={`py-4 rounded-xl font-bold transition-all ${
-                    rsvpStatus === 'Yes'
-                      ? 'bg-pink-primary text-white'
-                      : 'bg-white border-2 border-pink-primary/20 text-pink-primary hover:border-pink-primary'
-                  }`}
-                >
-                  ✓ Yes, I'll be there!
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setRsvpStatus('No')}
-                  className={`py-4 rounded-xl font-bold transition-all ${
-                    rsvpStatus === 'No'
-                      ? 'bg-pink-primary text-white'
-                      : 'bg-white border-2 border-pink-primary/20 text-pink-primary hover:border-pink-primary'
-                  }`}
-                >
-                  ✗ Sorry, can't make it
-                </button>
+            {/* RSVP Status or Household Members */}
+            {householdMembers.length > 0 ? (
+              /* Household RSVP */
+              <div className="space-y-6">
+                <div className="p-4 bg-pink-light rounded-xl">
+                  <p className="text-sm font-bold text-pink-primary mb-1">
+                    Family RSVP
+                  </p>
+                  <p className="text-xs text-pink-primary/70">
+                    Please RSVP for each family member individually
+                  </p>
+                </div>
+
+                {householdMembers.map((member: any, index: number) => (
+                  <div key={member.id} className="border-2 border-pink-primary/20 rounded-xl p-4 space-y-4">
+                    <h3 className="text-lg font-bold text-pink-primary">
+                      {member.full_name}
+                    </h3>
+
+                    {/* RSVP Status for this member */}
+                    <div>
+                      <label className="block text-sm font-medium text-pink-primary mb-3">
+                        Will they be attending?
+                      </label>
+                      <div className="grid grid-cols-2 gap-3">
+                        <button
+                          type="button"
+                          onClick={() => setHouseholdResponses({
+                            ...householdResponses,
+                            [member.id]: {
+                              ...householdResponses[member.id],
+                              rsvp_status: 'Yes',
+                            }
+                          })}
+                          className={`py-3 rounded-xl font-medium transition-all ${
+                            householdResponses[member.id]?.rsvp_status === 'Yes'
+                              ? 'bg-pink-primary text-white'
+                              : 'bg-white border-2 border-pink-primary/20 text-pink-primary hover:border-pink-primary'
+                          }`}
+                        >
+                          ✓ Yes
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setHouseholdResponses({
+                            ...householdResponses,
+                            [member.id]: {
+                              ...householdResponses[member.id],
+                              rsvp_status: 'No',
+                            }
+                          })}
+                          className={`py-3 rounded-xl font-medium transition-all ${
+                            householdResponses[member.id]?.rsvp_status === 'No'
+                              ? 'bg-pink-primary text-white'
+                              : 'bg-white border-2 border-pink-primary/20 text-pink-primary hover:border-pink-primary'
+                          }`}
+                        >
+                          ✗ No
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Show fields if attending */}
+                    {householdResponses[member.id]?.rsvp_status === 'Yes' && (
+                      <>
+                        {/* Meal Choice */}
+                        {rsvpSettings?.show_meal_choice && rsvpSettings?.meal_options && (
+                          <Select
+                            label="Meal Preference"
+                            value={householdResponses[member.id]?.meal_choice || ''}
+                            onChange={(e) => setHouseholdResponses({
+                              ...householdResponses,
+                              [member.id]: {
+                                ...householdResponses[member.id],
+                                meal_choice: e.target.value,
+                              }
+                            })}
+                            options={[
+                              { value: '', label: 'Select a meal option' },
+                              ...rsvpSettings.meal_options.split(',').map((option: string) => ({
+                                value: option.trim(),
+                                label: option.trim(),
+                              })),
+                            ]}
+                          />
+                        )}
+
+                        {/* Dietary Restrictions */}
+                        {rsvpSettings?.show_dietary_restrictions && (
+                          <Textarea
+                            label="Dietary Restrictions / Allergies"
+                            required={rsvpSettings?.require_dietary_restrictions}
+                            value={householdResponses[member.id]?.dietary_notes || ''}
+                            onChange={(e) => setHouseholdResponses({
+                              ...householdResponses,
+                              [member.id]: {
+                                ...householdResponses[member.id],
+                                dietary_notes: e.target.value,
+                              }
+                            })}
+                            placeholder="Let us know about any dietary requirements..."
+                          />
+                        )}
+
+                        {/* Shuttle Service */}
+                        {rsvpSettings?.shuttle_service_available && (
+                          <div>
+                            <label className="block text-sm font-medium text-pink-primary mb-3">
+                              Will they need shuttle service?
+                            </label>
+                            <div className="grid grid-cols-2 gap-3">
+                              <button
+                                type="button"
+                                onClick={() => setHouseholdResponses({
+                                  ...householdResponses,
+                                  [member.id]: {
+                                    ...householdResponses[member.id],
+                                    shuttle_needed: true,
+                                  }
+                                })}
+                                className={`py-3 rounded-xl font-medium transition-all ${
+                                  householdResponses[member.id]?.shuttle_needed === true
+                                    ? 'bg-pink-primary text-white'
+                                    : 'bg-white border-2 border-pink-primary/20 text-pink-primary hover:border-pink-primary'
+                                }`}
+                              >
+                                Yes
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setHouseholdResponses({
+                                  ...householdResponses,
+                                  [member.id]: {
+                                    ...householdResponses[member.id],
+                                    shuttle_needed: false,
+                                  }
+                                })}
+                                className={`py-3 rounded-xl font-medium transition-all ${
+                                  householdResponses[member.id]?.shuttle_needed === false
+                                    ? 'bg-pink-primary text-white'
+                                    : 'bg-white border-2 border-pink-primary/20 text-pink-primary hover:border-pink-primary'
+                                }`}
+                              >
+                                No
+                              </button>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Song Request */}
+                        {rsvpSettings?.show_song_request && (
+                          <Input
+                            label="Song Request (Optional)"
+                            value={householdResponses[member.id]?.song_request || ''}
+                            onChange={(e) => setHouseholdResponses({
+                              ...householdResponses,
+                              [member.id]: {
+                                ...householdResponses[member.id],
+                                song_request: e.target.value,
+                              }
+                            })}
+                            placeholder="Suggest a song for the playlist"
+                          />
+                        )}
+
+                        {/* Hotel Info Needed */}
+                        {rsvpSettings?.show_accommodation_question && (
+                          <div>
+                            <label className="block text-sm font-medium text-pink-primary mb-3">
+                              Do they need hotel accommodation information?
+                            </label>
+                            <div className="grid grid-cols-2 gap-3">
+                              <button
+                                type="button"
+                                onClick={() => setHouseholdResponses({
+                                  ...householdResponses,
+                                  [member.id]: {
+                                    ...householdResponses[member.id],
+                                    needs_accommodation: true,
+                                  }
+                                })}
+                                className={`py-3 rounded-xl font-medium transition-all ${
+                                  householdResponses[member.id]?.needs_accommodation === true
+                                    ? 'bg-pink-primary text-white'
+                                    : 'bg-white border-2 border-pink-primary/20 text-pink-primary hover:border-pink-primary'
+                                }`}
+                              >
+                                Yes
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setHouseholdResponses({
+                                  ...householdResponses,
+                                  [member.id]: {
+                                    ...householdResponses[member.id],
+                                    needs_accommodation: false,
+                                  }
+                                })}
+                                className={`py-3 rounded-xl font-medium transition-all ${
+                                  householdResponses[member.id]?.needs_accommodation === false
+                                    ? 'bg-pink-primary text-white'
+                                    : 'bg-white border-2 border-pink-primary/20 text-pink-primary hover:border-pink-primary'
+                                }`}
+                              >
+                                No
+                              </button>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Notes */}
+                        {rsvpSettings?.show_notes_field && (
+                          <Textarea
+                            label="Additional Notes (Optional)"
+                            value={householdResponses[member.id]?.rsvp_notes || ''}
+                            onChange={(e) => setHouseholdResponses({
+                              ...householdResponses,
+                              [member.id]: {
+                                ...householdResponses[member.id],
+                                rsvp_notes: e.target.value,
+                              }
+                            })}
+                            placeholder="Any special requests or messages..."
+                          />
+                        )}
+                      </>
+                    )}
+                  </div>
+                ))}
               </div>
-            </div>
+            ) : (
+              /* Single Guest RSVP */
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-pink-primary mb-3">
+                    Will you be attending? <span className="text-red-500">*</span>
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setRsvpStatus('Yes')}
+                      className={`py-4 rounded-xl font-bold transition-all ${
+                        rsvpStatus === 'Yes'
+                          ? 'bg-pink-primary text-white'
+                          : 'bg-white border-2 border-pink-primary/20 text-pink-primary hover:border-pink-primary'
+                      }`}
+                    >
+                      ✓ Yes, I'll be there!
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setRsvpStatus('No')}
+                      className={`py-4 rounded-xl font-bold transition-all ${
+                        rsvpStatus === 'No'
+                          ? 'bg-pink-primary text-white'
+                          : 'bg-white border-2 border-pink-primary/20 text-pink-primary hover:border-pink-primary'
+                      }`}
+                    >
+                      ✗ Sorry, can't make it
+                    </button>
+                  </div>
+                </div>
 
             {/* Show additional fields if attending */}
             {rsvpStatus === 'Yes' && (
@@ -294,12 +621,18 @@ export default function RSVPPage() {
                 )}
 
                 {/* Meal Choice */}
-                {rsvpSettings?.show_meal_choice && (
-                  <Input
+                {rsvpSettings?.show_meal_choice && rsvpSettings?.meal_options && (
+                  <Select
                     label="Meal Preference"
                     value={mealChoice}
                     onChange={(e) => setMealChoice(e.target.value)}
-                    placeholder="Chicken, Fish, Vegetarian, etc."
+                    options={[
+                      { value: '', label: 'Select a meal option' },
+                      ...rsvpSettings.meal_options.split(',').map((option: string) => ({
+                        value: option.trim(),
+                        label: option.trim(),
+                      })),
+                    ]}
                   />
                 )}
 
@@ -313,11 +646,87 @@ export default function RSVPPage() {
                     placeholder="Let us know about any dietary requirements..."
                   />
                 )}
+
+                {/* Shuttle Service */}
+                {rsvpSettings?.shuttle_service_available && (
+                  <div>
+                    <label className="block text-sm font-medium text-pink-primary mb-3">
+                      Will you need shuttle service?
+                    </label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setShuttleNeeded(true)}
+                        className={`py-3 rounded-xl font-medium transition-all ${
+                          shuttleNeeded === true
+                            ? 'bg-pink-primary text-white'
+                            : 'bg-white border-2 border-pink-primary/20 text-pink-primary hover:border-pink-primary'
+                        }`}
+                      >
+                        Yes
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setShuttleNeeded(false)}
+                        className={`py-3 rounded-xl font-medium transition-all ${
+                          shuttleNeeded === false
+                            ? 'bg-pink-primary text-white'
+                            : 'bg-white border-2 border-pink-primary/20 text-pink-primary hover:border-pink-primary'
+                        }`}
+                      >
+                        No
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Song Request */}
+                {rsvpSettings?.show_song_request && (
+                  <Input
+                    label="Song Request (Optional)"
+                    value={songRequest}
+                    onChange={(e) => setSongRequest(e.target.value)}
+                    placeholder="Suggest a song for the playlist"
+                  />
+                )}
+
+                {/* Hotel Info Needed */}
+                {rsvpSettings?.show_accommodation_question && (
+                  <div>
+                    <label className="block text-sm font-medium text-pink-primary mb-3">
+                      Do you need hotel accommodation information?
+                    </label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setNeedsAccommodation(true)}
+                        className={`py-3 rounded-xl font-medium transition-all ${
+                          needsAccommodation === true
+                            ? 'bg-pink-primary text-white'
+                            : 'bg-white border-2 border-pink-primary/20 text-pink-primary hover:border-pink-primary'
+                        }`}
+                      >
+                        Yes
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setNeedsAccommodation(false)}
+                        className={`py-3 rounded-xl font-medium transition-all ${
+                          needsAccommodation === false
+                            ? 'bg-pink-primary text-white'
+                            : 'bg-white border-2 border-pink-primary/20 text-pink-primary hover:border-pink-primary'
+                        }`}
+                      >
+                        No
+                      </button>
+                    </div>
+                  </div>
+                )}
               </>
             )}
 
-            {/* Notes */}
-            {rsvpSettings?.show_notes_field && (
+            {/* Notes - Only for single guests */}
+            {!householdMembers.length && rsvpSettings?.show_notes_field && (
               <Textarea
                 label="Additional Notes (Optional)"
                 value={notes}
@@ -325,9 +734,16 @@ export default function RSVPPage() {
                 placeholder="Any special requests or messages for the couple..."
               />
             )}
+              </>
+            )}
 
             {/* Submit */}
-            <Button type="submit" fullWidth size="lg" disabled={!rsvpStatus || isSubmitting}>
+            <Button 
+              type="submit" 
+              fullWidth 
+              size="lg" 
+              disabled={householdMembers.length > 0 ? isSubmitting : (!rsvpStatus || isSubmitting)}
+            >
               {isSubmitting ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />

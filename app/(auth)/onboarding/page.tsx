@@ -84,7 +84,6 @@ export default function OnboardingPage() {
 
       // Create wedding record
       const weddingId = id()
-      const settingsId = id()
       
       await db.transact([
         db.tx.weddings[weddingId].update({
@@ -94,16 +93,6 @@ export default function OnboardingPage() {
           wedding_date: weddingDate.toISOString(),
           wedding_slug: formData.wedding_slug,
           created_at: Date.now(),
-        }),
-        // Create default RSVP settings
-        db.tx.rsvpSettings[settingsId].update({
-          wedding_id: weddingId,
-          show_meal_choice: true,
-          show_dietary_restrictions: true,
-          require_dietary_restrictions: false,
-          show_notes_field: true,
-          shuttle_service_available: false,
-          custom_message: 'Thank you for RSVPing! We can\'t wait to celebrate with you!',
         }),
       ])
 
