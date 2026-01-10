@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Modal from '../ui/Modal'
 import Input from '../ui/Input'
+import Select from '../ui/Select'
 import Toggle from '../ui/Toggle'
 import Button from '../ui/Button'
 import { BudgetItem } from '@/lib/dummyData'
@@ -14,6 +15,24 @@ interface BudgetFormModalProps {
   editingItem?: BudgetItem | null
 }
 
+const PRESET_CATEGORIES = [
+  'Custom (enter your own)',
+  'Venue',
+  'Catering/Food',
+  'Photography',
+  'Videography',
+  'Flowers/Decorations',
+  'Music/DJ/Band',
+  'Wedding Attire',
+  'Rings',
+  'Invitations',
+  'Transportation',
+  'Hair & Makeup',
+  'Wedding Planner',
+  'Favors & Gifts',
+  'Miscellaneous',
+]
+
 export default function BudgetFormModal({ isOpen, onClose, onSave, editingItem }: BudgetFormModalProps) {
   const [formData, setFormData] = useState<Partial<BudgetItem>>({
     category_name: '',
@@ -22,10 +41,14 @@ export default function BudgetFormModal({ isOpen, onClose, onSave, editingItem }
     is_paid: false,
     is_active: true,
   })
+  const [selectedPreset, setSelectedPreset] = useState('Custom (enter your own)')
+  const [isCustom, setIsCustom] = useState(true)
 
   useEffect(() => {
     if (editingItem) {
       setFormData(editingItem)
+      setSelectedPreset('Custom (enter your own)')
+      setIsCustom(true)
     } else {
       setFormData({
         category_name: '',
@@ -34,8 +57,21 @@ export default function BudgetFormModal({ isOpen, onClose, onSave, editingItem }
         is_paid: false,
         is_active: true,
       })
+      setSelectedPreset('Custom (enter your own)')
+      setIsCustom(true)
     }
   }, [editingItem, isOpen])
+
+  const handlePresetChange = (value: string) => {
+    setSelectedPreset(value)
+    if (value === 'Custom (enter your own)') {
+      setIsCustom(true)
+      setFormData({ ...formData, category_name: '' })
+    } else {
+      setIsCustom(false)
+      setFormData({ ...formData, category_name: value })
+    }
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -51,17 +87,28 @@ export default function BudgetFormModal({ isOpen, onClose, onSave, editingItem }
       size="md"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
-        <Input
-          label="Category Name"
-          required
-          value={formData.category_name}
-          onChange={(e) => setFormData({ ...formData, category_name: e.target.value })}
-          placeholder="e.g., Venue, Catering, Photography"
-        />
+        {!editingItem && (
+          <Select
+            label="Category"
+            value={selectedPreset}
+            onChange={(e) => handlePresetChange(e.target.value)}
+            options={PRESET_CATEGORIES.map(cat => ({ value: cat, label: cat }))}
+          />
+        )}
+
+        {(isCustom || editingItem) && (
+          <Input
+            label="Category Name"
+            required
+            value={formData.category_name}
+            onChange={(e) => setFormData({ ...formData, category_name: e.target.value })}
+            placeholder="e.g., Venue, Catering, Photography"
+          />
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Input
-            label="Estimated Cost"
+            label="Budgeted Amount"
             type="number"
             required
             min="0"
@@ -72,7 +119,7 @@ export default function BudgetFormModal({ isOpen, onClose, onSave, editingItem }
           />
 
           <Input
-            label="Actual Cost"
+            label="Amount Spent"
             type="number"
             min="0"
             step="0.01"

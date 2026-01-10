@@ -6,27 +6,59 @@ import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
 import Textarea from '@/components/ui/Textarea'
 import Card from '@/components/ui/Card'
-import { dummyWedding, dummyGuests, Guest } from '@/lib/dummyData'
-import { Heart, Check } from 'lucide-react'
+import db from '@/lib/instant'
+import { Heart, Check, Loader2 } from 'lucide-react'
+import { id } from '@instantdb/react'
 
 export default function RSVPPage() {
   const params = useParams()
   const slug = params.slug as string
 
+  // Query wedding and guests by slug
+  const { data, isLoading, error } = db.useQuery({
+    weddings: {
+      $: {
+        where: {
+          wedding_slug: slug,
+        },
+      },
+    },
+    guests: {},
+    rsvpSettings: {},
+  })
+
+  const wedding = data?.weddings?.[0]
+  const allGuests = data?.guests || []
+  const rsvpSettings = data?.rsvpSettings?.[0]
+  
+  // Filter guests for this wedding
+  const weddingGuests = wedding ? allGuests.filter((g: any) => g.wedding_id === wedding.id) : []
+
   const [guestName, setGuestName] = useState('')
-  const [suggestions, setSuggestions] = useState<Guest[]>([])
-  const [selectedGuest, setSelectedGuest] = useState<Guest | null>(null)
+  const [suggestions, setSuggestions] = useState<any[]>([])
+  const [selectedGuest, setSelectedGuest] = useState<any | null>(null)
   const [rsvpStatus, setRsvpStatus] = useState<'Yes' | 'No' | null>(null)
   const [plusOneName, setPlusOneName] = useState('')
   const [mealChoice, setMealChoice] = useState('')
   const [dietaryNotes, setDietaryNotes] = useState('')
   const [notes, setNotes] = useState('')
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Check if slug matches
-  const isValidSlug = slug === dummyWedding.wedding_slug
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="text-center space-y-4">
+          <Loader2 className="w-12 h-12 animate-spin text-pink-primary mx-auto" />
+          <p className="text-pink-primary">Loading wedding details...</p>
+        </div>
+      </div>
+    )
+  }
 
-  if (!isValidSlug) {
+  // Error or invalid slug
+  if (error || !wedding) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
         <Card className="max-w-md w-full text-center">
@@ -45,7 +77,7 @@ export default function RSVPPage() {
   const handleGuestSearch = (value: string) => {
     setGuestName(value)
     if (value.length > 2) {
-      const matches = dummyGuests.filter((guest) =>
+      const matches = weddingGuests.filter((guest: any) =>
         guest.full_name.toLowerCase().includes(value.toLowerCase())
       )
       setSuggestions(matches.slice(0, 5))
@@ -54,7 +86,7 @@ export default function RSVPPage() {
     }
   }
 
-  const handleSelectGuest = (guest: Guest) => {
+  const handleSelectGuest = (guest: any) => {
     setSelectedGuest(guest)
     setGuestName(guest.full_name)
     setSuggestions([])
@@ -64,21 +96,61 @@ export default function RSVPPage() {
     setDietaryNotes(guest.dietary_notes || '')
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!rsvpStatus) return
+    if (!rsvpStatus || !wedding) return
 
-    // In real app, this would save to database
-    console.log('RSVP Submitted:', {
-      guestName,
-      rsvpStatus,
-      plusOneName,
-      mealChoice,
-      dietaryNotes,
-      notes,
-    })
+    setIsSubmitting(true)
 
-    setIsSubmitted(true)
+    try {
+      if (selectedGuest) {
+        // Update existing guest
+        await db.transact([
+          db.tx.guests[selectedGuest.id].update({
+            rsvp_status: rsvpStatus,
+            plus_one_name: plusOneName,
+            meal_choice: mealChoice,
+            dietary_notes: dietaryNotes,
+            rsvp_notes: notes,
+            last_updated: Date.now(),
+          }),
+        ])
+      } else {
+        // Create new guest from RSVP
+        const guestId = id()
+        await db.transact([
+          db.tx.guests[guestId].update({
+            wedding_id: wedding.id,
+            full_name: guestName,
+            email: '',
+            phone: '',
+            side: 'Unknown',
+            plus_one_allowed: false,
+            plus_one_name: plusOneName,
+            invite_sent: false,
+            rsvp_status: rsvpStatus,
+            meal_choice: mealChoice,
+            dietary_notes: dietaryNotes,
+            rsvp_notes: notes,
+            shuttle_needed: false,
+            address_street: '',
+            address_city: '',
+            address_state: '',
+            address_postal: '',
+            address_country: '',
+            source: 'RSVP',
+            last_updated: Date.now(),
+          }),
+        ])
+      }
+
+      setIsSubmitted(true)
+    } catch (error) {
+      console.error('Error submitting RSVP:', error)
+      alert('Failed to submit RSVP. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   if (isSubmitted) {
@@ -99,10 +171,10 @@ export default function RSVPPage() {
 
           <div className="p-4 bg-pink-light rounded-2xl">
             <p className="text-sm text-pink-primary">
-              <strong>{dummyWedding.partner1_name} & {dummyWedding.partner2_name}</strong>
+              <strong>{wedding.partner1_name} & {wedding.partner2_name}</strong>
             </p>
             <p className="text-xs text-pink-primary/60 mt-1">
-              {new Date(dummyWedding.wedding_date).toLocaleDateString('en-US', {
+              {new Date(wedding.wedding_date).toLocaleDateString('en-US', {
                 weekday: 'long',
                 year: 'numeric',
                 month: 'long',
@@ -110,6 +182,14 @@ export default function RSVPPage() {
               })}
             </p>
           </div>
+          
+          {rsvpSettings?.custom_message && (
+            <div className="mt-4 p-4 bg-pink-primary/5 rounded-2xl">
+              <p className="text-sm text-pink-primary/80">
+                {rsvpSettings.custom_message}
+              </p>
+            </div>
+          )}
         </Card>
       </div>
     )
@@ -122,10 +202,10 @@ export default function RSVPPage() {
         <div className="text-center text-pink-primary">
           <Heart size={48} className="mx-auto mb-4" fill="#C82777" />
           <h1 className="text-4xl md:text-5xl font-black mb-2">
-            {dummyWedding.partner1_name} & {dummyWedding.partner2_name}
+            {wedding.partner1_name} & {wedding.partner2_name}
           </h1>
           <p className="text-lg">
-            {new Date(dummyWedding.wedding_date).toLocaleDateString('en-US', {
+            {new Date(wedding.wedding_date).toLocaleDateString('en-US', {
               weekday: 'long',
               year: 'numeric',
               month: 'long',
@@ -214,34 +294,48 @@ export default function RSVPPage() {
                 )}
 
                 {/* Meal Choice */}
-                <Input
-                  label="Meal Preference"
-                  value={mealChoice}
-                  onChange={(e) => setMealChoice(e.target.value)}
-                  placeholder="Chicken, Fish, Vegetarian, etc."
-                />
+                {rsvpSettings?.show_meal_choice && (
+                  <Input
+                    label="Meal Preference"
+                    value={mealChoice}
+                    onChange={(e) => setMealChoice(e.target.value)}
+                    placeholder="Chicken, Fish, Vegetarian, etc."
+                  />
+                )}
 
                 {/* Dietary Restrictions */}
-                <Textarea
-                  label="Dietary Restrictions / Allergies"
-                  value={dietaryNotes}
-                  onChange={(e) => setDietaryNotes(e.target.value)}
-                  placeholder="Let us know about any dietary requirements..."
-                />
+                {rsvpSettings?.show_dietary_restrictions && (
+                  <Textarea
+                    label="Dietary Restrictions / Allergies"
+                    required={rsvpSettings?.require_dietary_restrictions}
+                    value={dietaryNotes}
+                    onChange={(e) => setDietaryNotes(e.target.value)}
+                    placeholder="Let us know about any dietary requirements..."
+                  />
+                )}
               </>
             )}
 
             {/* Notes */}
-            <Textarea
-              label="Additional Notes (Optional)"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              placeholder="Any special requests or messages for the couple..."
-            />
+            {rsvpSettings?.show_notes_field && (
+              <Textarea
+                label="Additional Notes (Optional)"
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                placeholder="Any special requests or messages for the couple..."
+              />
+            )}
 
             {/* Submit */}
-            <Button type="submit" fullWidth size="lg" disabled={!rsvpStatus}>
-              Submit RSVP
+            <Button type="submit" fullWidth size="lg" disabled={!rsvpStatus || isSubmitting}>
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Submitting...
+                </>
+              ) : (
+                'Submit RSVP'
+              )}
             </Button>
           </form>
         </Card>

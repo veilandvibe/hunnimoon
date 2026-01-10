@@ -88,6 +88,7 @@ export default function OnboardingPage() {
       
       await db.transact([
         db.tx.weddings[weddingId].update({
+          user_id: user.id,
           partner1_name: formData.partner1_name,
           partner2_name: formData.partner2_name,
           wedding_date: weddingDate.toISOString(),

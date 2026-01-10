@@ -1,21 +1,32 @@
 'use client'
 
 import { useState } from 'react'
-import { Search, Plus } from 'lucide-react'
+import { Search, Plus, Loader2 } from 'lucide-react'
 import GuestCard from '@/components/guests/GuestCard'
 import GuestFormModal from '@/components/guests/GuestFormModal'
 import Button from '@/components/ui/Button'
-import Input from '@/components/ui/Input'
 import Select from '@/components/ui/Select'
-import { dummyGuests, Guest, RSVPStatus, Side } from '@/lib/dummyData'
+import { RSVPStatus, Side } from '@/lib/dummyData'
+import db from '@/lib/instant'
+import { id } from '@instantdb/react'
 
 export default function GuestsPage() {
-  const [guests, setGuests] = useState<Guest[]>(dummyGuests)
+  const { user, isLoading: authLoading } = db.useAuth()
+  
+  // Query wedding and guests data
+  const { data, isLoading: dataLoading, error } = db.useQuery({
+    weddings: {},
+    guests: {},
+  })
+  
+  const wedding = data?.weddings?.[0]
+  const guests = data?.guests || []
+  
   const [searchQuery, setSearchQuery] = useState('')
   const [filterStatus, setFilterStatus] = useState<RSVPStatus | 'All'>('All')
   const [filterSide, setFilterSide] = useState<Side | 'All'>('All')
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingGuest, setEditingGuest] = useState<Guest | null>(null)
+  const [editingGuest, setEditingGuest] = useState<any | null>(null)
 
   // Filter guests
   const filteredGuests = guests.filter((guest) => {
@@ -40,48 +51,103 @@ export default function GuestsPage() {
     setIsModalOpen(true)
   }
 
-  const handleDeleteGuest = (guestId: string) => {
+  const handleDeleteGuest = async (guestId: string) => {
     if (confirm('Are you sure you want to delete this guest?')) {
-      setGuests(guests.filter((g) => g.id !== guestId))
+      try {
+        await db.transact([db.tx.guests[guestId].delete()])
+      } catch (error) {
+        console.error('Error deleting guest:', error)
+        alert('Failed to delete guest. Please try again.')
+      }
     }
   }
 
-  const handleSaveGuest = (guestData: Partial<Guest>) => {
-    if (editingGuest) {
-      // Update existing guest
-      setGuests(
-        guests.map((g) =>
-          g.id === editingGuest.id
-            ? { ...g, ...guestData, last_updated: Date.now() }
-            : g
-        )
-      )
-    } else {
-      // Add new guest
-      const newGuest: Guest = {
-        id: `guest-${Date.now()}`,
-        wedding_id: 'wedding-1',
-        full_name: guestData.full_name || '',
-        email: guestData.email || '',
-        phone: guestData.phone || '',
-        side: guestData.side || 'Unknown',
-        plus_one_allowed: guestData.plus_one_allowed || false,
-        plus_one_name: guestData.plus_one_name,
-        invite_sent: guestData.invite_sent || false,
-        rsvp_status: guestData.rsvp_status || 'Pending',
-        meal_choice: guestData.meal_choice,
-        dietary_notes: guestData.dietary_notes,
-        shuttle_needed: guestData.shuttle_needed || false,
-        address_street: guestData.address_street,
-        address_city: guestData.address_city,
-        address_state: guestData.address_state,
-        address_postal: guestData.address_postal,
-        address_country: guestData.address_country,
-        source: 'Manual',
-        last_updated: Date.now(),
-      }
-      setGuests([...guests, newGuest])
+  const handleSaveGuest = async (guestData: any) => {
+    if (!wedding?.id) {
+      alert('Wedding not found. Please refresh the page.')
+      return
     }
+    
+    try {
+      if (editingGuest) {
+        // Update existing guest
+        await db.transact([
+          db.tx.guests[editingGuest.id].update({
+            ...guestData,
+            last_updated: Date.now(),
+          }),
+        ])
+      } else {
+        // Add new guest
+        const guestId = id()
+        await db.transact([
+          db.tx.guests[guestId]
+            .update({
+              full_name: guestData.full_name || '',
+              email: guestData.email || '',
+              phone: guestData.phone || '',
+              side: guestData.side || 'Unknown',
+              plus_one_allowed: guestData.plus_one_allowed || false,
+              plus_one_name: guestData.plus_one_name || '',
+              invite_sent: guestData.invite_sent || false,
+              rsvp_status: guestData.rsvp_status || 'Pending',
+              meal_choice: guestData.meal_choice || '',
+              dietary_notes: guestData.dietary_notes || '',
+              rsvp_notes: guestData.rsvp_notes || '',
+              shuttle_needed: guestData.shuttle_needed || false,
+              address_street: guestData.address_street || '',
+              address_city: guestData.address_city || '',
+              address_state: guestData.address_state || '',
+              address_postal: guestData.address_postal || '',
+              address_country: guestData.address_country || '',
+              source: 'Manual',
+              last_updated: Date.now(),
+            })
+            .link({ wedding: wedding.id }),
+        ])
+      }
+    } catch (error) {
+      console.error('Error saving guest:', error)
+      alert('Failed to save guest. Please try again.')
+    }
+  }
+
+  // Loading state
+  if (authLoading || dataLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-center space-y-4">
+          <Loader2 className="w-12 h-12 animate-spin text-pink-primary mx-auto" />
+          <p className="text-pink-primary/60">Loading guests...</p>
+        </div>
+      </div>
+    )
+  }
+  
+  // Error state
+  if (error) {
+    return (
+      <div className="max-w-7xl mx-auto">
+        <div className="bg-white rounded-4xl shadow-card p-12 text-center">
+          <p className="text-pink-primary/70">
+            Error loading guests. Please refresh the page.
+          </p>
+        </div>
+      </div>
+    )
+  }
+  
+  // No wedding found
+  if (!wedding) {
+    return (
+      <div className="max-w-7xl mx-auto">
+        <div className="bg-white rounded-4xl shadow-card p-12 text-center">
+          <p className="text-pink-primary/70">
+            No wedding found. Please complete onboarding first.
+          </p>
+        </div>
+      </div>
+    )
   }
 
   return (

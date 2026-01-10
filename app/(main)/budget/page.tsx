@@ -1,25 +1,40 @@
 'use client'
 
 import { useState } from 'react'
-import { Plus, DollarSign, TrendingUp, TrendingDown } from 'lucide-react'
+import { Plus, DollarSign, TrendingUp, TrendingDown, Loader2, Edit2 } from 'lucide-react'
 import BudgetItemCard from '@/components/budget/BudgetItemCard'
 import BudgetFormModal from '@/components/budget/BudgetFormModal'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
-import { dummyBudgetItems, BudgetItem } from '@/lib/dummyData'
+import db from '@/lib/instant'
+import { id } from '@instantdb/react'
 
 export default function BudgetPage() {
-  const [budgetItems, setBudgetItems] = useState<BudgetItem[]>(dummyBudgetItems)
+  const { user, isLoading: authLoading } = db.useAuth()
+  
+  // Query wedding and budget items
+  const { data, isLoading: dataLoading, error } = db.useQuery({
+    weddings: {},
+    budgetItems: {},
+  })
+  
+  const wedding = data?.weddings?.[0]
+  const budgetItems = data?.budgetItems || []
+  
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingItem, setEditingItem] = useState<BudgetItem | null>(null)
+  const [editingItem, setEditingItem] = useState<any | null>(null)
+  const [isEditingBudget, setIsEditingBudget] = useState(false)
+  const [budgetInputValue, setBudgetInputValue] = useState('')
 
   // Calculate totals
   const activeItems = budgetItems.filter((item) => item.is_active)
-  const totalEstimated = activeItems.reduce((sum, item) => sum + item.estimated_cost, 0)
-  const totalActual = activeItems.reduce((sum, item) => sum + item.actual_cost, 0)
-  const remaining = totalEstimated - totalActual
-  const percentSpent = totalEstimated > 0 ? Math.round((totalActual / totalEstimated) * 100) : 0
-  const isOverBudget = totalActual > totalEstimated
+  const totalBudget = wedding?.total_budget || 0
+  const allocated = activeItems.reduce((sum, item) => sum + item.estimated_cost, 0)
+  const actualSpent = activeItems.reduce((sum, item) => sum + item.actual_cost, 0)
+  const unallocated = totalBudget - allocated
+  const percentSpent = allocated > 0 ? Math.round((actualSpent / allocated) * 100) : 0
+  const isOverBudget = actualSpent > allocated
+  const isOverAllocated = allocated > totalBudget
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -40,43 +55,129 @@ export default function BudgetPage() {
     setIsModalOpen(true)
   }
 
-  const handleDeleteItem = (itemId: string) => {
+  const handleDeleteItem = async (itemId: string) => {
     if (confirm('Are you sure you want to delete this budget item?')) {
-      setBudgetItems(budgetItems.filter((item) => item.id !== itemId))
+      try {
+        await db.transact([db.tx.budgetItems[itemId].delete()])
+      } catch (error) {
+        console.error('Error deleting budget item:', error)
+        alert('Failed to delete budget item. Please try again.')
+      }
     }
   }
 
-  const handleTogglePaid = (itemId: string, isPaid: boolean) => {
-    setBudgetItems(
-      budgetItems.map((item) =>
-        item.id === itemId ? { ...item, is_paid: isPaid } : item
-      )
+  const handleTogglePaid = async (itemId: string, isPaid: boolean) => {
+    try {
+      await db.transact([
+        db.tx.budgetItems[itemId].update({
+          is_paid: isPaid,
+        }),
+      ])
+    } catch (error) {
+      console.error('Error updating budget item:', error)
+      alert('Failed to update budget item. Please try again.')
+    }
+  }
+
+  const handleUpdateTotalBudget = async () => {
+    if (!wedding?.id) return
+    
+    const newBudget = parseFloat(budgetInputValue) || 0
+    if (newBudget < 0) {
+      alert('Budget must be a positive number')
+      return
+    }
+    
+    try {
+      await db.transact([
+        db.tx.weddings[wedding.id].update({
+          total_budget: newBudget,
+        }),
+      ])
+      setIsEditingBudget(false)
+    } catch (error) {
+      console.error('Error updating budget:', error)
+      alert('Failed to update budget. Please try again.')
+    }
+  }
+
+  const handleSaveItem = async (itemData: any) => {
+    if (!wedding?.id) {
+      alert('Wedding not found. Please refresh the page.')
+      return
+    }
+    
+    try {
+      if (editingItem) {
+        // Update existing item
+        await db.transact([
+          db.tx.budgetItems[editingItem.id].update({
+            ...itemData,
+          }),
+        ])
+      } else {
+        // Add new item
+        const itemId = id()
+        await db.transact([
+          db.tx.budgetItems[itemId]
+            .update({
+              category_name: itemData.category_name || '',
+              estimated_cost: itemData.estimated_cost || 0,
+              actual_cost: itemData.actual_cost || 0,
+              is_paid: itemData.is_paid || false,
+              is_active: itemData.is_active !== false,
+              is_custom: true,
+              sort_order: budgetItems.length + 1,
+            })
+            .link({ wedding: wedding.id }),
+        ])
+      }
+    } catch (error) {
+      console.error('Error saving budget item:', error)
+      alert('Failed to save budget item. Please try again.')
+    }
+  }
+
+  // Loading state
+  if (authLoading || dataLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-center space-y-4">
+          <Loader2 className="w-12 h-12 animate-spin text-pink-primary mx-auto" />
+          <p className="text-pink-primary/60">Loading budget...</p>
+        </div>
+      </div>
     )
   }
-
-  const handleSaveItem = (itemData: Partial<BudgetItem>) => {
-    if (editingItem) {
-      // Update existing item
-      setBudgetItems(
-        budgetItems.map((item) =>
-          item.id === editingItem.id ? { ...item, ...itemData } : item
-        )
-      )
-    } else {
-      // Add new item
-      const newItem: BudgetItem = {
-        id: `budget-${Date.now()}`,
-        wedding_id: 'wedding-1',
-        category_name: itemData.category_name || '',
-        estimated_cost: itemData.estimated_cost || 0,
-        actual_cost: itemData.actual_cost || 0,
-        is_paid: itemData.is_paid || false,
-        is_active: itemData.is_active !== false,
-        is_custom: true,
-        sort_order: budgetItems.length + 1,
-      }
-      setBudgetItems([...budgetItems, newItem])
-    }
+  
+  // Error state
+  if (error) {
+    return (
+      <div className="max-w-7xl mx-auto">
+        <Card>
+          <div className="text-center py-12">
+            <p className="text-pink-primary/70">
+              Error loading budget. Please refresh the page.
+            </p>
+          </div>
+        </Card>
+      </div>
+    )
+  }
+  
+  // No wedding found
+  if (!wedding) {
+    return (
+      <div className="max-w-7xl mx-auto">
+        <Card>
+          <div className="text-center py-12">
+            <p className="text-pink-primary/70">
+              No wedding found. Please complete onboarding first.
+            </p>
+          </div>
+        </Card>
+      </div>
+    )
   }
 
   return (
@@ -97,17 +198,67 @@ export default function BudgetPage() {
         </Button>
       </div>
 
+      {/* Total Wedding Budget Card */}
+      <Card>
+        <div className="flex items-center justify-between">
+          <div className="flex-1">
+            <div className="text-sm text-pink-primary/60 mb-2">Total Wedding Budget</div>
+            {isEditingBudget ? (
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-pink-primary text-xl font-bold">$</span>
+                  <input
+                    type="number"
+                    value={budgetInputValue}
+                    onChange={(e) => setBudgetInputValue(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleUpdateTotalBudget()
+                      if (e.key === 'Escape') setIsEditingBudget(false)
+                    }}
+                    className="pl-8 pr-4 py-2 text-2xl font-black text-pink-primary border-2 border-pink-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-primary/20 w-48"
+                    placeholder="50000"
+                    autoFocus
+                  />
+                </div>
+                <Button onClick={handleUpdateTotalBudget} size="sm">Save</Button>
+                <Button onClick={() => setIsEditingBudget(false)} variant="outline" size="sm">Cancel</Button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-3">
+                <div className="text-3xl font-black text-pink-primary">
+                  {totalBudget > 0 ? formatCurrency(totalBudget) : 'Not set'}
+                </div>
+                <button
+                  onClick={() => {
+                    setBudgetInputValue(totalBudget.toString())
+                    setIsEditingBudget(true)
+                  }}
+                  className="p-2 hover:bg-pink-light rounded-lg transition-colors"
+                  aria-label="Edit total budget"
+                >
+                  <Edit2 size={18} className="text-pink-primary" />
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </Card>
+
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-pink-primary/10 rounded-xl flex items-center justify-center">
-              <DollarSign size={24} className="text-pink-primary" />
+            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+              isOverAllocated ? 'bg-orange-100' : 'bg-blue-100'
+            }`}>
+              <DollarSign size={24} className={isOverAllocated ? 'text-orange-600' : 'text-blue-600'} />
             </div>
             <div className="flex-1">
-              <div className="text-xs text-pink-primary/60">Total Budget</div>
-              <div className="text-2xl font-black text-pink-primary">
-                {formatCurrency(totalEstimated)}
+              <div className="text-xs text-pink-primary/60">Allocated</div>
+              <div className={`text-2xl font-black ${
+                isOverAllocated ? 'text-orange-600' : 'text-pink-primary'
+              }`}>
+                {formatCurrency(allocated)}
               </div>
             </div>
           </div>
@@ -125,11 +276,11 @@ export default function BudgetPage() {
               )}
             </div>
             <div className="flex-1">
-              <div className="text-xs text-pink-primary/60">Amount Spent</div>
+              <div className="text-xs text-pink-primary/60">Actual Spent</div>
               <div className={`text-2xl font-black ${
                 isOverBudget ? 'text-red-600' : 'text-pink-primary'
               }`}>
-                {formatCurrency(totalActual)}
+                {formatCurrency(actualSpent)}
               </div>
             </div>
           </div>
@@ -138,18 +289,18 @@ export default function BudgetPage() {
         <Card>
           <div className="flex items-center gap-3">
             <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-              isOverBudget ? 'bg-red-100' : 'bg-green-100'
+              unallocated < 0 ? 'bg-red-100' : 'bg-green-100'
             }`}>
-              <DollarSign size={24} className={isOverBudget ? 'text-red-600' : 'text-green-600'} />
+              <DollarSign size={24} className={unallocated < 0 ? 'text-red-600' : 'text-green-600'} />
             </div>
             <div className="flex-1">
               <div className="text-xs text-pink-primary/60">
-                {isOverBudget ? 'Over Budget' : 'Remaining'}
+                {unallocated < 0 ? 'Over Allocated' : 'Unallocated'}
               </div>
               <div className={`text-2xl font-black ${
-                isOverBudget ? 'text-red-600' : 'text-green-600'
+                unallocated < 0 ? 'text-red-600' : 'text-green-600'
               }`}>
-                {formatCurrency(Math.abs(remaining))}
+                {formatCurrency(Math.abs(unallocated))}
               </div>
             </div>
           </div>
@@ -161,10 +312,10 @@ export default function BudgetPage() {
         <div className="space-y-3">
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-black text-pink-primary">
-              Overall Progress
+              Spending Progress
             </h3>
             <span className="text-sm text-pink-primary/60">
-              {percentSpent}% spent
+              {percentSpent}% of allocated spent
             </span>
           </div>
           <div className="h-4 bg-pink-light rounded-full overflow-hidden">
@@ -176,7 +327,7 @@ export default function BudgetPage() {
             />
           </div>
           <div className="text-sm text-center text-pink-primary/60">
-            {formatCurrency(totalActual)} of {formatCurrency(totalEstimated)}
+            {formatCurrency(actualSpent)} of {formatCurrency(allocated)} allocated
           </div>
         </div>
       </Card>
@@ -186,6 +337,7 @@ export default function BudgetPage() {
         <Card padding="lg" className="text-center">
           <p className="text-pink-primary/60 mb-4">No budget categories yet</p>
           <Button onClick={handleAddItem}>
+            <Plus size={20} />
             Add Your First Category
           </Button>
         </Card>

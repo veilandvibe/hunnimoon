@@ -1,17 +1,29 @@
 'use client'
 
 import { useState } from 'react'
-import { Plus, Search } from 'lucide-react'
+import { Plus, Search, Loader2 } from 'lucide-react'
 import VendorCard from '@/components/vendors/VendorCard'
 import VendorFormModal from '@/components/vendors/VendorFormModal'
 import Button from '@/components/ui/Button'
-import { dummyVendors, Vendor } from '@/lib/dummyData'
+import Card from '@/components/ui/Card'
+import db from '@/lib/instant'
+import { id } from '@instantdb/react'
 
 export default function VendorsPage() {
-  const [vendors, setVendors] = useState<Vendor[]>(dummyVendors)
+  const { user, isLoading: authLoading } = db.useAuth()
+  
+  // Query wedding and vendors
+  const { data, isLoading: dataLoading, error } = db.useQuery({
+    weddings: {},
+    vendors: {},
+  })
+  
+  const wedding = data?.weddings?.[0]
+  const vendors = data?.vendors || []
+  
   const [searchQuery, setSearchQuery] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingVendor, setEditingVendor] = useState<Vendor | null>(null)
+  const [editingVendor, setEditingVendor] = useState<any | null>(null)
 
   // Filter vendors
   const filteredVendors = vendors.filter((vendor) =>
@@ -30,34 +42,92 @@ export default function VendorsPage() {
     setIsModalOpen(true)
   }
 
-  const handleDeleteVendor = (vendorId: string) => {
+  const handleDeleteVendor = async (vendorId: string) => {
     if (confirm('Are you sure you want to delete this vendor?')) {
-      setVendors(vendors.filter((v) => v.id !== vendorId))
+      try {
+        await db.transact([db.tx.vendors[vendorId].delete()])
+      } catch (error) {
+        console.error('Error deleting vendor:', error)
+        alert('Failed to delete vendor. Please try again.')
+      }
     }
   }
 
-  const handleSaveVendor = (vendorData: Partial<Vendor>) => {
-    if (editingVendor) {
-      // Update existing vendor
-      setVendors(
-        vendors.map((v) =>
-          v.id === editingVendor.id ? { ...v, ...vendorData } : v
-        )
-      )
-    } else {
-      // Add new vendor
-      const newVendor: Vendor = {
-        id: `vendor-${Date.now()}`,
-        wedding_id: 'wedding-1',
-        vendor_name: vendorData.vendor_name || '',
-        contact_name: vendorData.contact_name || '',
-        email: vendorData.email || '',
-        phone: vendorData.phone || '',
-        website: vendorData.website || '',
-        notes: vendorData.notes || '',
-      }
-      setVendors([...vendors, newVendor])
+  const handleSaveVendor = async (vendorData: any) => {
+    if (!wedding?.id) {
+      alert('Wedding not found. Please refresh the page.')
+      return
     }
+    
+    try {
+      if (editingVendor) {
+        // Update existing vendor
+        await db.transact([
+          db.tx.vendors[editingVendor.id].update({
+            ...vendorData,
+          }),
+        ])
+      } else {
+        // Add new vendor
+        const vendorId = id()
+        await db.transact([
+          db.tx.vendors[vendorId].update({
+            wedding_id: wedding.id,
+            vendor_name: vendorData.vendor_name || '',
+            contact_name: vendorData.contact_name || '',
+            email: vendorData.email || '',
+            phone: vendorData.phone || '',
+            website: vendorData.website || '',
+            notes: vendorData.notes || '',
+          }),
+        ])
+      }
+    } catch (error) {
+      console.error('Error saving vendor:', error)
+      alert('Failed to save vendor. Please try again.')
+    }
+  }
+
+  // Loading state
+  if (authLoading || dataLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-center space-y-4">
+          <Loader2 className="w-12 h-12 animate-spin text-pink-primary mx-auto" />
+          <p className="text-pink-primary/60">Loading vendors...</p>
+        </div>
+      </div>
+    )
+  }
+  
+  // Error state
+  if (error) {
+    return (
+      <div className="max-w-7xl mx-auto">
+        <Card>
+          <div className="text-center py-12">
+            <p className="text-pink-primary/70">
+              Error loading vendors. Please refresh the page.
+            </p>
+          </div>
+        </Card>
+      </div>
+    )
+  }
+  
+  // No wedding found
+  if (!wedding) {
+    return (
+      <div className="max-w-7xl mx-auto">
+        <Card>
+          <div className="text-center py-12">
+            <p className="text-pink-primary/70">
+              No wedding found. Please complete onboarding first.
+            </p>
+          </div>
+        </Card>
+      </div>
+    )
   }
 
   return (

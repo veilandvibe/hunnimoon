@@ -66,7 +66,7 @@ export default function BudgetItemCard({ item, onEdit, onDelete, onTogglePaid }:
         {/* Costs */}
         <div className="grid grid-cols-2 gap-3">
           <div className="text-center p-3 bg-pink-light rounded-xl">
-            <div className="text-xs text-pink-primary/60 mb-1">Estimated</div>
+            <div className="text-xs text-pink-primary/60 mb-1">Budgeted</div>
             <div className="text-lg font-black text-pink-primary">
               {formatCurrency(item.estimated_cost)}
             </div>
@@ -74,7 +74,7 @@ export default function BudgetItemCard({ item, onEdit, onDelete, onTogglePaid }:
           <div className={`text-center p-3 rounded-xl ${
             isOverBudget ? 'bg-red-50' : 'bg-green-50'
           }`}>
-            <div className="text-xs text-pink-primary/60 mb-1">Actual</div>
+            <div className="text-xs text-pink-primary/60 mb-1">Spent</div>
             <div className={`text-lg font-black ${
               isOverBudget ? 'text-red-600' : 'text-green-600'
             }`}>

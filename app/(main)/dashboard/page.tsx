@@ -40,11 +40,13 @@ export default function DashboardPage() {
   const pendingCount = guests.filter((g: any) => g.rsvp_status === 'Pending').length
   const projectedAttendance = yesCount + Math.floor(pendingCount * 0.5)
 
-  const totalEstimated = budgetItems.reduce((sum: number, item: any) => sum + item.estimated_cost, 0)
-  const totalActual = budgetItems.reduce((sum: number, item: any) => sum + item.actual_cost, 0)
-  const remaining = totalEstimated - totalActual
-  const percentSpent = totalEstimated > 0 ? Math.round((totalActual / totalEstimated) * 100) : 0
-  const isOverBudget = totalActual > totalEstimated
+  const totalBudget = wedding?.total_budget || 0
+  const allocated = budgetItems.reduce((sum: number, item: any) => sum + item.estimated_cost, 0)
+  const actualSpent = budgetItems.reduce((sum: number, item: any) => sum + item.actual_cost, 0)
+  const unallocated = totalBudget - allocated
+  const percentSpent = totalBudget > 0 ? Math.round((actualSpent / totalBudget) * 100) : 0
+  const isOverBudget = actualSpent > allocated
+  const isOverAllocated = allocated > totalBudget
 
   if (!wedding) {
     return (
@@ -114,11 +116,13 @@ export default function DashboardPage() {
           pendingCount={pendingCount}
         />
         <BudgetOverview
-          totalEstimated={totalEstimated}
-          totalActual={totalActual}
-          remaining={remaining}
+          totalBudget={totalBudget}
+          allocated={allocated}
+          actualSpent={actualSpent}
+          unallocated={unallocated}
           percentSpent={percentSpent}
           isOverBudget={isOverBudget}
+          isOverAllocated={isOverAllocated}
         />
       </div>
 
