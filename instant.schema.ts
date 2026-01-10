@@ -6,6 +6,7 @@ import { i } from '@instantdb/react'
 const schema = i.schema({
   entities: {
     weddings: i.entity({
+      user_id: i.string(),
       partner1_name: i.string(),
       partner2_name: i.string(),
       wedding_date: i.string(),
@@ -111,6 +112,54 @@ const schema = i.schema({
         on: 'rsvpSettings',
         has: 'one',
         label: 'wedding',
+      },
+    },
+  },
+  permissions: {
+    // Weddings: Users can only access their own weddings
+    // Public can read weddings by slug for RSVP pages
+    weddings: {
+      allow: {
+        create: 'auth.id != null',
+        read: 'auth.id == data.user_id || data.wedding_slug != null',
+        update: 'auth.id == data.user_id',
+        delete: 'auth.id == data.user_id',
+      },
+    },
+    // Guests: Wedding owners can CRUD, public can read/create/update for RSVP
+    guests: {
+      allow: {
+        create: 'auth.id == data.ref("wedding").user_id || auth.id == null',
+        read: 'auth.id == data.ref("wedding").user_id || auth.id == null',
+        update: 'auth.id == data.ref("wedding").user_id || auth.id == null',
+        delete: 'auth.id == data.ref("wedding").user_id',
+      },
+    },
+    // Budget Items: Only wedding owners can access
+    budgetItems: {
+      allow: {
+        create: 'auth.id == data.ref("wedding").user_id',
+        read: 'auth.id == data.ref("wedding").user_id',
+        update: 'auth.id == data.ref("wedding").user_id',
+        delete: 'auth.id == data.ref("wedding").user_id',
+      },
+    },
+    // Vendors: Only wedding owners can access
+    vendors: {
+      allow: {
+        create: 'auth.id == data.ref("wedding").user_id',
+        read: 'auth.id == data.ref("wedding").user_id',
+        update: 'auth.id == data.ref("wedding").user_id',
+        delete: 'auth.id == data.ref("wedding").user_id',
+      },
+    },
+    // RSVP Settings: Wedding owners can CRUD, public can read for RSVP pages
+    rsvpSettings: {
+      allow: {
+        create: 'auth.id == data.ref("wedding").user_id',
+        read: 'auth.id == data.ref("wedding").user_id || auth.id == null',
+        update: 'auth.id == data.ref("wedding").user_id',
+        delete: 'auth.id == data.ref("wedding").user_id',
       },
     },
   },
