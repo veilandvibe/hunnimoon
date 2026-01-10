@@ -43,16 +43,16 @@ export default function GuestListItem({ guest, onView, onEdit, onDelete }: Guest
 
   return (
     <div className="bg-white rounded-2xl shadow-card p-4 hover:shadow-lg transition-shadow">
-      <div className="grid grid-cols-[1fr_120px_auto] md:grid-cols-[1fr_120px_140px_140px] gap-4 items-center">
+      <div className="grid grid-cols-[1fr_90px_40px] md:grid-cols-[1fr_120px_140px_140px] gap-3 items-center">
         {/* Name column - Left aligned */}
         <div className="flex items-center gap-2 min-w-0">
           <span className="text-base font-black text-pink-primary truncate">
             {guest.full_name}
           </span>
           
-          {/* Household badge */}
+          {/* Household badge - Desktop only */}
           {guest.household_id && (
-            <span className="px-2 py-0.5 bg-pink-100 text-pink-700 text-xs font-medium rounded flex-shrink-0">
+            <span className="hidden md:inline-block px-2 py-0.5 bg-pink-100 text-pink-700 text-xs font-medium rounded flex-shrink-0">
               {guest.household_id}
             </span>
           )}

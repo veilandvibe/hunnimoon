@@ -2,14 +2,15 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Users, ClipboardCheck, DollarSign, MoreHorizontal } from 'lucide-react'
+import { Home, Users, ClipboardCheck, DollarSign, Briefcase, Settings } from 'lucide-react'
 
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'Home' },
   { href: '/guests', icon: Users, label: 'Guests' },
   { href: '/rsvp-manager', icon: ClipboardCheck, label: 'RSVP' },
   { href: '/budget', icon: DollarSign, label: 'Budget' },
-  { href: '/settings', icon: MoreHorizontal, label: 'More' },
+  { href: '/vendors', icon: Briefcase, label: 'Vendors' },
+  { href: '/settings', icon: Settings, label: 'Settings' },
 ]
 
 export default function BottomNav() {
@@ -31,12 +32,12 @@ export default function BottomNav() {
               }`}
             >
               <div
-                className={`flex flex-col items-center justify-center p-2 rounded-xl transition-all ${
+                className={`flex flex-col items-center justify-center p-1.5 rounded-xl transition-all ${
                   isActive ? 'bg-pink-primary/10' : ''
                 }`}
               >
-                <Icon size={22} strokeWidth={2.5} />
-                <span className="text-[10px] font-medium mt-1">{item.label}</span>
+                <Icon size={20} strokeWidth={2.5} />
+                <span className="text-[9px] font-medium mt-0.5">{item.label}</span>
               </div>
             </Link>
           )

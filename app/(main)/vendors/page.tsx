@@ -144,7 +144,7 @@ export default function VendorsPage() {
             {filteredVendors.length} of {vendors.length} vendors
           </p>
         </div>
-        <Button onClick={handleAddVendor} size="lg">
+        <Button onClick={handleAddVendor} size="lg" type="button">
           <Plus size={20} />
           Add Vendor
         </Button>
@@ -175,7 +175,7 @@ export default function VendorsPage() {
               ? 'No vendors match your search'
               : 'No vendors added yet'}
           </p>
-          <Button onClick={handleAddVendor} className="mt-4">
+          <Button onClick={handleAddVendor} className="mt-4" type="button">
             Add Your First Vendor
           </Button>
         </div>

@@ -56,14 +56,14 @@ export default function VendorFormModal({ isOpen, onClose, onSave, editingVendor
         <Input
           label="Vendor/Company Name"
           required
-          value={formData.vendor_name}
+          value={formData.vendor_name || ''}
           onChange={(e) => setFormData({ ...formData, vendor_name: e.target.value })}
           placeholder="Perfect Photography Studio"
         />
 
         <Input
           label="Contact Person"
-          value={formData.contact_name}
+          value={formData.contact_name || ''}
           onChange={(e) => setFormData({ ...formData, contact_name: e.target.value })}
           placeholder="Jane Smith"
         />
@@ -72,7 +72,7 @@ export default function VendorFormModal({ isOpen, onClose, onSave, editingVendor
           <Input
             label="Email"
             type="email"
-            value={formData.email}
+            value={formData.email || ''}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             placeholder="contact@vendor.com"
           />
@@ -80,7 +80,7 @@ export default function VendorFormModal({ isOpen, onClose, onSave, editingVendor
           <Input
             label="Phone"
             type="tel"
-            value={formData.phone}
+            value={formData.phone || ''}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
             placeholder="555-0123"
           />
@@ -89,23 +89,23 @@ export default function VendorFormModal({ isOpen, onClose, onSave, editingVendor
         <Input
           label="Website"
           type="url"
-          value={formData.website}
+          value={formData.website || ''}
           onChange={(e) => setFormData({ ...formData, website: e.target.value })}
           placeholder="https://vendor.com"
         />
 
         <Textarea
           label="Notes"
-          value={formData.notes}
+          value={formData.notes || ''}
           onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
           placeholder="Contract details, pricing, special notes..."
         />
 
         <div className="flex gap-3 pt-4">
-          <Button type="submit" fullWidth>
+          <Button type="submit" className="flex-1">
             {editingVendor ? 'Save Changes' : 'Add Vendor'}
           </Button>
-          <Button type="button" variant="outline" onClick={onClose}>
+          <Button type="button" variant="outline" onClick={onClose} className="flex-1">
             Cancel
           </Button>
         </div>

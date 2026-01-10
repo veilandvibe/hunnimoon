@@ -41,17 +41,17 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[35]"
           />
 
           {/* Modal */}
-          <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-4 overflow-hidden">
+          <div className="fixed top-[72px] left-0 right-0 bottom-[80px] md:inset-0 z-[36] flex items-end md:items-center justify-center p-4 overflow-hidden pointer-events-none">
             <motion.div
               initial={{ opacity: 0, y: 100, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 100, scale: 0.95 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className={`bg-white rounded-t-4xl md:rounded-4xl shadow-2xl w-full ${sizes[size]} max-h-[90vh] overflow-hidden flex flex-col relative`}
+              className={`bg-white rounded-4xl shadow-2xl w-full ${sizes[size]} max-h-full md:max-h-[90vh] overflow-hidden flex flex-col relative pointer-events-auto`}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}

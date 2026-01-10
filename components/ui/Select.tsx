@@ -1,13 +1,24 @@
 import { SelectHTMLAttributes, forwardRef } from 'react'
 
+interface SelectOption {
+  value: string
+  label: string
+}
+
+interface SelectOptionGroup {
+  label: string
+  options: SelectOption[]
+}
+
 interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   label?: string
   error?: string
-  options: { value: string; label: string }[]
+  options?: SelectOption[]
+  groupedOptions?: SelectOptionGroup[]
 }
 
 const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ label, error, options, className = '', ...props }, ref) => {
+  ({ label, error, options, groupedOptions, className = '', ...props }, ref) => {
     return (
       <div className="w-full">
         {label && (
@@ -25,11 +36,23 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
           } focus:outline-none focus:ring-2 focus:ring-pink-primary/20 text-pink-primary bg-white ${className}`}
           {...props}
         >
-          {options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
+          {groupedOptions ? (
+            groupedOptions.map((group, groupIdx) => (
+              <optgroup key={groupIdx} label={group.label}>
+                {group.options.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </optgroup>
+            ))
+          ) : (
+            options?.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))
+          )}
         </select>
         {error && (
           <p className="mt-1 text-sm text-red-500">{error}</p>

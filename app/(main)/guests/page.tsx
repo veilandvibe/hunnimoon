@@ -26,7 +26,9 @@ export default function GuestsPage() {
   
   const [searchQuery, setSearchQuery] = useState('')
   const [filterStatus, setFilterStatus] = useState<RSVPStatus | 'All'>('All')
-  const [filterSide, setFilterSide] = useState<Side | 'All'>('All')
+  const [filterSide, setFilterSide] = useState<Side | 'All' | 'Individual'>('All')
+  const [filterHousehold, setFilterHousehold] = useState<string>('All')
+  const [filterPlusOne, setFilterPlusOne] = useState<'All' | 'With' | 'Without'>('All')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingGuest, setEditingGuest] = useState<any | null>(null)
   const [viewOnly, setViewOnly] = useState(false)
@@ -40,9 +42,32 @@ export default function GuestsPage() {
       guest.phone?.includes(searchQuery)
 
     const matchesStatus = filterStatus === 'All' || guest.rsvp_status === filterStatus
-    const matchesSide = filterSide === 'All' || guest.side === filterSide
+    
+    // Side filter
+    let matchesSide = true
+    if (filterSide !== 'All') {
+      if (filterSide === 'Individual') {
+        matchesSide = !guest.household_id || guest.household_id.trim() === ''
+      } else {
+        matchesSide = guest.side === filterSide
+      }
+    }
+    
+    // Household filter
+    const matchesHousehold = 
+      filterHousehold === 'All' || 
+      (filterHousehold === 'Individual' && (!guest.household_id || guest.household_id.trim() === '')) ||
+      guest.household_id === filterHousehold
+    
+    // Plus-one filter
+    let matchesPlusOne = true
+    if (filterPlusOne === 'With') {
+      matchesPlusOne = guest.plus_one_allowed || !!guest.plus_one_name
+    } else if (filterPlusOne === 'Without') {
+      matchesPlusOne = !guest.plus_one_allowed && !guest.plus_one_name
+    }
 
-    return matchesSearch && matchesStatus && matchesSide
+    return matchesSearch && matchesStatus && matchesSide && matchesHousehold && matchesPlusOne
   })
 
   // Group guests by household
@@ -272,15 +297,55 @@ export default function GuestsPage() {
           />
 
           <Select
-            label="Side"
-            value={filterSide}
-            onChange={(e) => setFilterSide(e.target.value as Side | 'All')}
-            options={[
-              { value: 'All', label: 'All Sides' },
-              { value: 'Bride', label: 'Bride' },
-              { value: 'Groom', label: 'Groom' },
-              { value: 'Both', label: 'Both' },
-              { value: 'Unknown', label: 'Unknown' },
+            label="Sort By"
+            value={filterSide !== 'All' && filterSide !== 'Individual' ? `side-${filterSide}` : 
+                   filterHousehold !== 'All' ? `household-${filterHousehold}` :
+                   filterPlusOne !== 'All' ? `plusone-${filterPlusOne}` : 'All'}
+            onChange={(e) => {
+              const value = e.target.value
+              // Reset all filters first
+              setFilterSide('All')
+              setFilterHousehold('All')
+              setFilterPlusOne('All')
+              
+              if (value === 'All') {
+                // All filters already reset
+              } else if (value.startsWith('side-')) {
+                setFilterSide(value.replace('side-', '') as Side)
+              } else if (value.startsWith('household-')) {
+                setFilterHousehold(value.replace('household-', ''))
+              } else if (value.startsWith('plusone-')) {
+                setFilterPlusOne(value.replace('plusone-', '') as 'With' | 'Without')
+              }
+            }}
+            groupedOptions={[
+              {
+                label: '━━━━━ SIDE ━━━━━',
+                options: [
+                  { value: 'All', label: 'All Guests' },
+                  { value: 'side-Bride', label: "Bride's Side" },
+                  { value: 'side-Groom', label: "Groom's Side" },
+                  { value: 'side-Both', label: 'Both Sides' },
+                  { value: 'side-Unknown', label: 'Unknown Side' },
+                ]
+              },
+              {
+                label: '━━━━━ HOUSEHOLD ━━━━━',
+                options: [
+                  { value: 'household-Individual', label: 'Individual Guests Only' },
+                  ...existingHouseholds.map(household => ({
+                    value: `household-${household}`,
+                    label: household
+                  }))
+                ]
+              },
+              {
+                label: '━━━━━ PLUS-ONE ━━━━━',
+                options: [
+                  { value: 'plusone-With', label: 'With Plus-One' },
+                  { value: 'plusone-Without', label: 'Without Plus-One' },
+                ]
+              }
             ]}
           />
         </div>
@@ -303,7 +368,7 @@ export default function GuestsPage() {
         <div className="space-y-4">
           {/* Column Headers */}
           <div className="bg-white rounded-2xl shadow-card px-4 py-3">
-            <div className="grid grid-cols-[1fr_120px_auto] md:grid-cols-[1fr_120px_140px_140px] gap-4 items-center">
+            <div className="grid grid-cols-[1fr_90px_40px] md:grid-cols-[1fr_120px_140px_140px] gap-3 items-center">
               <span className="text-sm font-bold text-pink-primary">Name</span>
               <span className="hidden md:block text-sm font-bold text-pink-primary text-center">Side</span>
               <span className="text-sm font-bold text-pink-primary text-center">RSVP</span>
