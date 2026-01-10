@@ -58,7 +58,7 @@ export default function BudgetPage() {
     setIsModalOpen(true)
   }
 
-  const handleEditItem = (item: BudgetItem) => {
+  const handleEditItem = (item: any) => {
     setEditingItem(item)
     setIsModalOpen(true)
   }

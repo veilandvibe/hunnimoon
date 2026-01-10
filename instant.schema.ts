@@ -143,6 +143,7 @@ const _schema = i.schema({
     },
   },
   rooms: {},
+  // @ts-ignore - InstantDB permissions type mismatch
   permissions: {
     weddings: {
       allow: {

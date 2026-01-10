@@ -270,7 +270,7 @@ export default function RSVPPage() {
               <strong>{wedding.partner1_name} & {wedding.partner2_name}</strong>
             </p>
             <p className="text-xs text-pink-primary/60 mt-1">
-              {new Date(wedding.wedding_date).toLocaleDateString('en-US', {
+              {wedding.wedding_date && new Date(wedding.wedding_date).toLocaleDateString('en-US', {
                 weekday: 'long',
                 year: 'numeric',
                 month: 'long',
@@ -301,7 +301,7 @@ export default function RSVPPage() {
             {wedding.partner1_name} & {wedding.partner2_name}
           </h1>
           <p className="text-lg">
-            {new Date(wedding.wedding_date).toLocaleDateString('en-US', {
+            {wedding.wedding_date && new Date(wedding.wedding_date).toLocaleDateString('en-US', {
               weekday: 'long',
               year: 'numeric',
               month: 'long',

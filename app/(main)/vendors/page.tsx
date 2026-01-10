@@ -35,7 +35,7 @@ export default function VendorsPage() {
 
   // Filter vendors
   const filteredVendors = vendors.filter((vendor) =>
-    vendor.vendor_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    vendor.vendor_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     vendor.contact_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     vendor.email?.toLowerCase().includes(searchQuery.toLowerCase())
   )
@@ -45,7 +45,7 @@ export default function VendorsPage() {
     setIsModalOpen(true)
   }
 
-  const handleEditVendor = (vendor: Vendor) => {
+  const handleEditVendor = (vendor: any) => {
     setEditingVendor(vendor)
     setIsModalOpen(true)
   }

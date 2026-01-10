@@ -1,11 +1,10 @@
 import Card from '../ui/Card'
 import Button from '../ui/Button'
-import { Vendor } from '@/lib/dummyData'
 import { Mail, Phone, Globe, Edit, Trash2, ExternalLink } from 'lucide-react'
 
 interface VendorCardProps {
-  vendor: Vendor
-  onEdit: (vendor: Vendor) => void
+  vendor: any
+  onEdit: (vendor: any) => void
   onDelete: (vendorId: string) => void
 }
 

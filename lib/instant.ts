@@ -16,4 +16,4 @@ const db = init({
 export default db
 
 // Export types
-export type { Schema } from '../instant.schema'
+export type { AppSchema } from '../instant.schema'

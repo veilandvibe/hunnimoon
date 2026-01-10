@@ -32,7 +32,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         whileTap={{ scale: 0.98 }}
         className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${width} ${className}`}
-        {...props}
+        {...(props as any)}
       >
         {children}
       </motion.button>

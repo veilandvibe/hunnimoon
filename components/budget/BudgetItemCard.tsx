@@ -1,11 +1,10 @@
 import Card from '../ui/Card'
 import Checkbox from '../ui/Checkbox'
-import { BudgetItem } from '@/lib/dummyData'
 import { Edit, Trash2, DollarSign } from 'lucide-react'
 
 interface BudgetItemCardProps {
-  item: BudgetItem
-  onEdit: (item: BudgetItem) => void
+  item: any
+  onEdit: (item: any) => void
   onDelete: (itemId: string) => void
   onTogglePaid: (itemId: string, isPaid: boolean) => void
 }
@@ -20,11 +19,14 @@ export default function BudgetItemCard({ item, onEdit, onDelete, onTogglePaid }:
     }).format(amount)
   }
 
-  const percentSpent = item.estimated_cost > 0
-    ? Math.round((item.actual_cost / item.estimated_cost) * 100)
+  const estimatedCost = item.estimated_cost || 0
+  const actualCost = item.actual_cost || 0
+
+  const percentSpent = estimatedCost > 0
+    ? Math.round((actualCost / estimatedCost) * 100)
     : 0
 
-  const isOverBudget = item.actual_cost > item.estimated_cost
+  const isOverBudget = actualCost > estimatedCost
 
   return (
     <Card padding="md">
@@ -66,7 +68,7 @@ export default function BudgetItemCard({ item, onEdit, onDelete, onTogglePaid }:
           <div className="text-center p-3 bg-pink-light rounded-xl">
             <div className="text-xs text-pink-primary/60 mb-1">Budgeted</div>
             <div className="text-lg font-black text-pink-primary">
-              {formatCurrency(item.estimated_cost)}
+              {formatCurrency(estimatedCost)}
             </div>
           </div>
           <div className={`text-center p-3 rounded-xl ${
@@ -76,7 +78,7 @@ export default function BudgetItemCard({ item, onEdit, onDelete, onTogglePaid }:
             <div className={`text-lg font-black ${
               isOverBudget ? 'text-red-600' : 'text-green-600'
             }`}>
-              {formatCurrency(item.actual_cost)}
+              {formatCurrency(actualCost)}
             </div>
           </div>
         </div>

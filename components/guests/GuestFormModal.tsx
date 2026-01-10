@@ -7,19 +7,19 @@ import Select from '../ui/Select'
 import Textarea from '../ui/Textarea'
 import Toggle from '../ui/Toggle'
 import Button from '../ui/Button'
-import { Guest, Side, RSVPStatus } from '@/lib/dummyData'
+import { Side, RSVPStatus } from '@/lib/dummyData'
 
 interface GuestFormModalProps {
   isOpen: boolean
   onClose: () => void
-  onSave: (guest: Partial<Guest>) => void
-  editingGuest?: Guest | null
+  onSave: (guest: any) => void
+  editingGuest?: any | null
   existingHouseholds?: string[]
   viewOnly?: boolean
 }
 
 export default function GuestFormModal({ isOpen, onClose, onSave, editingGuest, existingHouseholds = [], viewOnly = false }: GuestFormModalProps) {
-  const [formData, setFormData] = useState<Partial<Guest>>({
+  const [formData, setFormData] = useState<any>({
     full_name: '',
     email: '',
     phone: '',

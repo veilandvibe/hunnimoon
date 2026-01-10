@@ -44,7 +44,7 @@ export default function GuestsPage() {
   // Filter guests
   const filteredGuests = guests.filter((guest) => {
     const matchesSearch =
-      guest.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      guest.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       guest.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       guest.phone?.includes(searchQuery)
 
@@ -113,13 +113,13 @@ export default function GuestsPage() {
     setIsModalOpen(true)
   }
 
-  const handleEditGuest = (guest: Guest) => {
+  const handleEditGuest = (guest: any) => {
     setEditingGuest(guest)
     setViewOnly(false)
     setIsModalOpen(true)
   }
 
-  const handleViewGuest = (guest: Guest) => {
+  const handleViewGuest = (guest: any) => {
     setEditingGuest(guest)
     setViewOnly(true)
     setIsModalOpen(true)

@@ -2,13 +2,12 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Badge from '../ui/Badge'
-import { Guest } from '@/lib/dummyData'
 import { Eye, Edit, Trash2, MoreVertical } from 'lucide-react'
 
 interface GuestListItemProps {
-  guest: Guest
-  onView: (guest: Guest) => void
-  onEdit: (guest: Guest) => void
+  guest: any
+  onView: (guest: any) => void
+  onEdit: (guest: any) => void
   onDelete: (guestId: string) => void
 }
 
