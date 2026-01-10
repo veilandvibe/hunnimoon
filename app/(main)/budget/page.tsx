@@ -6,21 +6,28 @@ import BudgetItemCard from '@/components/budget/BudgetItemCard'
 import BudgetFormModal from '@/components/budget/BudgetFormModal'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
+import { useWedding } from '@/components/providers/WeddingProvider'
 import db from '@/lib/instant'
 import { id } from '@instantdb/react'
 
 export default function BudgetPage() {
   const { user, isLoading: authLoading } = db.useAuth()
+  const { wedding, isLoading: weddingLoading } = useWedding()
   
-  // Query wedding and budget items
-  const { data, isLoading: dataLoading, error } = db.useQuery({
-    weddings: {
-      budgetItems: {},
-    },
-  })
+  // Query only budget items
+  const { data, isLoading: dataLoading, error } = db.useQuery(
+    wedding?.id ? {
+      budgetItems: {
+        $: {
+          where: {
+            wedding: wedding.id
+          }
+        }
+      }
+    } : null
+  )
   
-  const wedding = data?.weddings?.[0]
-  const budgetItems = wedding?.budgetItems || []
+  const budgetItems = data?.budgetItems || []
   
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<any | null>(null)
@@ -140,7 +147,7 @@ export default function BudgetPage() {
   }
 
   // Loading state
-  if (authLoading || dataLoading) {
+  if (authLoading || weddingLoading || dataLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center space-y-4">

@@ -9,6 +9,9 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   const router = useRouter()
   const pathname = usePathname()
   const { isLoading, user, error } = db.useAuth()
+  
+  // Query weddings to check if user has completed onboarding
+  const { data: weddingData, isLoading: weddingLoading } = db.useQuery({ weddings: {} })
 
   // Public routes that don't require authentication
   const publicRoutes = ['/login', '/rsvp']
@@ -23,12 +26,19 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       return
     }
 
-    // If authenticated and on login page, redirect to onboarding
-    // (onboarding will handle checking if they already have a wedding)
+    // If authenticated and on login page, check if they have a wedding
     if (user && pathname === '/login') {
-      router.push('/onboarding')
+      if (weddingLoading) return // Wait for wedding data to load
+      
+      if (weddingData?.weddings && weddingData.weddings.length > 0) {
+        // Returning user - go straight to dashboard
+        router.push('/dashboard')
+      } else {
+        // New user - go to onboarding
+        router.push('/onboarding')
+      }
     }
-  }, [isLoading, user, pathname, isPublicRoute, router])
+  }, [isLoading, user, pathname, isPublicRoute, router, weddingData, weddingLoading])
 
   // Show loading spinner while checking authentication
   if (isLoading) {

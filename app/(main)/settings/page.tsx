@@ -5,22 +5,29 @@ import { useRouter } from 'next/navigation'
 import Card from '@/components/ui/Card'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
+import { useWedding } from '@/components/providers/WeddingProvider'
 import db from '@/lib/instant'
 import { Copy, Check, Calendar, User, LogOut, Loader2 } from 'lucide-react'
 
 export default function SettingsPage() {
   const router = useRouter()
   const { user, isLoading: authLoading } = db.useAuth()
+  const { wedding, isLoading: weddingLoading } = useWedding()
   
-  // Query wedding data
-  const { data, isLoading: dataLoading, error } = db.useQuery({
-    weddings: {
-      rsvpSettings: {},
-    },
-  })
+  // Query only rsvpSettings if needed
+  const { data, isLoading: dataLoading, error } = db.useQuery(
+    wedding?.id ? {
+      rsvpSettings: {
+        $: {
+          where: {
+            wedding: wedding.id
+          }
+        }
+      }
+    } : null
+  )
   
-  const wedding = data?.weddings?.[0]
-  const rsvpSettings = wedding?.rsvpSettings
+  const rsvpSettings = data?.rsvpSettings?.[0]
   
   const [weddingDetails, setWeddingDetails] = useState({
     partner1_name: '',
@@ -93,7 +100,7 @@ export default function SettingsPage() {
   }
 
   // Loading state
-  if (authLoading || dataLoading) {
+  if (authLoading || weddingLoading || dataLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center space-y-4">

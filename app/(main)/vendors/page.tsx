@@ -6,21 +6,28 @@ import VendorCard from '@/components/vendors/VendorCard'
 import VendorFormModal from '@/components/vendors/VendorFormModal'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
+import { useWedding } from '@/components/providers/WeddingProvider'
 import db from '@/lib/instant'
 import { id } from '@instantdb/react'
 
 export default function VendorsPage() {
   const { user, isLoading: authLoading } = db.useAuth()
+  const { wedding, isLoading: weddingLoading } = useWedding()
   
-  // Query wedding and vendors
-  const { data, isLoading: dataLoading, error } = db.useQuery({
-    weddings: {
-      vendors: {},
-    },
-  })
+  // Query only vendors
+  const { data, isLoading: dataLoading, error } = db.useQuery(
+    wedding?.id ? {
+      vendors: {
+        $: {
+          where: {
+            wedding: wedding.id
+          }
+        }
+      }
+    } : null
+  )
   
-  const wedding = data?.weddings?.[0]
-  const vendors = wedding?.vendors || []
+  const vendors = data?.vendors || []
   
   const [searchQuery, setSearchQuery] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -91,7 +98,7 @@ export default function VendorsPage() {
   }
 
   // Loading state
-  if (authLoading || dataLoading) {
+  if (authLoading || weddingLoading || dataLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center space-y-4">

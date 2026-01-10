@@ -8,21 +8,28 @@ import GuestFormModal from '@/components/guests/GuestFormModal'
 import Button from '@/components/ui/Button'
 import Select from '@/components/ui/Select'
 import { RSVPStatus, Side } from '@/lib/dummyData'
+import { useWedding } from '@/components/providers/WeddingProvider'
 import db from '@/lib/instant'
 import { id } from '@instantdb/react'
 
 export default function GuestsPage() {
   const { user, isLoading: authLoading } = db.useAuth()
+  const { wedding, isLoading: weddingLoading } = useWedding()
   
-  // Query wedding and guests data
-  const { data, isLoading: dataLoading, error } = db.useQuery({
-    weddings: {
-      guests: {},
-    },
-  })
+  // Query only guests data
+  const { data, isLoading: dataLoading, error } = db.useQuery(
+    wedding?.id ? {
+      guests: {
+        $: {
+          where: {
+            wedding: wedding.id
+          }
+        }
+      }
+    } : null
+  )
   
-  const wedding = data?.weddings?.[0]
-  const guests = wedding?.guests || []
+  const guests = data?.guests || []
   
   const [searchQuery, setSearchQuery] = useState('')
   const [filterStatus, setFilterStatus] = useState<RSVPStatus | 'All'>('All')
@@ -183,7 +190,7 @@ export default function GuestsPage() {
   }
 
   // Loading state
-  if (authLoading || dataLoading) {
+  if (authLoading || weddingLoading || dataLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center space-y-4">

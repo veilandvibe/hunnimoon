@@ -9,6 +9,7 @@ import Input from '@/components/ui/Input'
 import Textarea from '@/components/ui/Textarea'
 import RSVPChart from '@/components/dashboard/RSVPChart'
 import LoadingSpinner from '@/components/ui/LoadingSpinner'
+import { useWedding } from '@/components/providers/WeddingProvider'
 import db from '@/lib/instant'
 import { id } from '@instantdb/react'
 import { Copy, Check, ExternalLink, Users, Settings } from 'lucide-react'
@@ -17,17 +18,29 @@ export default function RSVPManagerPage() {
   const [copied, setCopied] = useState(false)
   const [saving, setSaving] = useState(false)
   const [saveSuccess, setSaveSuccess] = useState(false)
+  const { wedding, isLoading: weddingLoading } = useWedding()
   
-  // Query wedding, guests, and rsvpSettings from InstantDB
-  const { data, isLoading } = db.useQuery({
-    weddings: {
-      guests: {},
-      rsvpSettings: {},
-    },
-  })
+  // Query only guests and rsvpSettings
+  const { data, isLoading: dataLoading } = db.useQuery(
+    wedding?.id ? {
+      guests: {
+        $: {
+          where: {
+            wedding: wedding.id
+          }
+        }
+      },
+      rsvpSettings: {
+        $: {
+          where: {
+            wedding: wedding.id
+          }
+        }
+      }
+    } : null
+  )
 
-  const wedding = data?.weddings?.[0]
-  const guests = wedding?.guests || []
+  const guests = data?.guests || []
   const rsvpSettings = wedding?.rsvpSettings
   
   // Local state for form settings
@@ -150,7 +163,7 @@ export default function RSVPManagerPage() {
   }
 
   // Loading state
-  if (isLoading) {
+  if (weddingLoading || dataLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <LoadingSpinner size="lg" />

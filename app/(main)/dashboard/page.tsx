@@ -7,17 +7,35 @@ import BudgetOverview from '@/components/dashboard/BudgetOverview'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import LoadingSpinner from '@/components/ui/LoadingSpinner'
+import { useWedding } from '@/components/providers/WeddingProvider'
 import db from '@/lib/instant'
 import { Users, ClipboardList } from 'lucide-react'
 import Link from 'next/link'
 
 export default function DashboardPage() {
-  const { data, isLoading } = db.useQuery({
-    weddings: {
-      guests: {},
-      budgetItems: {},
-    },
-  })
+  const { wedding, isLoading: weddingLoading } = useWedding()
+  
+  // Query only the nested data we need for this page
+  const { data, isLoading: dataLoading } = db.useQuery(
+    wedding?.id ? {
+      guests: {
+        $: {
+          where: {
+            wedding: wedding.id
+          }
+        }
+      },
+      budgetItems: {
+        $: {
+          where: {
+            wedding: wedding.id
+          }
+        }
+      }
+    } : null
+  )
+
+  const isLoading = weddingLoading || dataLoading
 
   if (isLoading) {
     return (
@@ -27,9 +45,8 @@ export default function DashboardPage() {
     )
   }
 
-  const wedding = data?.weddings?.[0]
-  const guests = wedding?.guests || []
-  const budgetItems = wedding?.budgetItems?.filter((item: any) => item.is_active) || []
+  const guests = data?.guests || []
+  const budgetItems = data?.budgetItems?.filter((item: any) => item.is_active) || []
 
   // Calculate metrics
   const totalGuests = guests.length
