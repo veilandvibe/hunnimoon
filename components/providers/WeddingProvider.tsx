@@ -11,7 +11,18 @@ interface WeddingContextType {
 const WeddingContext = createContext<WeddingContextType | null>(null)
 
 export function WeddingProvider({ children }: { children: ReactNode }) {
-  const { data, isLoading } = db.useQuery({ weddings: {} })
+  const { user } = db.useAuth()
+  const { data, isLoading } = db.useQuery(
+    user?.id ? {
+      weddings: {
+        $: {
+          where: {
+            user_id: user.id
+          }
+        }
+      }
+    } : null
+  )
   const wedding = data?.weddings?.[0] || null
   
   return (

@@ -10,8 +10,18 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   const pathname = usePathname()
   const { isLoading, user, error } = db.useAuth()
   
-  // Query weddings to check if user has completed onboarding
-  const { data: weddingData, isLoading: weddingLoading } = db.useQuery({ weddings: {} })
+  // Query weddings to check if user has completed onboarding - filter by user_id
+  const { data: weddingData, isLoading: weddingLoading } = db.useQuery(
+    user?.id ? {
+      weddings: {
+        $: {
+          where: {
+            user_id: user.id
+          }
+        }
+      }
+    } : null
+  )
 
   // Public routes that don't require authentication
   const publicRoutes = ['/login', '/rsvp']

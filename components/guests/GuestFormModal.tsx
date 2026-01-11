@@ -41,10 +41,15 @@ export default function GuestFormModal({ isOpen, onClose, onSave, editingGuest, 
     address_postal: '',
     address_country: '',
   })
+  
+  const [isCreatingNewHousehold, setIsCreatingNewHousehold] = useState(false)
+  const [newHouseholdName, setNewHouseholdName] = useState('')
 
   useEffect(() => {
     if (editingGuest) {
       setFormData(editingGuest)
+      setIsCreatingNewHousehold(false)
+      setNewHouseholdName('')
     } else {
       // Reset form
       setFormData({
@@ -69,6 +74,8 @@ export default function GuestFormModal({ isOpen, onClose, onSave, editingGuest, 
         address_postal: '',
         address_country: '',
       })
+      setIsCreatingNewHousehold(false)
+      setNewHouseholdName('')
     }
   }, [editingGuest, isOpen])
 
@@ -379,8 +386,16 @@ export default function GuestFormModal({ isOpen, onClose, onSave, editingGuest, 
           {existingHouseholds.length > 0 ? (
             <Select
               label="Household ID"
-              value={formData.household_id}
-              onChange={(e) => setFormData({ ...formData, household_id: e.target.value })}
+              value={isCreatingNewHousehold ? '__custom__' : formData.household_id}
+              onChange={(e) => {
+                if (e.target.value === '__custom__') {
+                  setIsCreatingNewHousehold(true)
+                  setNewHouseholdName('')
+                } else {
+                  setIsCreatingNewHousehold(false)
+                  setFormData({ ...formData, household_id: e.target.value })
+                }
+              }}
               options={[
                 { value: '', label: 'No household (individual guest)' },
                 { value: '__custom__', label: '+ Create new household' },
@@ -398,12 +413,15 @@ export default function GuestFormModal({ isOpen, onClose, onSave, editingGuest, 
             />
           )}
 
-          {!viewOnly && formData.household_id === '__custom__' && (
+          {!viewOnly && isCreatingNewHousehold && (
             <div className="mt-4">
               <Input
                 label="New Household Name"
-                value=""
-                onChange={(e) => setFormData({ ...formData, household_id: e.target.value })}
+                value={newHouseholdName}
+                onChange={(e) => {
+                  setNewHouseholdName(e.target.value)
+                  setFormData({ ...formData, household_id: e.target.value })
+                }}
                 placeholder="e.g., Smith Family, Johnson Household"
                 autoFocus
               />

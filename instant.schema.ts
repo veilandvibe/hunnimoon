@@ -148,7 +148,7 @@ const _schema = i.schema({
     weddings: {
       allow: {
         create: "auth.id != null",
-        read: "auth.id == data.user_id || data.wedding_slug != null",
+        read: "true", // Allow public read access for RSVP forms
         update: "auth.id == data.user_id",
         delete: "auth.id == data.user_id",
       },
@@ -156,7 +156,17 @@ const _schema = i.schema({
     guests: {
       allow: {
         create: "auth.id == data.ref('wedding').user_id || auth.id == null",
-        read: "auth.id == data.ref('wedding').user_id || auth.id == null",
+        // Field-level read permissions for security:
+        // Public (RSVP form) can only see: full_name, rsvp_status, household_id, plus_one_allowed
+        // Wedding owner sees everything
+        read: {
+          full_name: "true", // Needed for autocomplete
+          rsvp_status: "true", // Needed to show status
+          household_id: "true", // Needed for household grouping
+          plus_one_allowed: "true", // Needed for plus-one field
+          // All other fields (email, phone, address, etc.) only visible to owner:
+          $default: "auth.id == data.ref('wedding').user_id"
+        },
         update: "auth.id == data.ref('wedding').user_id || auth.id == null",
         delete: "auth.id == data.ref('wedding').user_id",
       },
@@ -180,7 +190,7 @@ const _schema = i.schema({
     rsvpSettings: {
       allow: {
         create: "auth.id == data.ref('wedding').user_id",
-        read: "auth.id == data.ref('wedding').user_id || auth.id == null",
+        read: "true", // Allow public read access for RSVP form configuration
         update: "auth.id == data.ref('wedding').user_id",
         delete: "auth.id == data.ref('wedding').user_id",
       },
