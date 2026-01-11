@@ -9,7 +9,7 @@ interface ModalProps {
   onClose: () => void
   title?: string
   children: React.ReactNode
-  size?: 'sm' | 'md' | 'lg' | 'xl'
+  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl'
 }
 
 export default function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalProps) {
@@ -29,6 +29,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
     md: 'max-w-lg',
     lg: 'max-w-2xl',
     xl: 'max-w-4xl',
+    '2xl': 'max-w-6xl',
   }
 
   return (
@@ -45,13 +46,13 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
           />
 
           {/* Modal */}
-          <div className="fixed top-[72px] left-0 right-0 bottom-[80px] md:inset-0 z-[36] flex items-end md:items-center justify-center p-4 overflow-hidden pointer-events-none">
+          <div className="fixed top-[72px] left-0 right-0 bottom-[80px] md:top-0 md:left-[280px] md:right-0 md:bottom-0 z-[36] flex items-end md:items-center justify-center p-4 overflow-hidden pointer-events-none">
             <motion.div
               initial={{ opacity: 0, y: 100, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 100, scale: 0.95 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className={`bg-white rounded-4xl shadow-2xl w-full ${sizes[size]} max-h-full md:max-h-[90vh] overflow-hidden flex flex-col relative pointer-events-auto`}
+              className={`bg-white rounded-4xl shadow-2xl w-full ${sizes[size]} max-h-full md:max-h-[90vh] overflow-hidden flex flex-col relative pointer-events-auto mx-auto`}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}

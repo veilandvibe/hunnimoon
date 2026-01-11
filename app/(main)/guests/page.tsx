@@ -1,16 +1,18 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { Search, Plus, Loader2, Users2, List, LayoutGrid } from 'lucide-react'
+import { Search, Plus, Loader2, Users2, List, LayoutGrid, Upload, Download } from 'lucide-react'
 import GuestCard from '@/components/guests/GuestCard'
 import GuestListItem from '@/components/guests/GuestListItem'
 import GuestFormModal from '@/components/guests/GuestFormModal'
+import GuestImportModal from '@/components/guests/GuestImportModal'
 import Button from '@/components/ui/Button'
 import Select from '@/components/ui/Select'
 import { RSVPStatus, Side } from '@/lib/dummyData'
 import { useWedding } from '@/components/providers/WeddingProvider'
 import db from '@/lib/instant'
 import { id } from '@instantdb/react'
+import { ParsedGuest } from '@/lib/guestParser'
 
 export default function GuestsPage() {
   const { user, isLoading: authLoading } = db.useAuth()
@@ -37,6 +39,7 @@ export default function GuestsPage() {
   const [filterHousehold, setFilterHousehold] = useState<string>('All')
   const [filterPlusOne, setFilterPlusOne] = useState<'All' | 'With' | 'Without'>('All')
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false)
   const [editingGuest, setEditingGuest] = useState<any | null>(null)
   const [viewOnly, setViewOnly] = useState(false)
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list')
@@ -189,6 +192,158 @@ export default function GuestsPage() {
     }
   }
 
+  const handleImportGuests = async (importedGuests: ParsedGuest[]) => {
+    if (!wedding?.id) {
+      alert('Wedding not found. Please refresh the page.')
+      return
+    }
+
+    try {
+      // Batch imports in chunks of 50 to avoid InstantDB transaction size limits
+      const BATCH_SIZE = 50
+      const totalBatches = Math.ceil(importedGuests.length / BATCH_SIZE)
+      
+      for (let i = 0; i < totalBatches; i++) {
+        const start = i * BATCH_SIZE
+        const end = Math.min(start + BATCH_SIZE, importedGuests.length)
+        const batch = importedGuests.slice(start, end)
+        
+        // Create transactions for this batch
+        const transactions = batch.map(guest => {
+          const guestId = id()
+          return db.tx.guests[guestId]
+            .update({
+              full_name: guest.name,
+              email: guest.email || '',
+              phone: guest.phone || '',
+              side: guest.side || 'Unknown',
+              household_id: guest.household || '',
+              plus_one_allowed: false,
+              plus_one_name: '',
+              invite_sent: false,
+              rsvp_status: 'Pending',
+              meal_choice: '',
+              dietary_notes: '',
+              rsvp_notes: '',
+              shuttle_needed: false,
+              song_request: '',
+              needs_accommodation: false,
+              address_street: '',
+              address_city: '',
+              address_state: '',
+              address_postal: '',
+              address_country: '',
+              source: 'Import',
+              last_updated: Date.now(),
+            })
+            .link({ wedding: wedding.id })
+        })
+
+        // Execute batch transaction
+        await db.transact(transactions)
+        
+        // Small delay between batches to avoid overwhelming the server
+        if (i < totalBatches - 1) {
+          await new Promise(resolve => setTimeout(resolve, 100))
+        }
+      }
+      
+      alert(`Successfully imported ${importedGuests.length} guest${importedGuests.length === 1 ? '' : 's'}!`)
+    } catch (error) {
+      console.error('Error importing guests:', error)
+      throw error // Re-throw to be handled by modal
+    }
+  }
+
+  const handleExportGuests = () => {
+    if (!wedding) return
+
+    // Convert guests to CSV with ALL fields
+    const headers = [
+      'Name',
+      'Email',
+      'Phone',
+      'Side',
+      'RSVP Status',
+      'Household ID',
+      'Plus One Allowed',
+      'Plus One Name',
+      'Invite Sent',
+      'Meal Choice',
+      'Dietary Notes',
+      'Shuttle Needed',
+      'Song Request',
+      'Needs Accommodation',
+      'RSVP Notes',
+      'Address Street',
+      'Address City',
+      'Address State',
+      'Address Postal Code',
+      'Address Country'
+    ]
+    
+    const rows = guests.map(g => [
+      g.full_name || '',
+      g.email || '',
+      g.phone || '',
+      g.side || 'Unknown',
+      g.rsvp_status || 'Pending',
+      g.household_id || '',
+      g.plus_one_allowed ? 'Yes' : 'No',
+      g.plus_one_name || '',
+      g.invite_sent ? 'Yes' : 'No',
+      g.meal_choice || '',
+      g.dietary_notes || '',
+      g.shuttle_needed ? 'Yes' : 'No',
+      g.song_request || '',
+      g.needs_accommodation ? 'Yes' : 'No',
+      g.rsvp_notes || '',
+      g.address_street || '',
+      g.address_city || '',
+      g.address_state || '',
+      g.address_postal || '',
+      g.address_country || ''
+    ])
+    
+    // Generate CSV string
+    const csv = [headers, ...rows]
+      .map(row => row.map(cell => `"${cell}"`).join(','))
+      .join('\n')
+    
+    // Download file
+    const blob = new Blob([csv], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `${wedding.partner1_name}-${wedding.partner2_name}-guests.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  const handleDownloadTemplate = () => {
+    // Create template CSV with example data
+    const headers = ['Name', 'Email', 'Phone', 'Side', 'Household ID']
+    const exampleRows = [
+      ['John Doe', 'john@example.com', '555-0101', 'Bride', ''],
+      ['Jane Smith', 'jane@example.com', '555-0102', 'Groom', 'Smith Family'],
+      ['Bob Johnson', 'bob@example.com', '555-0103', 'Groom', '']
+    ]
+    
+    // Generate CSV string
+    const csv = [headers, ...exampleRows]
+      .map(row => row.map(cell => `"${cell}"`).join(','))
+      .join('\n')
+    
+    // Download file
+    const blob = new Blob([csv], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'guest-list-template.csv'
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   // Loading state
   if (authLoading || weddingLoading || dataLoading) {
     return (
@@ -239,7 +394,7 @@ export default function GuestsPage() {
             {filteredGuests.length} of {guests.length} guests
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-2 flex-wrap">
           {/* View toggle buttons */}
           <div className="flex bg-white rounded-xl shadow-card p-1 gap-1">
             <button
@@ -265,10 +420,34 @@ export default function GuestsPage() {
               <LayoutGrid size={20} />
             </button>
           </div>
-          <Button onClick={handleAddGuest} size="lg">
-            <Plus size={20} />
-            Add Guest
-          </Button>
+          
+          {/* Action buttons - all on same row */}
+          <div className="flex items-center gap-2 w-full md:w-auto">
+            <Button 
+              onClick={() => setIsImportModalOpen(true)} 
+              variant="outline" 
+              className="flex-1 md:flex-none h-[44px] text-sm md:text-base px-3 md:px-4"
+            >
+              <Upload size={18} className="md:w-5 md:h-5" />
+              <span className="ml-1 md:ml-2">Import</span>
+            </Button>
+            <Button 
+              onClick={handleExportGuests} 
+              variant="outline" 
+              className="flex-1 md:flex-none h-[44px] text-sm md:text-base px-3 md:px-4"
+              disabled={guests.length === 0}
+            >
+              <Download size={18} className="md:w-5 md:h-5" />
+              <span className="ml-1 md:ml-2">Export</span>
+            </Button>
+            <Button 
+              onClick={handleAddGuest} 
+              className="flex-1 md:flex-none h-[44px] text-sm md:text-base px-3 md:px-4"
+            >
+              <Plus size={18} className="md:w-5 md:h-5" />
+              <span className="ml-1 md:ml-2">Add Guest</span>
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -454,6 +633,15 @@ export default function GuestsPage() {
         editingGuest={editingGuest}
         existingHouseholds={existingHouseholds}
         viewOnly={viewOnly}
+      />
+
+      {/* Guest Import Modal */}
+      <GuestImportModal
+        isOpen={isImportModalOpen}
+        onClose={() => setIsImportModalOpen(false)}
+        onImport={handleImportGuests}
+        existingHouseholds={existingHouseholds}
+        onDownloadTemplate={handleDownloadTemplate}
       />
     </div>
   )
