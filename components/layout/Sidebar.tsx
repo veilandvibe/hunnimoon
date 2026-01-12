@@ -2,7 +2,9 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Users, ClipboardCheck, DollarSign, Briefcase, Settings } from 'lucide-react'
+import { Home, Users, ClipboardCheck, DollarSign, Briefcase, Settings, Menu } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useSidebar } from './SidebarContext'
 
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'Home' },
@@ -15,20 +17,33 @@ const navItems = [
 
 export default function Sidebar() {
   const pathname = usePathname()
+  const { isExpanded, setIsExpanded } = useSidebar()
 
   return (
-    <aside className="hidden md:flex flex-col fixed left-0 top-0 h-screen w-[69px] bg-white border-r border-pink-primary/10 z-50">
-      {/* Logo */}
-      <div className="flex items-center justify-center h-16 border-b border-pink-primary/10">
-        <div className="w-6 h-3 relative">
-          <div className="absolute top-0 left-0 w-full h-[2px] bg-pink-primary rounded-full" />
-          <div className="absolute top-1.5 left-0 w-full h-[2px] bg-pink-primary rounded-full" />
-          <div className="absolute top-3 left-0 w-full h-[2px] bg-pink-primary rounded-full" />
-        </div>
+    <motion.aside
+      initial={false}
+      animate={{
+        width: isExpanded ? 240 : 69,
+      }}
+      transition={{
+        duration: 0.3,
+        ease: [0.4, 0, 0.2, 1],
+      }}
+      className="hidden md:flex flex-col fixed left-0 top-0 h-screen bg-white border-r border-pink-primary/10 z-50 overflow-hidden"
+    >
+      {/* Hamburger Menu */}
+      <div className="flex items-center h-16 border-b border-pink-primary/10 px-4">
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="p-2 hover:bg-pink-light rounded-lg transition-colors"
+          aria-label="Toggle sidebar"
+        >
+          <Menu size={20} className="text-pink-primary" strokeWidth={2.5} />
+        </button>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 flex flex-col items-center py-8 gap-4">
+      <nav className="flex-1 flex flex-col py-8 gap-4 px-3">
         {navItems.map((item) => {
           const isActive = pathname === item.href || pathname?.startsWith(item.href + '/')
           const Icon = item.icon
@@ -37,25 +52,35 @@ export default function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className="group relative"
-              title={item.label}
+              className="group"
+              title={!isExpanded ? item.label : undefined}
             >
-              <div
-                className={`flex flex-col items-center justify-center w-12 h-12 rounded-xl transition-all ${
+              <motion.div
+                className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-colors ${
                   isActive
                     ? 'bg-pink-primary text-white'
                     : 'text-pink-primary hover:bg-pink-primary/10'
                 }`}
               >
-                <Icon size={20} strokeWidth={2.5} />
-              </div>
-              <span className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap transition-opacity">
-                {item.label}
-              </span>
+                <Icon size={20} strokeWidth={2.5} className="flex-shrink-0" />
+                <AnimatePresence mode="wait">
+                  {isExpanded && (
+                    <motion.span
+                      initial={{ opacity: 0, width: 0 }}
+                      animate={{ opacity: 1, width: 'auto' }}
+                      exit={{ opacity: 0, width: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="font-medium text-sm whitespace-nowrap overflow-hidden"
+                    >
+                      {item.label}
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </motion.div>
             </Link>
           )
         })}
       </nav>
-    </aside>
+    </motion.aside>
   )
 }

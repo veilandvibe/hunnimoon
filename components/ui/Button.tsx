@@ -30,7 +30,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <motion.button
         ref={ref}
+        whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
+        transition={{ duration: 0.15, ease: 'easeOut' }}
         className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${width} ${className}`}
         {...(props as any)}
       >
