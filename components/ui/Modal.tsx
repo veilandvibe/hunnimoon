@@ -29,7 +29,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
     md: 'max-w-lg',
     lg: 'max-w-2xl',
     xl: 'max-w-4xl',
-    '2xl': 'max-w-6xl',
+    '2xl': 'md:max-w-[calc(100%-8rem)]', // Desktop: leave 4rem (64px) on each side for centering
   }
 
   return (
@@ -52,7 +52,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 100, scale: 0.95 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className={`bg-white rounded-4xl shadow-2xl w-full ${sizes[size]} max-h-full md:max-h-[90vh] overflow-hidden flex flex-col relative pointer-events-auto mx-auto`}
+              className={`bg-white rounded-4xl shadow-2xl w-full ${sizes[size]} max-h-full md:max-h-[90vh] overflow-hidden flex flex-col relative pointer-events-auto`}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
