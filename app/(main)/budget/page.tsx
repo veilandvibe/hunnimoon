@@ -6,9 +6,11 @@ import BudgetItemCard from '@/components/budget/BudgetItemCard'
 import BudgetFormModal from '@/components/budget/BudgetFormModal'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
+import ConfirmDialog from '@/components/ui/ConfirmDialog'
 import { useWedding } from '@/components/providers/WeddingProvider'
 import db from '@/lib/instant'
 import { id } from '@instantdb/react'
+import toast from 'react-hot-toast'
 
 export default function BudgetPage() {
   const { user, isLoading: authLoading } = db.useAuth()
@@ -33,6 +35,11 @@ export default function BudgetPage() {
   const [editingItem, setEditingItem] = useState<any | null>(null)
   const [isEditingBudget, setIsEditingBudget] = useState(false)
   const [budgetInputValue, setBudgetInputValue] = useState('')
+  const [deleteConfirm, setDeleteConfirm] = useState<{ isOpen: boolean; itemId: string; itemName: string }>({
+    isOpen: false,
+    itemId: '',
+    itemName: ''
+  })
 
   // Calculate totals
   const activeItems = budgetItems.filter((item) => item.is_active)
@@ -64,26 +71,43 @@ export default function BudgetPage() {
   }
 
   const handleDeleteItem = async (itemId: string) => {
-    if (confirm('Are you sure you want to delete this budget item?')) {
-      try {
-        await db.transact([db.tx.budgetItems[itemId].delete()])
-      } catch (error) {
-        console.error('Error deleting budget item:', error)
-        alert('Failed to delete budget item. Please try again.')
-      }
+    const item = budgetItems.find(i => i.id === itemId)
+    setDeleteConfirm({
+      isOpen: true,
+      itemId,
+      itemName: item?.category_name || 'this budget item'
+    })
+  }
+
+  const confirmDelete = async () => {
+    try {
+      await db.transact([db.tx.budgetItems[deleteConfirm.itemId].delete()])
+      toast.success('Budget item deleted')
+    } catch (error) {
+      console.error('Error deleting budget item:', error)
+      toast.error('Failed to delete budget item. Please try again.')
     }
   }
 
   const handleTogglePaid = async (itemId: string, isPaid: boolean) => {
     try {
+      // Find the item to get its estimated_cost
+      const item = budgetItems.find(i => i.id === itemId)
+      if (!item) return
+
+      // When marking as paid, set actual_cost to estimated_cost
+      // When unmarking, set actual_cost to 0
       await db.transact([
         db.tx.budgetItems[itemId].update({
           is_paid: isPaid,
+          actual_cost: isPaid ? (item.estimated_cost || 0) : 0,
         }),
       ])
+      
+      toast.success(isPaid ? 'Marked as paid' : 'Unmarked as paid')
     } catch (error) {
       console.error('Error updating budget item:', error)
-      alert('Failed to update budget item. Please try again.')
+      toast.error('Failed to update budget item. Please try again.')
     }
   }
 
@@ -92,7 +116,7 @@ export default function BudgetPage() {
     
     const newBudget = parseFloat(budgetInputValue) || 0
     if (newBudget < 0) {
-      alert('Budget must be a positive number')
+      toast.error('Budget must be a positive number')
       return
     }
     
@@ -103,15 +127,16 @@ export default function BudgetPage() {
         }),
       ])
       setIsEditingBudget(false)
+      toast.success('Budget saved!')
     } catch (error) {
       console.error('Error updating budget:', error)
-      alert('Failed to update budget. Please try again.')
+      toast.error('Failed to update budget. Please try again.')
     }
   }
 
   const handleSaveItem = async (itemData: any) => {
     if (!wedding?.id) {
-      alert('Wedding not found. Please refresh the page.')
+      toast.error('Wedding not found. Please refresh the page.')
       return
     }
     
@@ -123,6 +148,7 @@ export default function BudgetPage() {
             ...itemData,
           }),
         ])
+        toast.success('Budget item updated!')
       } else {
         // Add new item
         const itemId = id()
@@ -139,10 +165,11 @@ export default function BudgetPage() {
             })
             .link({ wedding: wedding.id }),
         ])
+        toast.success('Budget item added!')
       }
     } catch (error) {
       console.error('Error saving budget item:', error)
-      alert('Failed to save budget item. Please try again.')
+      toast.error('Failed to save budget item. Please try again.')
     }
   }
 
@@ -369,6 +396,17 @@ export default function BudgetPage() {
         onClose={() => setIsModalOpen(false)}
         onSave={handleSaveItem}
         editingItem={editingItem}
+      />
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={deleteConfirm.isOpen}
+        onClose={() => setDeleteConfirm({ isOpen: false, itemId: '', itemName: '' })}
+        onConfirm={confirmDelete}
+        title="Delete Budget Item?"
+        message={`This will permanently delete ${deleteConfirm.itemName}. This action cannot be undone.`}
+        confirmText="Delete"
+        variant="danger"
       />
     </div>
   )

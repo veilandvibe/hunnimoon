@@ -8,6 +8,7 @@ import Button from '@/components/ui/Button'
 import { useWedding } from '@/components/providers/WeddingProvider'
 import db from '@/lib/instant'
 import { Copy, Check, Calendar, User, LogOut, Loader2 } from 'lucide-react'
+import toast from 'react-hot-toast'
 
 export default function SettingsPage() {
   const router = useRouter()
@@ -54,7 +55,7 @@ export default function SettingsPage() {
     e.preventDefault()
     
     if (!wedding?.id) {
-      alert('Wedding not found. Please refresh the page.')
+      toast.error('Wedding not found. Please refresh the page.')
       return
     }
     
@@ -64,7 +65,7 @@ export default function SettingsPage() {
       // Validate wedding date is in the future
       const weddingDate = new Date(weddingDetails.wedding_date)
       if (weddingDate <= new Date()) {
-        alert('Wedding date must be in the future')
+        toast.error('Wedding date must be in the future')
         setSaving(false)
         return
       }
@@ -79,10 +80,10 @@ export default function SettingsPage() {
         }),
       ])
       
-      alert('Settings saved successfully!')
+      toast.success('Wedding details updated!')
     } catch (error) {
       console.error('Error saving settings:', error)
-      alert('Failed to save settings. Please try again.')
+      toast.error('Failed to save settings. Please try again.')
     } finally {
       setSaving(false)
     }

@@ -10,6 +10,7 @@ import Card from '@/components/ui/Card'
 import db from '@/lib/instant'
 import { Heart, Check, Loader2 } from 'lucide-react'
 import { id } from '@instantdb/react'
+import toast from 'react-hot-toast'
 
 export default function RSVPPage() {
   const params = useParams()
@@ -160,13 +161,13 @@ export default function RSVPPage() {
         (response: any) => response.rsvp_status !== null
       )
       if (!hasResponses) {
-        alert('Please RSVP for at least one household member')
+        toast.error('Please RSVP for at least one household member')
         return
       }
     } else {
       // Single guest validation
       if (!rsvpStatus) {
-        alert('Please select if you will be attending')
+        toast.error('Please select if you will be attending')
         return
       }
     }
@@ -241,9 +242,10 @@ export default function RSVPPage() {
       }
 
       setIsSubmitted(true)
+      toast.success('RSVP submitted successfully!')
     } catch (error) {
       console.error('Error submitting RSVP:', error)
-      alert('Failed to submit RSVP. Please try again.')
+      toast.error('Failed to submit RSVP. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
@@ -261,7 +263,7 @@ export default function RSVPPage() {
               Thank You!
             </h1>
             <p className="text-pink-primary/70">
-              Your RSVP has been received. We can't wait to celebrate with you!
+              {rsvpSettings?.custom_message || "Your RSVP has been received. We can't wait to celebrate with you!"}
             </p>
           </div>
 
@@ -278,14 +280,6 @@ export default function RSVPPage() {
               })}
             </p>
           </div>
-          
-          {rsvpSettings?.custom_message && (
-            <div className="mt-4 p-4 bg-pink-primary/5 rounded-2xl">
-              <p className="text-sm text-pink-primary/80">
-                {rsvpSettings.custom_message}
-              </p>
-            </div>
-          )}
         </Card>
       </div>
     )

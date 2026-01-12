@@ -8,11 +8,13 @@ import GuestFormModal from '@/components/guests/GuestFormModal'
 import GuestImportModal from '@/components/guests/GuestImportModal'
 import Button from '@/components/ui/Button'
 import Select from '@/components/ui/Select'
+import ConfirmDialog from '@/components/ui/ConfirmDialog'
 import { RSVPStatus, Side } from '@/lib/dummyData'
 import { useWedding } from '@/components/providers/WeddingProvider'
 import db from '@/lib/instant'
 import { id } from '@instantdb/react'
 import { ParsedGuest } from '@/lib/guestParser'
+import toast from 'react-hot-toast'
 
 export default function GuestsPage() {
   const { user, isLoading: authLoading } = db.useAuth()
@@ -43,6 +45,11 @@ export default function GuestsPage() {
   const [editingGuest, setEditingGuest] = useState<any | null>(null)
   const [viewOnly, setViewOnly] = useState(false)
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list')
+  const [deleteConfirm, setDeleteConfirm] = useState<{ isOpen: boolean; guestId: string; guestName: string }>({
+    isOpen: false,
+    guestId: '',
+    guestName: ''
+  })
 
   // Filter guests
   const filteredGuests = guests.filter((guest) => {
@@ -129,19 +136,27 @@ export default function GuestsPage() {
   }
 
   const handleDeleteGuest = async (guestId: string) => {
-    if (confirm('Are you sure you want to delete this guest?')) {
-      try {
-        await db.transact([db.tx.guests[guestId].delete()])
-      } catch (error) {
-        console.error('Error deleting guest:', error)
-        alert('Failed to delete guest. Please try again.')
-      }
+    const guest = guests.find(g => g.id === guestId)
+    setDeleteConfirm({
+      isOpen: true,
+      guestId,
+      guestName: guest?.full_name || 'this guest'
+    })
+  }
+
+  const confirmDelete = async () => {
+    try {
+      await db.transact([db.tx.guests[deleteConfirm.guestId].delete()])
+      toast.success('Guest deleted')
+    } catch (error) {
+      console.error('Error deleting guest:', error)
+      toast.error('Failed to delete guest. Please try again.')
     }
   }
 
   const handleSaveGuest = async (guestData: any) => {
     if (!wedding?.id) {
-      alert('Wedding not found. Please refresh the page.')
+      toast.error('Wedding not found. Please refresh the page.')
       return
     }
     
@@ -154,6 +169,7 @@ export default function GuestsPage() {
             last_updated: Date.now(),
           }),
         ])
+        toast.success('Guest updated!')
       } else {
         // Add new guest
         const guestId = id()
@@ -185,16 +201,17 @@ export default function GuestsPage() {
             })
             .link({ wedding: wedding.id }),
         ])
+        toast.success('Guest added!')
       }
     } catch (error) {
       console.error('Error saving guest:', error)
-      alert('Failed to save guest. Please try again.')
+      toast.error('Failed to save guest. Please try again.')
     }
   }
 
   const handleImportGuests = async (importedGuests: ParsedGuest[]) => {
     if (!wedding?.id) {
-      alert('Wedding not found. Please refresh the page.')
+      toast.error('Wedding not found. Please refresh the page.')
       return
     }
 
@@ -248,7 +265,7 @@ export default function GuestsPage() {
         }
       }
       
-      alert(`Successfully imported ${importedGuests.length} guest${importedGuests.length === 1 ? '' : 's'}!`)
+      toast.success(`${importedGuests.length} guest${importedGuests.length === 1 ? '' : 's'} imported successfully!`)
     } catch (error) {
       console.error('Error importing guests:', error)
       throw error // Re-throw to be handled by modal
@@ -642,6 +659,17 @@ export default function GuestsPage() {
         onImport={handleImportGuests}
         existingHouseholds={existingHouseholds}
         onDownloadTemplate={handleDownloadTemplate}
+      />
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={deleteConfirm.isOpen}
+        onClose={() => setDeleteConfirm({ isOpen: false, guestId: '', guestName: '' })}
+        onConfirm={confirmDelete}
+        title="Delete Guest?"
+        message={`This will permanently delete ${deleteConfirm.guestName}. This action cannot be undone.`}
+        confirmText="Delete"
+        variant="danger"
       />
     </div>
   )

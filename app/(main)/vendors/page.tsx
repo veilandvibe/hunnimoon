@@ -6,9 +6,11 @@ import VendorCard from '@/components/vendors/VendorCard'
 import VendorFormModal from '@/components/vendors/VendorFormModal'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
+import ConfirmDialog from '@/components/ui/ConfirmDialog'
 import { useWedding } from '@/components/providers/WeddingProvider'
 import db from '@/lib/instant'
 import { id } from '@instantdb/react'
+import toast from 'react-hot-toast'
 
 export default function VendorsPage() {
   const { user, isLoading: authLoading } = db.useAuth()
@@ -32,6 +34,11 @@ export default function VendorsPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingVendor, setEditingVendor] = useState<any | null>(null)
+  const [deleteConfirm, setDeleteConfirm] = useState<{ isOpen: boolean; vendorId: string; vendorName: string }>({
+    isOpen: false,
+    vendorId: '',
+    vendorName: ''
+  })
 
   // Filter vendors
   const filteredVendors = vendors.filter((vendor) =>
@@ -51,19 +58,27 @@ export default function VendorsPage() {
   }
 
   const handleDeleteVendor = async (vendorId: string) => {
-    if (confirm('Are you sure you want to delete this vendor?')) {
-      try {
-        await db.transact([db.tx.vendors[vendorId].delete()])
-      } catch (error) {
-        console.error('Error deleting vendor:', error)
-        alert('Failed to delete vendor. Please try again.')
-      }
+    const vendor = vendors.find(v => v.id === vendorId)
+    setDeleteConfirm({
+      isOpen: true,
+      vendorId,
+      vendorName: vendor?.vendor_name || 'this vendor'
+    })
+  }
+
+  const confirmDelete = async () => {
+    try {
+      await db.transact([db.tx.vendors[deleteConfirm.vendorId].delete()])
+      toast.success('Vendor deleted')
+    } catch (error) {
+      console.error('Error deleting vendor:', error)
+      toast.error('Failed to delete vendor. Please try again.')
     }
   }
 
   const handleSaveVendor = async (vendorData: any) => {
     if (!wedding?.id) {
-      alert('Wedding not found. Please refresh the page.')
+      toast.error('Wedding not found. Please refresh the page.')
       return
     }
     
@@ -75,6 +90,7 @@ export default function VendorsPage() {
             ...vendorData,
           }),
         ])
+        toast.success('Vendor updated!')
       } else {
         // Add new vendor
         const vendorId = id()
@@ -90,10 +106,11 @@ export default function VendorsPage() {
             })
             .link({ wedding: wedding.id }),
         ])
+        toast.success('Vendor added!')
       }
     } catch (error) {
       console.error('Error saving vendor:', error)
-      alert('Failed to save vendor. Please try again.')
+      toast.error('Failed to save vendor. Please try again.')
     }
   }
 
@@ -205,6 +222,17 @@ export default function VendorsPage() {
         onClose={() => setIsModalOpen(false)}
         onSave={handleSaveVendor}
         editingVendor={editingVendor}
+      />
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={deleteConfirm.isOpen}
+        onClose={() => setDeleteConfirm({ isOpen: false, vendorId: '', vendorName: '' })}
+        onConfirm={confirmDelete}
+        title="Delete Vendor?"
+        message={`This will permanently delete ${deleteConfirm.vendorName}. All vendor information will be lost.`}
+        confirmText="Delete"
+        variant="danger"
       />
     </div>
   )

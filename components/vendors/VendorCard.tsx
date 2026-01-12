@@ -86,22 +86,6 @@ export default function VendorCard({ vendor, onEdit, onDelete }: VendorCardProps
             </p>
           </div>
         )}
-
-        {/* Quick Actions */}
-        <div className="flex gap-2 pt-2">
-          {vendor.email && (
-            <Button size="sm" variant="outline" fullWidth>
-              <Mail size={14} />
-              Email
-            </Button>
-          )}
-          {vendor.phone && (
-            <Button size="sm" variant="outline" fullWidth>
-              <Phone size={14} />
-              Call
-            </Button>
-          )}
-        </div>
       </div>
     </Card>
   )

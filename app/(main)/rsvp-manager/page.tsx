@@ -13,6 +13,7 @@ import { useWedding } from '@/components/providers/WeddingProvider'
 import db from '@/lib/instant'
 import { id } from '@instantdb/react'
 import { Copy, Check, ExternalLink, Users, Settings } from 'lucide-react'
+import toast from 'react-hot-toast'
 
 export default function RSVPManagerPage() {
   const [copied, setCopied] = useState(false)
@@ -87,6 +88,7 @@ export default function RSVPManagerPage() {
     await navigator.clipboard.writeText(rsvpUrl)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+    toast.success('RSVP link copied!')
   }
 
   const handleOpenRSVP = () => {
@@ -143,9 +145,10 @@ export default function RSVPManagerPage() {
       
       setSaveSuccess(true)
       setTimeout(() => setSaveSuccess(false), 3000)
+      toast.success('RSVP settings saved!')
     } catch (error) {
       console.error('Error saving RSVP settings:', error)
-      alert('Failed to save settings. Please check the console for details.')
+      toast.error('Failed to save settings. Please try again.')
     } finally {
       setSaving(false)
     }
