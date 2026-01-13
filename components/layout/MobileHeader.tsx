@@ -1,9 +1,20 @@
 'use client'
 
+import { usePathname } from 'next/navigation'
+import { HelpCircle } from 'lucide-react'
 import { useSidebar } from './SidebarContext'
+import { useTour } from '@/components/providers/TourContext'
 
 export default function MobileHeader({ title }: { title?: string }) {
   const { isExpanded } = useSidebar()
+  const pathname = usePathname()
+  const { startPageTour } = useTour()
+
+  const handleHelpClick = () => {
+    // Determine current page from pathname
+    const pageName = pathname?.split('/')[1] || 'dashboard'
+    startPageTour(pageName)
+  }
 
   return (
     <header 
@@ -11,7 +22,7 @@ export default function MobileHeader({ title }: { title?: string }) {
         isExpanded ? 'md:left-[240px]' : 'md:left-[69px]'
       }`}
     >
-      <div className="flex items-center justify-center h-14 px-4">
+      <div className="relative flex items-center justify-center h-14 px-4">
         <svg width="148" height="24" viewBox="0 0 148 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M81.5509 9.03731L81.7068 9.73026C82.9194 6.94562 87.628 6.30492 89.2 9.10422L89.6656 10.3059C90.9168 6.92087 96.2991 5.8072 98.003 9.42778C98.8243 11.1712 98.6181 15.9897 98.6401 18.1181C98.6529 19.3592 98.6291 20.6186 98.6391 21.8431L92.9901 21.8991L92.827 13.5204C92.5117 11.6111 90.4658 12.1318 90.1862 13.7743L90.2357 21.9779L84.6326 22.0017C84.4694 21.8761 84.6179 20.6415 84.6133 20.3399C84.5867 18.3261 84.7114 15.602 84.4712 13.6661C84.2018 11.4929 81.9707 12.2491 81.8232 14.0016L81.9772 22.032L76.1962 22.0906L76 7.86589L81.6014 7.71007L81.5509 9.03822V9.03731Z" fill="#CB1F70"/>
           <path d="M5.85342 2.87793L6.41713 10.1062C6.71961 9.74878 6.90751 9.29781 7.23657 8.95591C10.2604 5.82297 15.2257 7.29137 15.8462 11.812C16.2733 14.9212 16.3696 18.4492 16.5877 21.6123C16.596 21.7352 16.6391 21.8213 16.6821 21.9295L10.6326 22.3887L10.0817 14.6443C10.133 12.2282 7.22465 11.9275 6.87634 14.2768L7.60413 22.6591L1.66088 23.111L0 3.3234L5.85342 2.87793Z" fill="#CB1F70"/>
@@ -24,6 +35,15 @@ export default function MobileHeader({ title }: { title?: string }) {
           <path d="M74.0627 8.18154L72.9618 22.1139L67.0039 21.6565L68.0222 7.64258L74.0627 8.18154Z" fill="#CB1F70"/>
           <path d="M70.6477 0.0476685C73.1308 -0.289641 75.2426 1.18334 74.9768 3.82682C74.5726 7.84886 67.0885 7.61788 67.7604 2.65998C67.952 1.24658 69.2847 0.232822 70.6477 0.0476685Z" fill="#CB1F70"/>
         </svg>
+
+        {/* Help Icon - Absolutely positioned on the right */}
+        <button
+          onClick={handleHelpClick}
+          className="absolute right-4 p-2 text-pink-primary/70 hover:text-pink-primary hover:bg-pink-light rounded-full transition-colors"
+          aria-label="Page Help"
+        >
+          <HelpCircle size={18} strokeWidth={2} />
+        </button>
       </div>
     </header>
   )

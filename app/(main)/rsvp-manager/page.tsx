@@ -12,7 +12,7 @@ import LoadingSpinner from '@/components/ui/LoadingSpinner'
 import { useWedding } from '@/components/providers/WeddingProvider'
 import db from '@/lib/instant'
 import { id } from '@instantdb/react'
-import { Copy, Check, ExternalLink, Users, Settings } from 'lucide-react'
+import { Copy, Check, ExternalLink, Users, Settings, ClipboardCheck } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 export default function RSVPManagerPage() {
@@ -202,7 +202,7 @@ export default function RSVPManagerPage() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4" data-tour="rsvp-metrics">
         <Card className="text-center">
           <div className="text-3xl md:text-4xl font-black text-pink-primary mb-2">
             {totalGuests}
@@ -235,14 +235,16 @@ export default function RSVPManagerPage() {
       {/* RSVP Chart & Recent RSVPs */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Chart */}
-        <RSVPChart
-          yesCount={yesCount}
-          noCount={noCount}
-          pendingCount={pendingCount}
-        />
+        <div data-tour="rsvp-chart">
+          <RSVPChart
+            yesCount={yesCount}
+            noCount={noCount}
+            pendingCount={pendingCount}
+          />
+        </div>
 
         {/* Recent RSVPs */}
-        <Card>
+        <Card data-tour="recent-rsvps">
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-pink-primary/10 rounded-xl flex items-center justify-center">
@@ -288,40 +290,61 @@ export default function RSVPManagerPage() {
         </Card>
       </div>
 
-      {/* RSVP Link Card */}
-      <Card>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-black text-pink-primary">
-              Your RSVP Link
-            </h2>
-            <Button onClick={handleOpenRSVP} variant="outline" size="sm">
-              <ExternalLink size={16} />
-              Preview
-            </Button>
+      {/* RSVP Link & How It Works Section */}
+      <div className="space-y-6" data-tour="rsvp-link-section">
+        {/* RSVP Link Card */}
+        <Card>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-black text-pink-primary">
+                Your RSVP Link
+              </h2>
+              <Button onClick={handleOpenRSVP} variant="outline" size="sm">
+                <ExternalLink size={16} />
+                Preview
+              </Button>
+            </div>
+
+            <p className="text-sm text-pink-primary/70">
+              Share this link via email, text, social media, or include it on your wedding invitations
+            </p>
+
+            <div className="p-4 bg-pink-light rounded-xl">
+              <code className="text-sm text-pink-primary break-all">
+                {rsvpUrl}
+              </code>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Button onClick={handleCopyUrl} fullWidth>
+                {copied ? <Check size={18} /> : <Copy size={18} />}
+                {copied ? 'Copied to Clipboard!' : 'Copy Link'}
+              </Button>
+            </div>
           </div>
+        </Card>
 
-          <p className="text-sm text-pink-primary/70">
-            Share this link via email, text, social media, or include it on your wedding invitations
-          </p>
-
-          <div className="p-4 bg-pink-light rounded-xl">
-            <code className="text-sm text-pink-primary break-all">
-              {rsvpUrl}
-            </code>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Button onClick={handleCopyUrl} fullWidth>
-              {copied ? <Check size={18} /> : <Copy size={18} />}
-              {copied ? 'Copied to Clipboard!' : 'Copy Link'}
-            </Button>
+        {/* How It Works Info Card */}
+        <div 
+          className="bg-gradient-to-br from-pink-primary/5 to-pink-secondary/5 rounded-xl p-4 border-2 border-pink-primary/20"
+        >
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 bg-pink-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+              <ClipboardCheck size={16} className="text-pink-primary" />
+            </div>
+            <div>
+              <h3 className="font-bold text-pink-primary mb-1">How RSVP Works</h3>
+              <p className="text-sm text-pink-primary/70">
+                When you add guests to your guest list, they can search for their name on your custom RSVP form. 
+                Their responses automatically update in your system - no manual entry needed! Household members can RSVP together too.
+              </p>
+            </div>
           </div>
         </div>
-      </Card>
+      </div>
 
       {/* RSVP Form Settings Card */}
-      <Card>
+      <Card data-tour="rsvp-settings">
         <div className="space-y-6">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-pink-primary/10 rounded-xl flex items-center justify-center">

@@ -168,7 +168,7 @@ export default function VendorsPage() {
             {filteredVendors.length} of {vendors.length} vendors
           </p>
         </div>
-        <Button onClick={handleAddVendor} size="lg" type="button">
+        <Button onClick={handleAddVendor} size="lg" type="button" data-tour="add-vendor">
           <Plus size={20} />
           Add Vendor
         </Button>
@@ -204,7 +204,7 @@ export default function VendorsPage() {
           </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" data-tour="vendor-card">
           {filteredVendors.map((vendor) => (
             <VendorCard
               key={vendor.id}

@@ -76,14 +76,16 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
       {/* Countdown Timer */}
-      <CountdownTimer
-        weddingDate={wedding.wedding_date}
-        partner1Name={wedding.partner1_name}
-        partner2Name={wedding.partner2_name}
-      />
+      <div data-tour="countdown">
+        <CountdownTimer
+          weddingDate={wedding.wedding_date}
+          partner1Name={wedding.partner1_name}
+          partner2Name={wedding.partner2_name}
+        />
+      </div>
 
       {/* Guest Metrics - Mobile: 2 cols, Tablet+: 4 cols */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4" data-tour="guest-metrics">
         <MetricCard
           value={totalGuests}
           label="Total Guests"
@@ -127,20 +129,24 @@ export default function DashboardPage() {
 
       {/* RSVP & Budget Grid - Mobile: Stack, Desktop: 2 cols */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <RSVPChart
-          yesCount={yesCount}
-          noCount={noCount}
-          pendingCount={pendingCount}
-        />
-        <BudgetOverview
-          totalBudget={totalBudget}
-          allocated={allocated}
-          actualSpent={actualSpent}
-          unallocated={unallocated}
-          percentSpent={percentSpent}
-          isOverBudget={isOverBudget}
-          isOverAllocated={isOverAllocated}
-        />
+        <div data-tour="rsvp-chart">
+          <RSVPChart
+            yesCount={yesCount}
+            noCount={noCount}
+            pendingCount={pendingCount}
+          />
+        </div>
+        <div data-tour="budget-overview">
+          <BudgetOverview
+            totalBudget={totalBudget}
+            allocated={allocated}
+            actualSpent={actualSpent}
+            unallocated={unallocated}
+            percentSpent={percentSpent}
+            isOverBudget={isOverBudget}
+            isOverAllocated={isOverAllocated}
+          />
+        </div>
       </div>
 
       {/* RSVP Manager Link */}

@@ -227,14 +227,14 @@ export default function BudgetPage() {
             {activeItems.length} categories
           </p>
         </div>
-        <Button onClick={handleAddItem} size="lg">
+        <Button onClick={handleAddItem} size="lg" data-tour="add-category">
           <Plus size={20} />
           Add Category
         </Button>
       </div>
 
       {/* Total Wedding Budget Card */}
-      <Card>
+      <Card data-tour="total-budget">
         <div className="flex items-center justify-between">
           <div className="flex-1">
             <div className="text-sm text-pink-primary/60 mb-2">Total Wedding Budget</div>
@@ -343,7 +343,7 @@ export default function BudgetPage() {
       </div>
 
       {/* Overall Progress */}
-      <Card>
+      <Card data-tour="spending-metrics">
         <div className="space-y-3">
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-black text-pink-primary">
@@ -377,7 +377,7 @@ export default function BudgetPage() {
           </Button>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" data-tour="budget-item">
           {activeItems.map((item) => (
             <BudgetItemCard
               key={item.id}

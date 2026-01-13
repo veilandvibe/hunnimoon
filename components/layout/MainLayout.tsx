@@ -1,10 +1,14 @@
 'use client'
 
+import { useEffect } from 'react'
 import Sidebar from './Sidebar'
 import BottomNav from './BottomNav'
 import MobileHeader from './MobileHeader'
 import PageTransition from './PageTransition'
+import SpotlightTour from '@/components/tour/SpotlightTour'
+import OnboardingModal from '@/components/onboarding/OnboardingModal'
 import { SidebarProvider, useSidebar } from './SidebarContext'
+import { useTour } from '@/components/providers/TourContext'
 
 function MainLayoutContent({
   children,
@@ -14,6 +18,19 @@ function MainLayoutContent({
   title?: string
 }) {
   const { isExpanded } = useSidebar()
+  const { onboardingCompleted, showOnboarding, startOnboarding, completeOnboarding } = useTour()
+
+  // Check if onboarding should be shown on first load
+  useEffect(() => {
+    // Only show onboarding if not completed and not already showing
+    if (!onboardingCompleted && !showOnboarding) {
+      // Small delay to let the dashboard load first
+      const timer = setTimeout(() => {
+        startOnboarding()
+      }, 500)
+      return () => clearTimeout(timer)
+    }
+  }, [onboardingCompleted, showOnboarding, startOnboarding])
 
   return (
     <div className="min-h-screen">
@@ -33,6 +50,15 @@ function MainLayoutContent({
       </main>
 
       <BottomNav />
+      
+      {/* Spotlight Tour - Always rendered, shown when active */}
+      <SpotlightTour />
+
+      {/* Onboarding Modal - Shows on first visit */}
+      <OnboardingModal 
+        isOpen={showOnboarding} 
+        onClose={completeOnboarding}
+      />
     </div>
   )
 }

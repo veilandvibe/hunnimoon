@@ -413,7 +413,7 @@ export default function GuestsPage() {
         </div>
         <div className="flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-2 flex-wrap">
           {/* View toggle buttons */}
-          <div className="flex bg-white rounded-xl shadow-card p-1 gap-1">
+          <div className="flex bg-white rounded-xl shadow-card p-1 gap-1" data-tour="view-toggle">
             <button
               onClick={() => setViewMode('list')}
               className={`p-2 rounded-lg transition-colors ${
@@ -439,7 +439,7 @@ export default function GuestsPage() {
           </div>
           
           {/* Action buttons - all on same row */}
-          <div className="flex items-center gap-2 w-full md:w-auto">
+          <div className="flex items-center gap-2 w-full md:w-auto" data-tour="add-guest">
             <Button 
               onClick={() => setIsImportModalOpen(true)} 
               variant="outline" 
@@ -468,8 +468,24 @@ export default function GuestsPage() {
         </div>
       </div>
 
+      {/* Household Info - Hidden but available for tour */}
+      <div 
+        data-tour="household-info"
+        className="bg-pink-light rounded-xl p-4 border-2 border-pink-primary/20"
+      >
+        <div className="flex items-start gap-3">
+          <Users2 size={20} className="text-pink-primary mt-0.5 flex-shrink-0" />
+          <div>
+            <h3 className="font-bold text-pink-primary mb-1">Household Grouping</h3>
+            <p className="text-sm text-pink-primary/70">
+              Group guests together as a household for better organization. Household members can RSVP together on your custom RSVP form.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Search & Filters */}
-      <div className="bg-white rounded-4xl shadow-card p-4 space-y-4">
+      <div className="bg-white rounded-4xl shadow-card p-4 space-y-4" data-tour="search-filter">
         {/* Search */}
         <div className="relative">
           <Search
@@ -580,7 +596,7 @@ export default function GuestsPage() {
           </div>
 
           {/* All Guests - Flat List */}
-          <div className="space-y-2">
+          <div className="space-y-2" data-tour="guest-actions">
             {filteredGuests.map((guest) => (
               <GuestListItem
                 key={guest.id}

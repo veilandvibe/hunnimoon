@@ -7,13 +7,15 @@ import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import { useWedding } from '@/components/providers/WeddingProvider'
 import db from '@/lib/instant'
-import { Copy, Check, Calendar, User, LogOut, Loader2 } from 'lucide-react'
+import { Copy, Check, Calendar, User, LogOut, Loader2, HelpCircle, RotateCcw } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { useTour } from '@/components/providers/TourContext'
 
 export default function SettingsPage() {
   const router = useRouter()
   const { user, isLoading: authLoading } = db.useAuth()
   const { wedding, isLoading: weddingLoading } = useWedding()
+  const { startOnboarding } = useTour()
   
   // Query only rsvpSettings if needed
   const { data, isLoading: dataLoading, error } = db.useQuery(
@@ -100,6 +102,14 @@ export default function SettingsPage() {
     }
   }
 
+  const handleRetakeTour = () => {
+    // Clear the onboarding completed flag
+    localStorage.removeItem('onboardingCompleted')
+    // Start the onboarding tour
+    startOnboarding()
+    toast.success('Onboarding tour started!')
+  }
+
   // Loading state
   if (authLoading || weddingLoading || dataLoading) {
     return (
@@ -158,7 +168,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Wedding Details */}
-      <Card>
+      <Card data-tour="wedding-details">
         <form onSubmit={handleSaveChanges} className="space-y-6">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-pink-primary/10 rounded-xl flex items-center justify-center">
@@ -247,6 +257,33 @@ export default function SettingsPage() {
           >
             <LogOut size={18} />
             {signingOut ? 'Signing Out...' : 'Sign Out'}
+          </Button>
+        </div>
+      </Card>
+
+      {/* Help & Support */}
+      <Card data-tour="retake-tour">
+        <div className="space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-pink-primary/10 rounded-xl flex items-center justify-center">
+              <HelpCircle size={20} className="text-pink-primary" />
+            </div>
+            <h2 className="text-xl font-black text-pink-primary">
+              Help & Support
+            </h2>
+          </div>
+
+          <p className="text-pink-primary/70 text-sm">
+            Need a refresher on how things work? Retake the onboarding tour to see all the features again.
+          </p>
+
+          <Button 
+            variant="outline" 
+            fullWidth 
+            onClick={handleRetakeTour}
+          >
+            <RotateCcw size={18} />
+            Retake Onboarding Tour
           </Button>
         </div>
       </Card>

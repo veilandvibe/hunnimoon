@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import AuthProvider from '@/components/providers/AuthProvider'
+import { TourProvider } from '@/components/providers/TourContext'
 import { Toaster } from 'react-hot-toast'
 import './globals.css'
 
@@ -16,27 +17,29 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AuthProvider>
-          {children}
-        </AuthProvider>
-        <Toaster 
-          position="top-right"
-          toastOptions={{
-            duration: 3000,
-            success: {
-              iconTheme: {
-                primary: '#C2185B',
-                secondary: '#fff',
+        <TourProvider>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+          <Toaster 
+            position="top-right"
+            toastOptions={{
+              duration: 3000,
+              success: {
+                iconTheme: {
+                  primary: '#C2185B',
+                  secondary: '#fff',
+                },
               },
-            },
-            error: {
-              iconTheme: {
-                primary: '#ef4444',
-                secondary: '#fff',
+              error: {
+                iconTheme: {
+                  primary: '#ef4444',
+                  secondary: '#fff',
+                },
               },
-            },
-          }}
-        />
+            }}
+          />
+        </TourProvider>
       </body>
     </html>
   )

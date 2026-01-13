@@ -2,9 +2,10 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Users, ClipboardCheck, DollarSign, Briefcase, Settings, Menu } from 'lucide-react'
+import { Home, Users, ClipboardCheck, DollarSign, Briefcase, Settings, Menu, HelpCircle } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useSidebar } from './SidebarContext'
+import { useTour } from '@/components/providers/TourContext'
 
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'Home' },
@@ -18,6 +19,13 @@ const navItems = [
 export default function Sidebar() {
   const pathname = usePathname()
   const { isExpanded, setIsExpanded } = useSidebar()
+  const { startPageTour } = useTour()
+
+  const handleHelpClick = () => {
+    // Determine current page from pathname
+    const pageName = pathname?.split('/')[1] || 'dashboard'
+    startPageTour(pageName)
+  }
 
   return (
     <motion.aside
@@ -80,6 +88,32 @@ export default function Sidebar() {
             </Link>
           )
         })}
+
+        {/* Help Button */}
+        <button
+          onClick={handleHelpClick}
+          className="group mt-auto"
+          title={!isExpanded ? 'Page Help' : undefined}
+        >
+          <motion.div
+            className="flex items-center gap-3 px-3 py-3 rounded-xl text-pink-primary hover:bg-pink-primary/10 transition-colors"
+          >
+            <HelpCircle size={20} strokeWidth={2} className="flex-shrink-0" />
+            <AnimatePresence mode="wait">
+              {isExpanded && (
+                <motion.span
+                  initial={{ opacity: 0, width: 0 }}
+                  animate={{ opacity: 1, width: 'auto' }}
+                  exit={{ opacity: 0, width: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="font-medium text-sm whitespace-nowrap overflow-hidden"
+                >
+                  Help
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        </button>
       </nav>
     </motion.aside>
   )
