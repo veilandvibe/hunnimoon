@@ -27,10 +27,21 @@ export default function TourStep({
 }: TourStepProps) {
   const { isExpanded } = useSidebar()
   
-  if (!targetRect) return null
-
   // Calculate tooltip position with smart positioning to avoid clipping
   const getTooltipPosition = () => {
+    // If no target, center the tooltip on screen
+    if (!targetRect) {
+      const viewportWidth = window.innerWidth
+      const viewportHeight = window.innerHeight
+      const tooltipWidth = 320
+      const tooltipHeight = 250
+      
+      return {
+        top: (viewportHeight - tooltipHeight) / 2,
+        left: (viewportWidth - tooltipWidth) / 2,
+      }
+    }
+    
     const tooltipWidth = 320
     const tooltipHeight = 250 // Increased to better estimate actual height
     const gap = 16
@@ -132,10 +143,13 @@ export default function TourStep({
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      transition={{ duration: 0.2 }}
+      initial={{ opacity: 0, scale: 0.95, y: 10 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95, y: -10 }}
+      transition={{ 
+        duration: 0.3,
+        ease: [0.4, 0, 0.2, 1]
+      }}
       style={{
         position: 'fixed',
         top: tooltipPosition.top,

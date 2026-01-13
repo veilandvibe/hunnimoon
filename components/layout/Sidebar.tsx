@@ -1,11 +1,12 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { Home, Users, ClipboardCheck, DollarSign, Briefcase, Settings, Menu, HelpCircle } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
+import { Home, Users, ClipboardCheck, DollarSign, Briefcase, Settings, Menu, HelpCircle, LogOut } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useSidebar } from './SidebarContext'
 import { useTour } from '@/components/providers/TourContext'
+import db from '@/lib/instant'
 
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'Home' },
@@ -18,6 +19,7 @@ const navItems = [
 
 export default function Sidebar() {
   const pathname = usePathname()
+  const router = useRouter()
   const { isExpanded, setIsExpanded } = useSidebar()
   const { startPageTour } = useTour()
 
@@ -25,6 +27,15 @@ export default function Sidebar() {
     // Determine current page from pathname
     const pageName = pathname?.split('/')[1] || 'dashboard'
     startPageTour(pageName)
+  }
+
+  const handleSignOut = async () => {
+    try {
+      await db.auth.signOut()
+      router.push('/login')
+    } catch (error) {
+      console.error('Sign out error:', error)
+    }
   }
 
   return (
@@ -89,10 +100,36 @@ export default function Sidebar() {
           )
         })}
 
+        {/* Sign Out Button */}
+        <button
+          onClick={handleSignOut}
+          className="group mt-auto"
+          title={!isExpanded ? 'Sign Out' : undefined}
+        >
+          <motion.div
+            className="flex items-center gap-3 px-3 py-3 rounded-xl text-pink-primary hover:bg-pink-primary/10 transition-colors"
+          >
+            <LogOut size={20} strokeWidth={2} className="flex-shrink-0" />
+            <AnimatePresence mode="wait">
+              {isExpanded && (
+                <motion.span
+                  initial={{ opacity: 0, width: 0 }}
+                  animate={{ opacity: 1, width: 'auto' }}
+                  exit={{ opacity: 0, width: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="font-medium text-sm whitespace-nowrap overflow-hidden"
+                >
+                  Sign Out
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        </button>
+
         {/* Help Button */}
         <button
           onClick={handleHelpClick}
-          className="group mt-auto"
+          className="group"
           title={!isExpanded ? 'Page Help' : undefined}
         >
           <motion.div

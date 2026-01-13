@@ -557,21 +557,6 @@ export default function GuestsPage() {
       </div>
 
       {/* Household Info - Hidden but available for tour */}
-      <div 
-        data-tour="household-info"
-        className="bg-pink-light rounded-xl p-4 border-2 border-pink-primary/20"
-      >
-        <div className="flex items-start gap-3">
-          <Users2 size={20} className="text-pink-primary mt-0.5 flex-shrink-0" />
-          <div>
-            <h3 className="font-bold text-pink-primary mb-1">Household Grouping</h3>
-            <p className="text-sm text-pink-primary/70">
-              Group guests together as a household for better organization. Household members can RSVP together on your custom RSVP form.
-            </p>
-          </div>
-        </div>
-      </div>
-
       {/* Search & Filters */}
       <div className="bg-white rounded-4xl shadow-card p-4 space-y-4" data-tour="search-filter">
         {/* Search */}

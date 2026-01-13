@@ -41,12 +41,6 @@ export const tourSteps: Record<string, TourStep[]> = {
       position: 'bottom'
     },
     {
-      target: '[data-tour="household-info"]',
-      title: 'Household Grouping',
-      description: 'Group guests together as a household for better organization. Household members can RSVP together on your custom RSVP form',
-      position: 'bottom'
-    },
-    {
       target: '[data-tour="search-filter"]',
       title: 'Search & Filter',
       description: 'Quickly find guests by searching their name or filter by side, RSVP status, or household',
@@ -63,6 +57,12 @@ export const tourSteps: Record<string, TourStep[]> = {
       title: 'Your Guest List',
       description: 'This is where all your guests will appear. Once you add guests, you can view their details, edit information, or remove them using the action icons',
       position: 'top'
+    },
+    {
+      target: 'body',
+      title: 'Tip: Household Grouping',
+      description: 'Group guests together as a household for better organization. Household members can RSVP together on your custom RSVP form. You can assign households when adding or editing guests.',
+      position: 'bottom'
     }
   ],
 

@@ -10,6 +10,7 @@ export default function SpotlightTour() {
   const { currentTourPage, endPageTour } = useTour()
   const [currentStep, setCurrentStep] = useState(0)
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null)
+  const [isTransitioning, setIsTransitioning] = useState(false)
 
   const steps = currentTourPage ? getTourSteps(currentTourPage) : undefined
   const isActive = !!currentTourPage && !!steps && steps.length > 0
@@ -19,6 +20,13 @@ export default function SpotlightTour() {
     if (!steps || !isActive) return
 
     const currentStepData = steps[currentStep]
+    
+    // Skip highlighting for generic targets like 'body' - show tooltip only
+    if (currentStepData.target === 'body') {
+      setTargetRect(null)
+      return
+    }
+    
     const element = document.querySelector(currentStepData.target)
 
     if (element) {
@@ -66,20 +74,29 @@ export default function SpotlightTour() {
   }, [currentTourPage])
 
   const handleNext = () => {
-    if (!steps) return
+    if (!steps || isTransitioning) return
 
-    if (currentStep === steps.length - 1) {
-      // Finish tour
-      endPageTour()
-      setCurrentStep(0)
-    } else {
-      setCurrentStep((prev) => prev + 1)
-    }
+    setIsTransitioning(true)
+
+    setTimeout(() => {
+      if (currentStep === steps.length - 1) {
+        // Finish tour
+        endPageTour()
+        setCurrentStep(0)
+      } else {
+        setCurrentStep((prev) => prev + 1)
+      }
+      setIsTransitioning(false)
+    }, 150)
   }
 
   const handleBack = () => {
-    if (currentStep > 0) {
-      setCurrentStep((prev) => prev - 1)
+    if (currentStep > 0 && !isTransitioning) {
+      setIsTransitioning(true)
+      setTimeout(() => {
+        setCurrentStep((prev) => prev - 1)
+        setIsTransitioning(false)
+      }, 150)
     }
   }
 
@@ -97,11 +114,15 @@ export default function SpotlightTour() {
       {isActive && (
         <>
           {/* Spotlight with box-shadow overlay - highlighted element stays clear */}
-          {targetRect && (
+          {targetRect ? (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ 
+                duration: 0.3,
+                ease: 'easeInOut'
+              }}
               style={{
                 position: 'fixed',
                 top: targetRect.top - 8,
@@ -114,18 +135,39 @@ export default function SpotlightTour() {
               }}
               className="rounded-2xl ring-4 ring-pink-primary/50"
             />
+          ) : (
+            // Full-screen overlay for tips without a target
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ 
+                duration: 0.3,
+                ease: 'easeInOut'
+              }}
+              style={{
+                position: 'fixed',
+                inset: 0,
+                backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                zIndex: 46,
+                pointerEvents: 'none',
+              }}
+            />
           )}
 
           {/* Tooltip */}
-          <TourStep
-            step={currentStepData}
-            currentStep={currentStep}
-            totalSteps={steps.length}
-            onNext={handleNext}
-            onBack={handleBack}
-            onExit={handleExit}
-            targetRect={targetRect}
-          />
+          <AnimatePresence mode="wait">
+            <TourStep
+              key={currentStep}
+              step={currentStepData}
+              currentStep={currentStep}
+              totalSteps={steps.length}
+              onNext={handleNext}
+              onBack={handleBack}
+              onExit={handleExit}
+              targetRect={targetRect}
+            />
+          </AnimatePresence>
         </>
       )}
     </AnimatePresence>
