@@ -6,6 +6,7 @@ import GuestCard from '@/components/guests/GuestCard'
 import GuestListItem from '@/components/guests/GuestListItem'
 import GuestFormModal from '@/components/guests/GuestFormModal'
 import GuestImportModal from '@/components/guests/GuestImportModal'
+import BulkActionBar from '@/components/guests/BulkActionBar'
 import Button from '@/components/ui/Button'
 import Select from '@/components/ui/Select'
 import ConfirmDialog from '@/components/ui/ConfirmDialog'
@@ -50,6 +51,11 @@ export default function GuestsPage() {
     guestId: '',
     guestName: ''
   })
+  
+  // Multi-select state (desktop only)
+  const [selectedGuestIds, setSelectedGuestIds] = useState<Set<string>>(new Set())
+  const [isSelectMode, setIsSelectMode] = useState(false)
+  const [hoveredGuestId, setHoveredGuestId] = useState<string | null>(null)
 
   // Filter guests
   const filteredGuests = guests.filter((guest) => {
@@ -146,12 +152,39 @@ export default function GuestsPage() {
 
   const confirmDelete = async () => {
     try {
-      await db.transact([db.tx.guests[deleteConfirm.guestId].delete()])
-      toast.success('Guest deleted')
+      if (deleteConfirm.guestId === 'bulk') {
+        await confirmBulkDelete()
+      } else {
+        await db.transact([db.tx.guests[deleteConfirm.guestId].delete()])
+        toast.success('Guest deleted')
+      }
     } catch (error) {
       console.error('Error deleting guest:', error)
       toast.error('Failed to delete guest. Please try again.')
     }
+  }
+
+  // Multi-select handlers
+  const toggleGuestSelection = (guestId: string) => {
+    const newSelection = new Set(selectedGuestIds)
+    if (newSelection.has(guestId)) {
+      newSelection.delete(guestId)
+    } else {
+      newSelection.add(guestId)
+    }
+    setSelectedGuestIds(newSelection)
+    setIsSelectMode(newSelection.size > 0)
+  }
+
+  const cancelSelection = () => {
+    setSelectedGuestIds(new Set())
+    setIsSelectMode(false)
+  }
+
+  const handleSelectMultiple = (guestId: string) => {
+    const newSelection = new Set<string>([guestId])
+    setSelectedGuestIds(newSelection)
+    setIsSelectMode(true)
   }
 
   const handleSaveGuest = async (guestData: any) => {
@@ -269,6 +302,61 @@ export default function GuestsPage() {
     } catch (error) {
       console.error('Error importing guests:', error)
       throw error // Re-throw to be handled by modal
+    }
+  }
+
+  // Bulk action handlers
+  const handleBulkDelete = async () => {
+    const count = selectedGuestIds.size
+    setDeleteConfirm({
+      isOpen: true,
+      guestId: 'bulk',
+      guestName: `${count} guest${count !== 1 ? 's' : ''}`
+    })
+  }
+
+  const confirmBulkDelete = async () => {
+    const count = selectedGuestIds.size
+    try {
+      const deleteTransactions = Array.from(selectedGuestIds).map(id =>
+        db.tx.guests[id].delete()
+      )
+      await db.transact(deleteTransactions)
+      toast.success(`${count} guest${count !== 1 ? 's' : ''} deleted successfully`)
+      cancelSelection()
+    } catch (error) {
+      console.error('Error deleting guests:', error)
+      toast.error('Failed to delete guests. Please try again.')
+    }
+  }
+
+  const handleBulkMarkInvited = async (invited: boolean) => {
+    const count = selectedGuestIds.size
+    try {
+      const updateTransactions = Array.from(selectedGuestIds).map(id =>
+        db.tx.guests[id].update({ invite_sent: invited })
+      )
+      await db.transact(updateTransactions)
+      toast.success(`${count} guest${count !== 1 ? 's' : ''} marked as ${invited ? 'invited' : 'not invited'}`)
+      cancelSelection()
+    } catch (error) {
+      console.error('Error updating guests:', error)
+      toast.error('Failed to update guests. Please try again.')
+    }
+  }
+
+  const handleBulkChangeSide = async (side: 'Bride' | 'Groom' | 'Both' | 'Unknown') => {
+    const count = selectedGuestIds.size
+    try {
+      const updateTransactions = Array.from(selectedGuestIds).map(id =>
+        db.tx.guests[id].update({ side })
+      )
+      await db.transact(updateTransactions)
+      toast.success(`${count} guest${count !== 1 ? 's' : ''} updated to ${side} side`)
+      cancelSelection()
+    } catch (error) {
+      console.error('Error updating guests:', error)
+      toast.error('Failed to update guests. Please try again.')
     }
   }
 
@@ -570,6 +658,20 @@ export default function GuestsPage() {
         </div>
       </div>
 
+      {/* Bulk Action Bar */}
+      {isSelectMode && (
+        <div className="md:sticky md:top-[56px] md:z-30 sticky top-[56px] z-30">
+          <BulkActionBar
+            selectedCount={selectedGuestIds.size}
+            onDelete={handleBulkDelete}
+            onMarkInvited={() => handleBulkMarkInvited(true)}
+            onMarkNotInvited={() => handleBulkMarkInvited(false)}
+            onChangeSide={handleBulkChangeSide}
+            onCancel={cancelSelection}
+          />
+        </div>
+      )}
+
       {/* Guest List */}
       {filteredGuests.length === 0 ? (
         <div className="bg-white rounded-4xl shadow-card p-12 text-center" data-tour="guest-list">
@@ -604,6 +706,12 @@ export default function GuestsPage() {
                 onView={handleViewGuest}
                 onEdit={handleEditGuest}
                 onDelete={handleDeleteGuest}
+                isSelected={selectedGuestIds.has(guest.id)}
+                isHovered={hoveredGuestId === guest.id}
+                isSelectMode={isSelectMode}
+                onToggleSelect={toggleGuestSelection}
+                onHover={setHoveredGuestId}
+                onSelectMultiple={handleSelectMultiple}
               />
             ))}
           </div>
@@ -635,6 +743,11 @@ export default function GuestsPage() {
                     onEdit={handleEditGuest}
                     onDelete={handleDeleteGuest}
                     onView={handleViewGuest}
+                    isSelected={selectedGuestIds.has(guest.id)}
+                    isHovered={hoveredGuestId === guest.id}
+                    isSelectMode={isSelectMode}
+                    onToggleSelect={toggleGuestSelection}
+                    onHover={setHoveredGuestId}
                   />
                 ))}
               </div>
@@ -651,6 +764,11 @@ export default function GuestsPage() {
                   onEdit={handleEditGuest}
                   onDelete={handleDeleteGuest}
                   onView={handleViewGuest}
+                  isSelected={selectedGuestIds.has(guest.id)}
+                  isHovered={hoveredGuestId === guest.id}
+                  isSelectMode={isSelectMode}
+                  onToggleSelect={toggleGuestSelection}
+                  onHover={setHoveredGuestId}
                 />
               ))}
             </div>

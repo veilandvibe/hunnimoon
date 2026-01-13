@@ -1,3 +1,5 @@
+'use client'
+
 import Card from '../ui/Card'
 import Badge from '../ui/Badge'
 import Button from '../ui/Button'
@@ -9,9 +11,24 @@ interface GuestCardProps {
   onEdit: (guest: Guest) => void
   onDelete: (guestId: string) => void
   onView: (guest: Guest) => void
+  isSelected?: boolean
+  isHovered?: boolean
+  isSelectMode?: boolean
+  onToggleSelect?: (id: string) => void
+  onHover?: (id: string | null) => void
 }
 
-export default function GuestCard({ guest, onEdit, onDelete, onView }: GuestCardProps) {
+export default function GuestCard({ 
+  guest, 
+  onEdit, 
+  onDelete, 
+  onView,
+  isSelected,
+  isHovered,
+  isSelectMode,
+  onToggleSelect,
+  onHover
+}: GuestCardProps) {
   const getStatusVariant = (status: string) => {
     switch (status) {
       case 'Yes':
@@ -24,8 +41,32 @@ export default function GuestCard({ guest, onEdit, onDelete, onView }: GuestCard
   }
 
   return (
-    <Card padding="md">
-      <div className="space-y-3">
+    <div 
+      className="relative"
+      onMouseEnter={() => onHover?.(guest.id)}
+      onMouseLeave={() => onHover?.(null)}
+    >
+      {/* Overlay checkbox - desktop only */}
+      {(isHovered || isSelectMode) && onToggleSelect && (
+        <div className="hidden md:block absolute top-3 right-3 z-10">
+          <input
+            type="checkbox"
+            checked={isSelected}
+            onChange={(e) => {
+              e.stopPropagation()
+              onToggleSelect(guest.id)
+            }}
+            onClick={(e) => e.stopPropagation()}
+            className="w-5 h-5 rounded border-2 border-pink-primary/30 text-pink-primary focus:ring-pink-primary cursor-pointer bg-white shadow-md"
+          />
+        </div>
+      )}
+      
+      <Card 
+        padding="md" 
+        className={`${isSelected ? 'ring-2 ring-pink-primary bg-pink-light/20' : ''} transition-all`}
+      >
+        <div className="space-y-3">
         {/* Header */}
         <div className="flex items-start justify-between gap-2">
           <div className="flex-1 min-w-0">
@@ -106,6 +147,7 @@ export default function GuestCard({ guest, onEdit, onDelete, onView }: GuestCard
           )}
         </div>
       </div>
-    </Card>
+      </Card>
+    </div>
   )
 }

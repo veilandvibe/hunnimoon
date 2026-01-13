@@ -2,16 +2,33 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Badge from '../ui/Badge'
-import { Eye, Edit, Trash2, MoreVertical } from 'lucide-react'
+import { Eye, Edit, Trash2, MoreVertical, Users2 } from 'lucide-react'
 
 interface GuestListItemProps {
   guest: any
   onView: (guest: any) => void
   onEdit: (guest: any) => void
   onDelete: (guestId: string) => void
+  isSelected?: boolean
+  isHovered?: boolean
+  isSelectMode?: boolean
+  onToggleSelect?: (id: string) => void
+  onHover?: (id: string | null) => void
+  onSelectMultiple?: (id: string) => void
 }
 
-export default function GuestListItem({ guest, onView, onEdit, onDelete }: GuestListItemProps) {
+export default function GuestListItem({ 
+  guest, 
+  onView, 
+  onEdit, 
+  onDelete,
+  isSelected,
+  isHovered,
+  isSelectMode,
+  onToggleSelect,
+  onHover,
+  onSelectMultiple
+}: GuestListItemProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -41,8 +58,34 @@ export default function GuestListItem({ guest, onView, onEdit, onDelete }: Guest
   }, [isMenuOpen])
 
   return (
-    <div className="bg-white rounded-2xl shadow-card p-4 hover:shadow-lg transition-shadow">
-      <div className="grid grid-cols-[1fr_90px_40px] md:grid-cols-[1fr_120px_140px_140px] gap-3 items-center">
+    <div 
+      className={`relative bg-white rounded-2xl shadow-card p-4 hover:shadow-lg transition-all ${
+        isSelected ? 'ring-2 ring-pink-primary bg-pink-light/20' : ''
+      }`}
+      onMouseEnter={() => onHover?.(guest.id)}
+      onMouseLeave={() => onHover?.(null)}
+    >
+      {/* Overlay checkbox - desktop: shows on hover, mobile: shows only in select mode */}
+      {onToggleSelect && (
+        <div className={`absolute left-3 top-1/2 -translate-y-1/2 z-10 ${
+          isSelectMode ? 'block' : 'hidden md:block'
+        } ${isHovered || isSelectMode ? 'opacity-100' : 'md:opacity-0'} transition-opacity`}>
+          <input
+            type="checkbox"
+            checked={isSelected}
+            onChange={(e) => {
+              e.stopPropagation()
+              onToggleSelect(guest.id)
+            }}
+            onClick={(e) => e.stopPropagation()}
+            className="w-5 h-5 rounded border-2 border-pink-primary/30 text-pink-primary focus:ring-pink-primary cursor-pointer bg-white shadow-sm"
+          />
+        </div>
+      )}
+      
+      <div className={`grid grid-cols-[1fr_90px_40px] md:grid-cols-[1fr_120px_140px_140px] gap-3 items-center transition-all ${
+        isSelectMode ? 'pl-8' : (isHovered ? 'md:pl-8' : '')
+      }`}>
         {/* Name column - Left aligned */}
         <div className="flex items-center gap-2 min-w-0">
           <span className="text-base font-black text-pink-primary truncate">
@@ -113,6 +156,18 @@ export default function GuestListItem({ guest, onView, onEdit, onDelete }: Guest
                   <Edit size={16} className="text-pink-primary" />
                   Edit
                 </button>
+                {!isSelectMode && onSelectMultiple && (
+                  <button
+                    onClick={() => {
+                      onSelectMultiple(guest.id)
+                      setIsMenuOpen(false)
+                    }}
+                    className="w-full px-4 py-2 text-left text-sm text-pink-primary hover:bg-pink-light transition-colors flex items-center gap-2"
+                  >
+                    <Users2 size={16} className="text-pink-primary" strokeWidth={2} />
+                    Select Multiple
+                  </button>
+                )}
                 <button
                   onClick={() => {
                     onDelete(guest.id)
