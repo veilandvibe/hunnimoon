@@ -193,7 +193,7 @@ export default function VendorsPage() {
 
       {/* Vendor List */}
       {filteredVendors.length === 0 ? (
-        <div className="bg-white rounded-4xl shadow-card p-12 text-center">
+        <div className="bg-white rounded-4xl shadow-card p-12 text-center" data-tour="vendor-list">
           <p className="text-pink-primary/60">
             {searchQuery
               ? 'No vendors match your search'
@@ -204,7 +204,7 @@ export default function VendorsPage() {
           </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" data-tour="vendor-card">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" data-tour="vendor-list">
           {filteredVendors.map((vendor) => (
             <VendorCard
               key={vendor.id}

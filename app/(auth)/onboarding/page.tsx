@@ -13,7 +13,17 @@ import { Heart, Sparkles } from 'lucide-react'
 export default function OnboardingPage() {
   const router = useRouter()
   const { user } = db.useAuth()
-  const { data, isLoading: queryLoading } = db.useQuery({ weddings: {} })
+  const { data, isLoading: queryLoading } = db.useQuery(
+    user?.id ? {
+      weddings: {
+        $: {
+          where: {
+            user_id: user.id
+          }
+        }
+      }
+    } : null
+  )
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [formData, setFormData] = useState({

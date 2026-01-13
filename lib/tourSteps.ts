@@ -59,10 +59,10 @@ export const tourSteps: Record<string, TourStep[]> = {
       position: 'bottom'
     },
     {
-      target: '[data-tour="guest-actions"]',
-      title: 'Guest Actions',
-      description: 'Click the eye icon to view guest details, pencil to edit their information, or trash to remove them',
-      position: 'left'
+      target: '[data-tour="guest-list"]',
+      title: 'Your Guest List',
+      description: 'This is where all your guests will appear. Once you add guests, you can view their details, edit information, or remove them using the action icons',
+      position: 'top'
     }
   ],
 
@@ -119,10 +119,10 @@ export const tourSteps: Record<string, TourStep[]> = {
       position: 'bottom'
     },
     {
-      target: '[data-tour="budget-item"]',
-      title: 'Track Payments',
-      description: 'Mark items as paid to automatically update your spending totals. Edit budgeted amounts and actual costs as needed',
-      position: 'left'
+      target: '[data-tour="budget-list"]',
+      title: 'Budget Categories',
+      description: 'All your budget categories will appear here. Once added, you can mark items as paid to automatically update your spending totals, or edit amounts anytime',
+      position: 'top'
     }
   ],
 
@@ -134,10 +134,10 @@ export const tourSteps: Record<string, TourStep[]> = {
       position: 'bottom'
     },
     {
-      target: '[data-tour="vendor-card"]',
-      title: 'Vendor Details',
-      description: 'Quick access to vendor details including contact name, email, phone, website, and notes. Edit or delete vendors anytime',
-      position: 'left'
+      target: '[data-tour="vendor-list"]',
+      title: 'Your Vendors',
+      description: 'All your vendors will be displayed here with their contact details. Once you add vendors, you can quickly access their information, edit details, or remove them',
+      position: 'top'
     }
   ],
 

@@ -15,7 +15,7 @@ interface TourContextType {
 const TourContext = createContext<TourContextType | undefined>(undefined)
 
 export function TourProvider({ children }: { children: ReactNode }) {
-  const [onboardingCompleted, setOnboardingCompleted] = useState(true) // Default to true, will check localStorage
+  const [onboardingCompleted, setOnboardingCompleted] = useState(false) // Default to false, will check localStorage
   const [currentTourPage, setCurrentTourPage] = useState<string | null>(null)
   const [showOnboarding, setShowOnboarding] = useState(false)
 

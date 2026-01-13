@@ -572,7 +572,7 @@ export default function GuestsPage() {
 
       {/* Guest List */}
       {filteredGuests.length === 0 ? (
-        <div className="bg-white rounded-4xl shadow-card p-12 text-center">
+        <div className="bg-white rounded-4xl shadow-card p-12 text-center" data-tour="guest-list">
           <p className="text-pink-primary/60">
             {searchQuery || filterStatus !== 'All' || filterSide !== 'All'
               ? 'No guests match your filters'
@@ -584,7 +584,7 @@ export default function GuestsPage() {
         </div>
       ) : viewMode === 'list' ? (
         // List View
-        <div className="space-y-4">
+        <div className="space-y-4" data-tour="guest-list">
           {/* Column Headers */}
           <div className="bg-white rounded-2xl shadow-card px-4 py-3">
             <div className="grid grid-cols-[1fr_90px_40px] md:grid-cols-[1fr_120px_140px_140px] gap-3 items-center">
@@ -596,7 +596,7 @@ export default function GuestsPage() {
           </div>
 
           {/* All Guests - Flat List */}
-          <div className="space-y-2" data-tour="guest-actions">
+          <div className="space-y-2">
             {filteredGuests.map((guest) => (
               <GuestListItem
                 key={guest.id}
@@ -610,7 +610,7 @@ export default function GuestsPage() {
         </div>
       ) : (
         // Grid View (existing)
-        <div className="space-y-6">
+        <div className="space-y-6" data-tour="guest-list">
           {/* Households */}
           {Object.entries(groupedGuests.households).map(([householdId, householdMembers]) => (
             <div key={householdId} className="bg-white rounded-4xl shadow-card p-6">

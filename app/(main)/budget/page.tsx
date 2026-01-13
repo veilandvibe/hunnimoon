@@ -369,7 +369,7 @@ export default function BudgetPage() {
 
       {/* Budget Items Grid */}
       {activeItems.length === 0 ? (
-        <Card padding="lg" className="text-center">
+        <Card padding="lg" className="text-center" data-tour="budget-list">
           <p className="text-pink-primary/60 mb-4">No budget categories yet</p>
           <Button onClick={handleAddItem}>
             <Plus size={20} />
@@ -377,7 +377,7 @@ export default function BudgetPage() {
           </Button>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" data-tour="budget-item">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" data-tour="budget-list">
           {activeItems.map((item) => (
             <BudgetItemCard
               key={item.id}
