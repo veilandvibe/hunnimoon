@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useContext } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
-import { useSidebar } from '@/components/layout/SidebarContext'
+import { SidebarContext } from '@/components/layout/SidebarContext'
 
 interface ModalProps {
   isOpen: boolean
@@ -14,7 +14,9 @@ interface ModalProps {
 }
 
 export default function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalProps) {
-  const { isExpanded } = useSidebar()
+  // Use sidebar context if available (for main app), otherwise default to collapsed
+  const sidebarContext = useContext(SidebarContext)
+  const isExpanded = sidebarContext?.isExpanded ?? false
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'

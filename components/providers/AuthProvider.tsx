@@ -24,8 +24,8 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   )
 
   // Public routes that don't require authentication
-  const publicRoutes = ['/login', '/rsvp']
-  const isPublicRoute = publicRoutes.some(route => pathname?.startsWith(route))
+  const publicRoutes = ['/login', '/rsvp', '/tools', '/pricing', '/terms', '/privacy', '/refunds']
+  const isPublicRoute = pathname === '/' || publicRoutes.some(route => pathname?.startsWith(route))
 
   useEffect(() => {
     if (isLoading) return

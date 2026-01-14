@@ -9,6 +9,9 @@ interface SidebarContextType {
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined)
 
+// Export the context so it can be used with useContext in components that may or may not have a provider
+export { SidebarContext }
+
 export function SidebarProvider({ children }: { children: ReactNode }) {
   const [isExpanded, setIsExpanded] = useState(false)
 
