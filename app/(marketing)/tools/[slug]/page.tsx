@@ -1,0 +1,128 @@
+import { notFound } from 'next/navigation'
+import Link from 'next/link'
+import { getToolBySlug, getAllTools } from '@/lib/tools-data'
+import Breadcrumbs from '@/components/marketing/Breadcrumbs'
+import CTABlock from '@/components/marketing/CTABlock'
+import ToolSlider from '@/components/marketing/ToolSlider'
+import Button from '@/components/ui/Button'
+import WeddingTimelineGenerator from '@/components/tools/WeddingTimelineGenerator'
+
+// Map component names to actual components
+const toolComponents: Record<string, React.ComponentType> = {
+  WeddingTimelineGenerator,
+}
+
+export default function ToolPage({ params }: { params: { slug: string } }) {
+  const tool = getToolBySlug(params.slug)
+  
+  if (!tool) {
+    notFound()
+  }
+
+  const ToolComponent = toolComponents[tool.component]
+  const allTools = getAllTools()
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      {/* Breadcrumbs */}
+      <Breadcrumbs 
+        items={[
+          { label: 'Tools', href: '/tools' },
+          { label: tool.name, href: `/tools/${tool.slug}` }
+        ]}
+      />
+
+      {/* SEO Header Block */}
+      <div className="text-center mb-12">
+        <p className="text-sm font-medium text-pink-primary/60 mb-2 uppercase tracking-wide">
+          TOOLS
+        </p>
+        <h1 className="text-4xl md:text-5xl font-black text-pink-primary mb-4">
+          {tool.h1}
+        </h1>
+        <p className="text-lg text-pink-primary/70 max-w-3xl mx-auto">
+          {tool.description}
+        </p>
+      </div>
+
+      {/* Tool Embed */}
+      {ToolComponent && <ToolComponent />}
+
+      {/* Soft Inline CTA */}
+      <div className="text-center my-12 space-y-6">
+        <p className="text-pink-primary/70 max-w-2xl mx-auto text-lg">
+          Planning a wedding gets messy fast. Hunnimoon keeps your guest list, budget, vendors, and RSVPs all in one place, so nothing slips through the cracks.
+        </p>
+        <div className="flex justify-center">
+          <Link href="/login">
+            <Button size="lg">
+              Start Free Trial
+            </Button>
+          </Link>
+        </div>
+      </div>
+
+      {/* Try Other Tools Slider */}
+      <ToolSlider tools={allTools} currentToolSlug={tool.slug} />
+
+      {/* Testimonial */}
+      <div className="bg-pink-light rounded-3xl p-8 md:p-12 my-16">
+        <div className="max-w-3xl mx-auto text-center">
+          <p className="text-lg text-pink-primary mb-6 italic">
+            "We had so many moving parts to track. Hunnimoon made it simple to see what we needed to do each month. Nothing fell through the cracks."
+          </p>
+          <div className="flex items-center justify-center gap-4">
+            <div className="w-12 h-12 bg-pink-primary rounded-full flex items-center justify-center text-white font-bold">
+              S
+            </div>
+            <div className="text-left">
+              <p className="font-bold text-pink-primary">Sarah M.</p>
+              <p className="text-sm text-pink-primary/70">Married June 2024</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Long-Form SEO Content */}
+      <article className="prose prose-pink max-w-4xl mx-auto my-16">
+        <h2 className="text-3xl font-black text-pink-primary mb-6">
+          {tool.seoContent.h2}
+        </h2>
+        
+        <div 
+          className="text-pink-primary/80 leading-relaxed space-y-4"
+          dangerouslySetInnerHTML={{ __html: tool.seoContent.content }}
+        />
+
+        {/* FAQs */}
+        <div className="mt-16 pt-16 border-t-2 border-pink-primary/10">
+          <h2 className="text-3xl font-black text-pink-primary mb-8">
+            Frequently Asked Questions
+          </h2>
+          <div className="space-y-6">
+            {tool.seoContent.faqs.map((faq, index) => (
+              <div key={index} className="border-b border-pink-primary/10 pb-6 last:border-0">
+                <h3 className="text-xl font-bold text-pink-primary mb-3">
+                  {faq.question}
+                </h3>
+                <p className="text-pink-primary/70 leading-relaxed">
+                  {faq.answer}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </article>
+
+      {/* Final CTA */}
+      <CTABlock />
+    </div>
+  )
+}
+
+export async function generateStaticParams() {
+  const tools = getAllTools()
+  return tools.map((tool) => ({
+    slug: tool.slug,
+  }))
+}
