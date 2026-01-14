@@ -528,26 +528,31 @@ export default function GuestsPage() {
           
           {/* Action buttons - all on same row */}
           <div className="flex items-center gap-2 w-full md:w-auto" data-tour="add-guest">
+            {/* Import button - smaller mobile padding, fixed width to match Export */}
             <Button 
               onClick={() => setIsImportModalOpen(true)} 
               variant="outline" 
-              className="flex-1 md:flex-none h-[44px] text-sm md:text-base px-3 md:px-4"
+              className="w-[100px] md:flex-none h-[44px] text-sm md:text-base px-2 md:px-4"
             >
               <Upload size={18} className="md:w-5 md:h-5" />
               <span className="ml-1 md:ml-2">Import</span>
             </Button>
+            
+            {/* Export button - smaller mobile padding, fixed width to match Import */}
             <Button 
               onClick={handleExportGuests} 
               variant="outline" 
-              className="flex-1 md:flex-none h-[44px] text-sm md:text-base px-3 md:px-4"
+              className="w-[100px] md:flex-none h-[44px] text-sm md:text-base px-2 md:px-4"
               disabled={guests.length === 0}
             >
               <Download size={18} className="md:w-5 md:h-5" />
               <span className="ml-1 md:ml-2">Export</span>
             </Button>
+            
+            {/* Add Guest button - smaller mobile padding, slightly wider to prevent text wrap */}
             <Button 
               onClick={handleAddGuest} 
-              className="flex-1 md:flex-none h-[44px] text-sm md:text-base px-3 md:px-4"
+              className="flex-1 md:flex-none h-[44px] text-sm md:text-base px-2 md:px-4 whitespace-nowrap"
             >
               <Plus size={18} className="md:w-5 md:h-5" />
               <span className="ml-1 md:ml-2">Add Guest</span>

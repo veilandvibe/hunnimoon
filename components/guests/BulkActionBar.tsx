@@ -41,24 +41,24 @@ export default function BulkActionBar({
       
       {/* Actions - Single Row */}
       <div className="flex items-center gap-2">
-        {/* Delete */}
+        {/* Delete button - fixed width for desktop */}
         <Button
           onClick={onDelete}
           variant="outline"
           size="sm"
-          className="text-red-600 border-red-200 hover:bg-red-50 px-2 py-2 md:px-4 md:py-2 h-9 whitespace-nowrap"
+          className="text-red-600 border-red-200 hover:bg-red-50 px-2 py-2 h-9 whitespace-nowrap md:w-[140px]"
         >
           <Trash2 size={14} className="hidden md:inline" />
           <span className="text-xs md:ml-1">Delete</span>
         </Button>
         
-        {/* Mark Invited Dropdown */}
-        <div className="relative flex-1">
+        {/* Mark Invited Dropdown - fixed width for desktop */}
+        <div className="relative flex-1 md:flex-none">
           <Button
             onClick={() => setShowInviteMenu(!showInviteMenu)}
             variant="outline"
             size="sm"
-            className="w-full px-2 py-2 md:px-4 md:py-2 h-9 whitespace-nowrap"
+            className="w-full md:w-[140px] px-2 py-2 h-9 whitespace-nowrap"
           >
             <Mail size={14} className="hidden md:inline" />
             <span className="text-xs md:ml-1">Mark Invited ▼</span>
@@ -94,13 +94,13 @@ export default function BulkActionBar({
           )}
         </div>
         
-        {/* Change Side Dropdown */}
-        <div className="relative flex-1">
+        {/* Change Side Dropdown - fixed width for desktop */}
+        <div className="relative flex-1 md:flex-none">
           <Button
             onClick={() => setShowSideMenu(!showSideMenu)}
             variant="outline"
             size="sm"
-            className="w-full px-2 py-2 md:px-4 md:py-2 h-9 whitespace-nowrap"
+            className="w-full md:w-[140px] px-2 py-2 h-9 whitespace-nowrap"
           >
             <Users size={14} className="hidden md:inline" />
             <span className="text-xs md:ml-1">Change Side ▼</span>
