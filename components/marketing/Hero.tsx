@@ -37,7 +37,7 @@ export default function Hero() {
               <p className="text-lg md:text-xl text-pink-primary/70 mb-8 max-w-2xl mx-auto lg:mx-0">
                 Hunnimoon replaces messy spreadsheets and keeps your guest list, budget, vendors, and RSVPs organized in one place. No more juggling tabs or losing track of details.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <div className="flex justify-center lg:justify-start">
                 <Button 
                   onClick={() => setIsTrialModalOpen(true)}
                   size="lg"
@@ -45,14 +45,6 @@ export default function Hero() {
                 >
                   Start Free Trial
                 </Button>
-                <Link href="/tools">
-                  <Button 
-                    variant="outline" 
-                    size="lg"
-                  >
-                    Try Free Tools
-                  </Button>
-                </Link>
               </div>
               <p className="text-pink-primary/60 text-sm mt-4">
                 No credit card required · 7-day free trial

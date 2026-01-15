@@ -10,7 +10,7 @@ export default function Features() {
     {
       icon: CheckCircle,
       title: "RSVP Tracking",
-      description: "Create a custom RSVP form guests can fill out online. They search for their name and respond. Your guest list updates automatically. No more text messages or lost paper cards."
+      description: "Create custom RSVP forms that your guests can fill out online. Their responses automatically update your guest list. No more text messages or lost paper cards."
     },
     {
       icon: DollarSign,
@@ -20,7 +20,7 @@ export default function Features() {
     {
       icon: Briefcase,
       title: "Vendor Organization",
-      description: "Store all your vendor contacts in one place. Track who you hired, what they are doing, and when payments are due. No more digging through emails to find phone numbers."
+      description: "Store all your vendor contacts in one place. Track who you hired, what they charge, and add notes about your conversations. No more digging through emails to find phone numbers."
     }
   ]
 

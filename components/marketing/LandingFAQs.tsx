@@ -22,7 +22,7 @@ export default function LandingFAQs() {
     },
     {
       question: "Can my partner access the same account?",
-      answer: "Yes. You can share access with your partner so both of you can manage your wedding planning together. Changes sync in real-time, so you are always on the same page."
+      answer: "Yes. Accounts are created with one email, but you can share your login with your partner so both of you can manage your wedding planning together. Changes sync in real-time, so you are always on the same page."
     },
     {
       question: "Do I need a credit card to start?",
@@ -30,7 +30,7 @@ export default function LandingFAQs() {
     },
     {
       question: "Can I import my guest list from a spreadsheet?",
-      answer: "Yes. Hunnimoon lets you upload a CSV file with your guest list. You can also add guests one by one if you prefer. Both options work great."
+      answer: "Yes. Hunnimoon lets you upload a CSV file with your guest list using our simple template with easy steps to follow. You can also add guests one by one if you prefer. Both options work great."
     },
     {
       question: "How does the RSVP feature work?",

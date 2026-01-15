@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 import Sidebar from './Sidebar'
 import BottomNav from './BottomNav'
 import MobileHeader from './MobileHeader'
@@ -19,6 +20,12 @@ function MainLayoutContent({
 }) {
   const { isExpanded } = useSidebar()
   const { onboardingCompleted, showOnboarding, startOnboarding, completeOnboarding } = useTour()
+  const pathname = usePathname()
+
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
 
   // Check if onboarding should be shown on first load
   useEffect(() => {

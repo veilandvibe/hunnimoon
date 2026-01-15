@@ -66,7 +66,7 @@ export default function VendorCard({ vendor, onEdit, onDelete }: VendorCardProps
           
           {vendor.website && (
             <a
-              href={vendor.website}
+              href={vendor.website.startsWith('http') ? vendor.website : `https://${vendor.website}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-sm text-pink-primary/70 hover:text-pink-primary transition-colors"

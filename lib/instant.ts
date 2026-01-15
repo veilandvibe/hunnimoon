@@ -11,6 +11,7 @@ if (!APP_ID) {
 const db = init({
   appId: APP_ID,
   schema,
+  devtool: false, // Hide the InstantDB devtools icon
 })
 
 export default db

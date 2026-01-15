@@ -10,7 +10,7 @@ export default function HowItWorks() {
     {
       icon: ListChecks,
       title: "Add Your Details",
-      description: "Enter your wedding date, venue, and budget. Upload your guest list or add guests one by one. Everything syncs instantly."
+      description: "Enter your couple names and wedding date. Add your vendors and upload your guest list or add guests one by one. Everything syncs instantly."
     },
     {
       icon: Users,

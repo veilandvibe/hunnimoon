@@ -88,10 +88,10 @@ export default function VendorFormModal({ isOpen, onClose, onSave, editingVendor
 
         <Input
           label="Website"
-          type="url"
+          type="text"
           value={formData.website || ''}
           onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-          placeholder="https://vendor.com"
+          placeholder="vendor.com"
         />
 
         <Textarea

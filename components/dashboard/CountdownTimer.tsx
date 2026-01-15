@@ -48,33 +48,33 @@ export default function CountdownTimer({ weddingDate, partner1Name, partner2Name
           Your wedding is in
         </p>
         
-        <div className="flex justify-center items-center gap-2 md:gap-4 flex-wrap">
-          <div className="flex items-baseline gap-1">
+        <div className="flex justify-center items-center gap-3 md:gap-4">
+          <div className="flex flex-col items-center">
             <span className="text-4xl md:text-5xl font-black tabular-nums">
               {timeLeft.days}
             </span>
-            <span className="text-sm md:text-base font-medium opacity-90">days</span>
+            <span className="text-xs md:text-base font-medium opacity-90 mt-1">days</span>
           </div>
-          <span className="text-2xl md:text-3xl font-bold opacity-50">:</span>
-          <div className="flex items-baseline gap-1">
+          <span className="text-2xl md:text-3xl font-bold opacity-50 mb-4 md:mb-0">:</span>
+          <div className="flex flex-col items-center">
             <span className="text-4xl md:text-5xl font-black tabular-nums">
               {String(timeLeft.hours).padStart(2, '0')}
             </span>
-            <span className="text-sm md:text-base font-medium opacity-90">hrs</span>
+            <span className="text-xs md:text-base font-medium opacity-90 mt-1">hrs</span>
           </div>
-          <span className="text-2xl md:text-3xl font-bold opacity-50">:</span>
-          <div className="flex items-baseline gap-1">
+          <span className="text-2xl md:text-3xl font-bold opacity-50 mb-4 md:mb-0">:</span>
+          <div className="flex flex-col items-center">
             <span className="text-4xl md:text-5xl font-black tabular-nums">
               {String(timeLeft.minutes).padStart(2, '0')}
             </span>
-            <span className="text-sm md:text-base font-medium opacity-90">min</span>
+            <span className="text-xs md:text-base font-medium opacity-90 mt-1">min</span>
           </div>
-          <span className="text-2xl md:text-3xl font-bold opacity-50">:</span>
-          <div className="flex items-baseline gap-1">
+          <span className="text-2xl md:text-3xl font-bold opacity-50 mb-4 md:mb-0">:</span>
+          <div className="flex flex-col items-center">
             <span className="text-4xl md:text-5xl font-black tabular-nums">
               {String(timeLeft.seconds).padStart(2, '0')}
             </span>
-            <span className="text-sm md:text-base font-medium opacity-90">sec</span>
+            <span className="text-xs md:text-base font-medium opacity-90 mt-1">sec</span>
           </div>
         </div>
       </div>

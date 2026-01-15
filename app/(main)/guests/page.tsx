@@ -181,6 +181,12 @@ export default function GuestsPage() {
     setIsSelectMode(false)
   }
 
+  const selectAll = () => {
+    const allGuestIds = new Set(filteredGuests.map(g => g.id))
+    setSelectedGuestIds(allGuestIds)
+    setIsSelectMode(true)
+  }
+
   const handleSelectMultiple = (guestId: string) => {
     const newSelection = new Set<string>([guestId])
     setSelectedGuestIds(newSelection)
@@ -534,8 +540,8 @@ export default function GuestsPage() {
               variant="outline" 
               className="w-[100px] md:flex-none h-[44px] text-sm md:text-base px-2 md:px-4"
             >
-              <Upload size={18} className="md:w-5 md:h-5" />
-              <span className="ml-1 md:ml-2">Import</span>
+              <Upload size={20} className="flex-shrink-0" />
+              Import
             </Button>
             
             {/* Export button - smaller mobile padding, fixed width to match Import */}
@@ -545,8 +551,8 @@ export default function GuestsPage() {
               className="w-[100px] md:flex-none h-[44px] text-sm md:text-base px-2 md:px-4"
               disabled={guests.length === 0}
             >
-              <Download size={18} className="md:w-5 md:h-5" />
-              <span className="ml-1 md:ml-2">Export</span>
+              <Download size={20} className="flex-shrink-0" />
+              Export
             </Button>
             
             {/* Add Guest button - smaller mobile padding, slightly wider to prevent text wrap */}
@@ -554,8 +560,8 @@ export default function GuestsPage() {
               onClick={handleAddGuest} 
               className="flex-1 md:flex-none h-[44px] text-sm md:text-base px-2 md:px-4 whitespace-nowrap"
             >
-              <Plus size={18} className="md:w-5 md:h-5" />
-              <span className="ml-1 md:ml-2">Add Guest</span>
+              <Plus size={20} className="flex-shrink-0" />
+              Add Guest
             </Button>
           </div>
         </div>
@@ -653,6 +659,8 @@ export default function GuestsPage() {
         <div className="md:sticky md:top-[56px] md:z-30 sticky top-[56px] z-30">
           <BulkActionBar
             selectedCount={selectedGuestIds.size}
+            totalCount={filteredGuests.length}
+            onSelectAll={selectAll}
             onDelete={handleBulkDelete}
             onMarkInvited={() => handleBulkMarkInvited(true)}
             onMarkNotInvited={() => handleBulkMarkInvited(false)}

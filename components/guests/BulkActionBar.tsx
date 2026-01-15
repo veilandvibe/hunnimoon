@@ -1,11 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { Trash2, Mail, Users } from 'lucide-react'
+import { Trash2, Users } from 'lucide-react'
 import Button from '@/components/ui/Button'
 
 interface BulkActionBarProps {
   selectedCount: number
+  totalCount: number
+  onSelectAll: () => void
   onDelete: () => void
   onMarkInvited: () => void
   onMarkNotInvited: () => void
@@ -15,6 +17,8 @@ interface BulkActionBarProps {
 
 export default function BulkActionBar({
   selectedCount,
+  totalCount,
+  onSelectAll,
   onDelete,
   onMarkInvited,
   onMarkNotInvited,
@@ -31,16 +35,35 @@ export default function BulkActionBar({
         <span className="text-sm font-bold text-pink-primary">
           {selectedCount} guest{selectedCount !== 1 ? 's' : ''} selected
         </span>
-        <button
-          onClick={onCancel}
-          className="text-xs text-pink-primary/70 hover:text-pink-primary underline"
-        >
-          Cancel
-        </button>
+        <div className="flex items-center gap-3">
+          {/* Mobile: Select All button next to Cancel */}
+          <button
+            onClick={onSelectAll}
+            className="md:hidden text-xs text-pink-primary/70 hover:text-pink-primary underline"
+          >
+            Select All
+          </button>
+          <button
+            onClick={onCancel}
+            className="text-xs text-pink-primary/70 hover:text-pink-primary underline"
+          >
+            Cancel
+          </button>
+        </div>
       </div>
       
       {/* Actions - Single Row */}
       <div className="flex items-center gap-2">
+        {/* Desktop Only: Select All button */}
+        <Button
+          onClick={onSelectAll}
+          variant="outline"
+          size="sm"
+          className="hidden md:inline-flex px-2 py-2 h-9 whitespace-nowrap"
+        >
+          <span className="text-xs">Select All</span>
+        </Button>
+        
         {/* Delete button - fixed width for desktop */}
         <Button
           onClick={onDelete}
@@ -60,8 +83,7 @@ export default function BulkActionBar({
             size="sm"
             className="w-full md:w-[140px] px-2 py-2 h-9 whitespace-nowrap"
           >
-            <Mail size={14} className="hidden md:inline" />
-            <span className="text-xs md:ml-1">Mark Invited ▼</span>
+            <span className="text-xs">Mark Invited ▼</span>
           </Button>
           
           {showInviteMenu && (

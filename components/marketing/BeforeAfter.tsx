@@ -7,8 +7,8 @@ export default function BeforeAfter() {
       after: "Everything in one organized dashboard you can access anywhere"
     },
     {
-      before: "Forgetting to email vendors back or losing track of who you contacted",
-      after: "All vendor details and conversations in one place with reminders"
+      before: "Losing vendor contact information and scrambling to find phone numbers in old emails",
+      after: "All vendor details stored in one organized place you can access anytime"
     },
     {
       before: "Guests texting you their RSVPs at random times, losing track of who is coming",
@@ -32,42 +32,44 @@ export default function BeforeAfter() {
           </p>
         </div>
 
-        <div className="space-y-8">
+        <div className="space-y-6">
           {painPoints.map((point, index) => (
             <div 
               key={index}
-              className="grid md:grid-cols-2 gap-6 items-center"
+              className="bg-white border-2 border-pink-primary/10 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
             >
-              {/* Before (Problem) */}
-              <div className="bg-red-50 border-2 border-red-100 rounded-2xl p-6 md:p-8">
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center mt-1">
-                    <X size={16} className="text-white" strokeWidth={3} />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-bold text-red-900 text-sm uppercase tracking-wide mb-2">
-                      Before
-                    </p>
-                    <p className="text-red-800 leading-relaxed">
-                      {point.before}
-                    </p>
+              <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-pink-primary/10">
+                {/* Before (Problem) */}
+                <div className="p-6 md:p-8" style={{ backgroundColor: '#FFE4E1' }}>
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center mt-1">
+                      <X size={16} className="text-white" strokeWidth={3} />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-bold text-red-900 text-sm uppercase tracking-wide mb-2">
+                        Before
+                      </p>
+                      <p className="text-red-800 leading-relaxed">
+                        {point.before}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* After (Solution) */}
-              <div className="bg-pink-light border-2 border-pink-primary/20 rounded-2xl p-6 md:p-8">
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-6 h-6 bg-pink-primary rounded-full flex items-center justify-center mt-1">
-                    <Check size={16} className="text-white" strokeWidth={3} />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-bold text-pink-primary text-sm uppercase tracking-wide mb-2">
-                      With Hunnimoon
-                    </p>
-                    <p className="text-pink-primary/80 leading-relaxed">
-                      {point.after}
-                    </p>
+                {/* After (Solution) */}
+                <div className="bg-pink-light p-6 md:p-8">
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 w-6 h-6 bg-pink-primary rounded-full flex items-center justify-center mt-1">
+                      <Check size={16} className="text-white" strokeWidth={3} />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-bold text-pink-primary text-sm uppercase tracking-wide mb-2">
+                        With Hunnimoon
+                      </p>
+                      <p className="text-pink-primary/80 leading-relaxed">
+                        {point.after}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
