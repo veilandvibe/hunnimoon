@@ -251,6 +251,8 @@ export default function SettingsPage() {
             ...userData,
             id: user!.id,
             email: user?.email ?? undefined,
+            billing_status: userData.billing_status as 'trial' | 'active' | 'expired' | 'canceled' | null | undefined,
+            subscription_plan: userData.subscription_plan as 'monthly' | 'yearly' | null | undefined,
           }} 
         />
       )}

@@ -163,7 +163,6 @@ export default function WeddingTimelineGenerator() {
             type="date"
             value={engagementDate}
             onChange={(e) => setEngagementDate(e.target.value)}
-            helperText="Leave blank to start from today"
           />
 
           <Select

@@ -17,21 +17,28 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
       lg: 'p-8',
     }
 
-    const Component = hover ? motion.div : 'div'
-    const motionProps = hover ? {
-      whileHover: { y: -2, boxShadow: '0 10px 30px rgba(194, 24, 91, 0.12)' },
-      transition: { duration: 0.2, ease: 'easeOut' }
-    } : {}
+    if (hover) {
+      return (
+        <motion.div
+          ref={ref}
+          className={`bg-white rounded-4xl shadow-card transition-shadow duration-200 ${paddings[padding]} ${className}`}
+          whileHover={{ y: -2, boxShadow: '0 10px 30px rgba(194, 24, 91, 0.12)' }}
+          transition={{ duration: 0.2, ease: 'easeOut' }}
+          {...(props as any)}
+        >
+          {children}
+        </motion.div>
+      )
+    }
 
     return (
-      <Component
+      <div
         ref={ref}
         className={`bg-white rounded-4xl shadow-card transition-shadow duration-200 ${paddings[padding]} ${className}`}
-        {...motionProps}
         {...props}
       >
         {children}
-      </Component>
+      </div>
     )
   }
 )

@@ -28,6 +28,7 @@ export default function GuestImportModal({
   const [parsedGuests, setParsedGuests] = useState<ParsedGuest[]>([])
   const [isImporting, setIsImporting] = useState(false)
   const [parseError, setParseError] = useState<string | null>(null)
+  const [pastedText, setPastedText] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -12,7 +12,7 @@ if (!stripeSecretKey) {
 
 // Initialize Stripe client (server-side only)
 export const stripe = new Stripe(stripeSecretKey, {
-  apiVersion: '2024-11-20.acacia',
+  apiVersion: '2025-12-15.clover',
   typescript: true,
 })
 
@@ -26,5 +26,9 @@ if (!STRIPE_PRICE_ID_MONTHLY || !STRIPE_PRICE_ID_YEARLY) {
 
 // Helper function to get price ID by plan type
 export function getPriceId(plan: 'monthly' | 'yearly'): string {
-  return plan === 'monthly' ? STRIPE_PRICE_ID_MONTHLY : STRIPE_PRICE_ID_YEARLY
+  const priceId = plan === 'monthly' ? STRIPE_PRICE_ID_MONTHLY : STRIPE_PRICE_ID_YEARLY
+  if (!priceId) {
+    throw new Error(`Missing Stripe price ID for ${plan} plan`)
+  }
+  return priceId
 }

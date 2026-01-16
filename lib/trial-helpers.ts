@@ -15,6 +15,9 @@ export interface UserBillingData {
   billing_status?: 'trial' | 'active' | 'expired' | 'canceled' | null
   acq_source?: string | null
   acq_source_set_at?: number | null
+  stripe_customer_id?: string | null
+  stripe_subscription_id?: string | null
+  subscription_plan?: 'monthly' | 'yearly' | null
 }
 
 const TRIAL_DAYS = 0.0014  // ~2 minutes for testing (change back to 7 for production!)

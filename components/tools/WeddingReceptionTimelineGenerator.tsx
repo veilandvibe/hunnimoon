@@ -18,7 +18,7 @@ export default function WeddingReceptionTimelineGenerator() {
     const startMin = parseInt(startTime.split(':')[1])
     const durationHours = parseInt(duration)
     
-    const events = []
+    const events: Array<{ time: string; event: string; duration: string }> = []
     let currentTime = startHour * 60 + startMin // Convert to minutes
     
     const addEvent = (event: string, durationMin: number) => {
