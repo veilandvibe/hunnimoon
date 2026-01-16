@@ -46,9 +46,10 @@ Already exists. Auto-generates pages. Update component mapping if needed.
    - Interactive tool component
    - White background, rounded corners, padding
 
-4. **Soft Inline CTA**
-   - Text: Brief mention of Hunnimoon (1 sentence, ONLY verified features)
-   - Button: "Start Free Trial" (links to `/login`)
+4. **CTA Block**
+   - Pink background CTA block with headline, copy, and 'Start Free Trial' button
+   - Positioned immediately after "Try Other Tools" slider
+   - Full CTABlock component (not inline text)
 
 5. **"Try Our Other Free Wedding Tools" Slider**
    - Shows 3 tools at a time
@@ -180,10 +181,10 @@ Open `lib/tools-data.ts` and add to the `tools` array:
   slug: 'wedding-seating-chart-generator', // URL slug (lowercase, hyphens)
   name: 'Wedding Seating Chart Generator', // Display name
   h1: 'Wedding Seating Chart Generator', // Must match exact keyword
-  description: 'Use this wedding seating chart generator to organize your guests and create the perfect table layout. Plan your reception seating in minutes.', // First sentence MUST include H1 keyword
+  description: 'Use this wedding seating chart generator to organize your guests and create the perfect table layout. Plan your reception seating in minutes.', // REQUIRED: First sentence MUST include H1 keyword naturally
   category: 'planning', // planning | budget | guests | timeline | other
   icon: '/icons/seating.svg', // Icon for cards (placeholder OK)
-  image: '/images/tools/seating-generator.png', // Product image (placeholder OK)
+  image: '/images/tools/[tool-slug].svg', // Placeholder path - actual images created later
   component: 'WeddingSeatingChartGenerator', // Component name (PascalCase)
   seoContent: {
     h2: 'How to Create a Wedding Seating Chart That Actually Works', // Natural variation of H1
@@ -221,22 +222,64 @@ Open `lib/tools-data.ts` and add to the `tools` array:
 }
 ```
 
-### Step 3: Write Content Using Unified Writing Rules
+### Step 3: Write Content Following ALL Writing Guidelines
 
-**Content Must Include:**
+**FOUNDATION:** All content MUST strictly follow [unified-writing-tool-guide.md](unified-writing-tool-guide.md).
+The techniques below are ADDITIONAL humanization layers applied ON TOP of those base rules.
+
+## Content Writing Guidelines (MANDATORY)
+
+### Base Rules (Always Apply)
+**Reference:** [unified-writing-tool-guide.md](unified-writing-tool-guide.md)
+
+ALL content MUST follow the Unified Writing Rules:
+- Fifth-grade reading level
+- No em dashes (use commas or colons)
+- No forbidden words (comprehensive list in guide)
+- No forbidden patterns ("whether you are...", "from...to...", "...meets...")
+- Active voice, contractions, natural flow
+- 1-1.5% keyword density
+- 7-10 FAQs with bold questions, no Q/A labels
+- One personal anecdote if appropriate
 - Main keyword in first paragraph
-- 1-1.5% keyword density (natural, not forced)
-- Conversational tone (like talking to a friend)
-- NO em dashes (use commas or periods)
-- NO buzzwords or corporate speak
-- Real, practical advice
 - Gradual transition from tool → full wedding planning → Hunnimoon
 - ONLY mention verified Hunnimoon features
 
-**Forbidden Words/Phrases:**
-- Comprehensive, robust, leverage, streamline, facilitate
-- "Your X is not just Y, it's Z"
-- Any clichés or AI-sounding phrases
+### Additional Humanization Techniques (Layer On Top)
+
+To pass AI detection tools, apply these ADDITIONAL techniques:
+
+#### Sentence Structure Variety
+- Mix short punchy sentences (3-5 words) with longer ones (15-20 words)
+- Start sentences with different words (avoid repetitive patterns)
+- Use fragments occasionally: "Not anymore." "Here's why."
+- Vary paragraph lengths: 1-sentence mixed with 4-5 sentence paragraphs
+
+#### Natural Human Patterns
+- Use rhetorical questions: "Why does this matter?"
+- Add casual asides: "(trust me, it happens)"
+- Conversational transitions from unified guide: "Here's the thing..." "Look..."
+- Include hedging: "usually," "often," "most couples"
+- Specific numbers: "about 3 hours" not "several hours"
+
+#### Avoiding Additional AI Tells
+- Never use: "It's important to note," "Moreover," "Furthermore," "Additionally"
+- Never use: "In conclusion," "To summarize," "Delve into," "Navigate," "Landscape"
+- Never use: "Seamless," "Robust," "Leverage"
+- Avoid perfect parallel structure
+- Vary list lengths (don't always use 3 items)
+
+#### Emotional and Personal Touch
+- Reference frustrations: "You know that feeling when..."
+- Direct address: "You've been there."
+- Show personality: "Here's the deal:" (from unified guide)
+- Allow minor imperfections in flow
+
+#### Imperfect Writing (Controlled)
+- Use colloquialisms: "a ton of," "kind of," "sort of"
+- Allow minor redundancy for emphasis
+- Don't over-explain, assume shared knowledge
+- Let sentences be slightly imperfect
 - See full list in `unified-writing-tool-guide.md`
 
 **H2 Structure:**

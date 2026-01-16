@@ -6,10 +6,14 @@ import CTABlock from '@/components/marketing/CTABlock'
 import ToolSlider from '@/components/marketing/ToolSlider'
 import Button from '@/components/ui/Button'
 import WeddingTimelineGenerator from '@/components/tools/WeddingTimelineGenerator'
+import WeddingDayTimelineGenerator from '@/components/tools/WeddingDayTimelineGenerator'
+import WeddingReceptionTimelineGenerator from '@/components/tools/WeddingReceptionTimelineGenerator'
 
 // Map component names to actual components
 const toolComponents: Record<string, React.ComponentType> = {
   WeddingTimelineGenerator,
+  WeddingDayTimelineGenerator,
+  WeddingReceptionTimelineGenerator,
 }
 
 export default function ToolPage({ params }: { params: { slug: string } }) {
@@ -48,22 +52,11 @@ export default function ToolPage({ params }: { params: { slug: string } }) {
       {/* Tool Embed */}
       {ToolComponent && <ToolComponent />}
 
-      {/* Soft Inline CTA */}
-      <div className="text-center my-12 space-y-6">
-        <p className="text-pink-primary/70 max-w-2xl mx-auto text-lg">
-          Planning a wedding gets messy fast. Hunnimoon keeps your guest list, budget, vendors, and RSVPs all in one place, so nothing slips through the cracks.
-        </p>
-        <div className="flex justify-center">
-          <Link href="/login">
-            <Button size="lg">
-              Start Free Trial
-            </Button>
-          </Link>
-        </div>
-      </div>
-
       {/* Try Other Tools Slider */}
       <ToolSlider tools={allTools} currentToolSlug={tool.slug} />
+
+      {/* CTA Block - Primary conversion point */}
+      <CTABlock />
 
       {/* Testimonial */}
       <div className="bg-pink-light rounded-3xl p-8 md:p-12 my-16">

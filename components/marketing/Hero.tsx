@@ -53,49 +53,14 @@ export default function Hero() {
 
             {/* Right: Visual/Image */}
             <div className="relative">
-              <div className="bg-white rounded-3xl shadow-2xl p-6 md:p-8 border-2 border-pink-primary/10">
-                {/* Placeholder dashboard preview */}
-                <div className="space-y-4">
-                  {/* Header */}
-                  <div className="flex items-center justify-between pb-4 border-b border-pink-primary/10">
-                    <div>
-                      <div className="h-3 w-32 bg-pink-primary/20 rounded mb-2" />
-                      <div className="h-6 w-48 bg-pink-primary rounded" />
-                    </div>
-                    <div className="h-12 w-12 bg-pink-light rounded-full" />
-                  </div>
-                  
-                  {/* Cards */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-pink-light rounded-xl p-4">
-                      <div className="h-3 w-16 bg-pink-primary/30 rounded mb-2" />
-                      <div className="h-8 w-20 bg-pink-primary/50 rounded" />
-                    </div>
-                    <div className="bg-pink-light rounded-xl p-4">
-                      <div className="h-3 w-16 bg-pink-primary/30 rounded mb-2" />
-                      <div className="h-8 w-20 bg-pink-primary/50 rounded" />
-                    </div>
-                  </div>
-                  
-                  {/* List items */}
-                  <div className="space-y-3">
-                    <div className="bg-pink-light/50 rounded-lg p-3 flex items-center gap-3">
-                      <div className="h-8 w-8 bg-pink-primary/20 rounded-full" />
-                      <div className="flex-1 space-y-1">
-                        <div className="h-3 w-3/4 bg-pink-primary/30 rounded" />
-                        <div className="h-2 w-1/2 bg-pink-primary/20 rounded" />
-                      </div>
-                    </div>
-                    <div className="bg-pink-light/50 rounded-lg p-3 flex items-center gap-3">
-                      <div className="h-8 w-8 bg-pink-primary/20 rounded-full" />
-                      <div className="flex-1 space-y-1">
-                        <div className="h-3 w-2/3 bg-pink-primary/30 rounded" />
-                        <div className="h-2 w-1/3 bg-pink-primary/20 rounded" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <Image
+                src="/hero image.png"
+                alt="Hunnimoon Dashboard Preview"
+                width={1400}
+                height={1000}
+                className="rounded-3xl shadow-2xl"
+                priority
+              />
             </div>
           </div>
         </div>
