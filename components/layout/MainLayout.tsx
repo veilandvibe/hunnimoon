@@ -8,6 +8,7 @@ import MobileHeader from './MobileHeader'
 import PageTransition from './PageTransition'
 import SpotlightTour from '@/components/tour/SpotlightTour'
 import OnboardingModal from '@/components/onboarding/OnboardingModal'
+import TrialManager from '@/components/trial/TrialManager'
 import { SidebarProvider, useSidebar } from './SidebarContext'
 import { useTour } from '@/components/providers/TourContext'
 
@@ -43,6 +44,9 @@ function MainLayoutContent({
     <div className="min-h-screen">
       <Sidebar />
       <MobileHeader title={title} />
+      
+      {/* Trial & Billing Modals/Banners */}
+      <TrialManager />
       
       <main 
         className={`pb-20 md:pb-8 transition-[margin] duration-300 ease-out ${

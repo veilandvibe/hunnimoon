@@ -12,6 +12,13 @@ const _schema = i.schema({
       "email": i.string().unique().indexed().optional(),
       "imageURL": i.string().optional(),
       "type": i.string().optional(),
+      "trial_start_date": i.number().optional(),
+      "billing_status": i.string().optional(),
+      "stripe_customer_id": i.string().optional(),
+      "stripe_subscription_id": i.string().optional(),
+      "subscription_plan": i.string().optional(),
+      "acq_source": i.string().optional(),
+      "acq_source_set_at": i.number().optional(),
     }),
     "budgetItems": i.entity({
       "actual_cost": i.number().optional(),

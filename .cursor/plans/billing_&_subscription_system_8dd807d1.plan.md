@@ -4,70 +4,70 @@ overview: Complete implementation of 7-day free trial, Stripe subscription payme
 todos:
   - id: phase1-db-schema
     content: Update InstantDB schema with trial and Etsy fields
-    status: pending
+    status: completed
   - id: phase1-trial-helpers
     content: Create trial and billing helper functions
-    status: pending
+    status: completed
     dependencies:
       - phase1-db-schema
   - id: phase1-etsy-tracking
     content: Implement Etsy source tracking on landing page
-    status: pending
+    status: completed
     dependencies:
       - phase1-db-schema
   - id: phase2-pricing-page
     content: Build pricing page with 3 cards and toggle
-    status: pending
+    status: completed
   - id: phase3-stripe-setup
     content: Create Stripe product, prices, and promo code
-    status: pending
+    status: completed
   - id: phase3-checkout-api
     content: Build checkout session API route
-    status: pending
+    status: completed
     dependencies:
       - phase3-stripe-setup
   - id: phase3-success-pages
     content: Create checkout success and canceled pages
-    status: pending
+    status: completed
   - id: phase4-webhook-handler
     content: Build Stripe webhook handler API route
-    status: pending
+    status: completed
     dependencies:
       - phase3-stripe-setup
       - phase1-db-schema
   - id: phase4-test-webhooks
     content: Test webhook events with Stripe CLI
-    status: pending
+    status: completed
     dependencies:
       - phase4-webhook-handler
   - id: phase5-billing-section
     content: Create BillingSection component for settings
-    status: pending
+    status: completed
     dependencies:
       - phase1-trial-helpers
   - id: phase5-portal-api
     content: Build Stripe portal API route
-    status: pending
+    status: completed
     dependencies:
       - phase3-stripe-setup
   - id: phase5-promo-button
     content: Add generic promo code button to settings
-    status: pending
+    status: completed
     dependencies:
       - phase5-billing-section
   - id: phase6-trial-components
     content: Create trial banner, upgrade modal, and read-only banner
-    status: pending
+    status: completed
     dependencies:
       - phase1-trial-helpers
   - id: phase6-etsy-modals
     content: Create 3 Etsy-specific modals with instructions
-    status: pending
+    status: completed
     dependencies:
       - phase1-etsy-tracking
   - id: phase6-modal-manager
     content: Build modal display logic and localStorage tracking
-    status: pending
+    status: completed
     dependencies:
       - phase6-etsy-modals
   - id: phase7-resend-setup

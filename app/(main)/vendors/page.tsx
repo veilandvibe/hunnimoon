@@ -11,10 +11,12 @@ import { useWedding } from '@/components/providers/WeddingProvider'
 import db from '@/lib/instant'
 import { id } from '@instantdb/react'
 import toast from 'react-hot-toast'
+import { useReadOnly } from '@/lib/use-read-only'
 
 export default function VendorsPage() {
   const { user, isLoading: authLoading } = db.useAuth()
   const { wedding, isLoading: weddingLoading } = useWedding()
+  const { isReadOnly } = useReadOnly()
   
   // Query only vendors
   const { data, isLoading: dataLoading, error } = db.useQuery(
@@ -168,7 +170,14 @@ export default function VendorsPage() {
             {filteredVendors.length} of {vendors.length} vendors
           </p>
         </div>
-        <Button onClick={handleAddVendor} size="lg" type="button" data-tour="add-vendor">
+        <Button 
+          onClick={handleAddVendor} 
+          size="lg" 
+          type="button" 
+          data-tour="add-vendor"
+          disabled={isReadOnly}
+          title={isReadOnly ? 'Upgrade to add vendors' : undefined}
+        >
           <Plus size={20} />
           Add Vendor
         </Button>
@@ -199,7 +208,13 @@ export default function VendorsPage() {
               ? 'No vendors match your search'
               : 'No vendors added yet'}
           </p>
-          <Button onClick={handleAddVendor} className="mt-4" type="button">
+          <Button 
+            onClick={handleAddVendor} 
+            className="mt-4" 
+            type="button"
+            disabled={isReadOnly}
+            title={isReadOnly ? 'Upgrade to add vendors' : undefined}
+          >
             Add Your First Vendor
           </Button>
         </div>
@@ -211,6 +226,7 @@ export default function VendorsPage() {
               vendor={vendor}
               onEdit={handleEditVendor}
               onDelete={handleDeleteVendor}
+              isReadOnly={isReadOnly}
             />
           ))}
         </div>

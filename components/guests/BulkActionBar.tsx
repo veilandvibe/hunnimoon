@@ -13,6 +13,7 @@ interface BulkActionBarProps {
   onMarkNotInvited: () => void
   onChangeSide: (side: 'Bride' | 'Groom' | 'Both' | 'Unknown') => void
   onCancel: () => void
+  isReadOnly?: boolean
 }
 
 export default function BulkActionBar({
@@ -23,7 +24,8 @@ export default function BulkActionBar({
   onMarkInvited,
   onMarkNotInvited,
   onChangeSide,
-  onCancel
+  onCancel,
+  isReadOnly = false
 }: BulkActionBarProps) {
   const [showSideMenu, setShowSideMenu] = useState(false)
   const [showInviteMenu, setShowInviteMenu] = useState(false)
@@ -70,6 +72,8 @@ export default function BulkActionBar({
           variant="outline"
           size="sm"
           className="text-red-600 border-red-200 hover:bg-red-50 px-2 py-2 h-9 whitespace-nowrap md:w-[140px]"
+          disabled={isReadOnly}
+          title={isReadOnly ? 'Upgrade to delete guests' : undefined}
         >
           <Trash2 size={14} className="hidden md:inline" />
           <span className="text-xs md:ml-1">Delete</span>
@@ -82,6 +86,8 @@ export default function BulkActionBar({
             variant="outline"
             size="sm"
             className="w-full md:w-[140px] px-2 py-2 h-9 whitespace-nowrap"
+            disabled={isReadOnly}
+            title={isReadOnly ? 'Upgrade to edit guests' : undefined}
           >
             <span className="text-xs">Mark Invited ▼</span>
           </Button>
@@ -123,6 +129,8 @@ export default function BulkActionBar({
             variant="outline"
             size="sm"
             className="w-full md:w-[140px] px-2 py-2 h-9 whitespace-nowrap"
+            disabled={isReadOnly}
+            title={isReadOnly ? 'Upgrade to edit guests' : undefined}
           >
             <Users size={14} className="hidden md:inline" />
             <span className="text-xs md:ml-1">Change Side ▼</span>

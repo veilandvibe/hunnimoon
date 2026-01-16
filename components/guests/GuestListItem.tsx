@@ -15,6 +15,7 @@ interface GuestListItemProps {
   onToggleSelect?: (id: string) => void
   onHover?: (id: string | null) => void
   onSelectMultiple?: (id: string) => void
+  isReadOnly?: boolean
 }
 
 export default function GuestListItem({ 
@@ -27,7 +28,8 @@ export default function GuestListItem({
   isSelectMode,
   onToggleSelect,
   onHover,
-  onSelectMultiple
+  onSelectMultiple,
+  isReadOnly = false
 }: GuestListItemProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -151,10 +153,11 @@ export default function GuestListItem({
                     onEdit(guest)
                     setIsMenuOpen(false)
                   }}
-                  className="w-full px-4 py-2 text-left text-sm text-pink-primary hover:bg-pink-light transition-colors flex items-center gap-2"
+                  className="w-full px-4 py-2 text-left text-sm text-pink-primary hover:bg-pink-light transition-colors flex items-center gap-2 disabled:opacity-30 disabled:cursor-not-allowed"
+                  disabled={isReadOnly}
                 >
                   <Edit size={16} className="text-pink-primary" />
-                  Edit
+                  Edit {isReadOnly && '(Upgrade)'}
                 </button>
                 {!isSelectMode && onSelectMultiple && (
                   <button
@@ -173,10 +176,11 @@ export default function GuestListItem({
                     onDelete(guest.id)
                     setIsMenuOpen(false)
                   }}
-                  className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center gap-2"
+                  className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center gap-2 disabled:opacity-30 disabled:cursor-not-allowed"
+                  disabled={isReadOnly}
                 >
                   <Trash2 size={16} className="text-red-500" />
-                  Delete
+                  Delete {isReadOnly && '(Upgrade)'}
                 </button>
               </div>
             )}
@@ -193,15 +197,19 @@ export default function GuestListItem({
             </button>
             <button
               onClick={() => onEdit(guest)}
-              className="p-2 hover:bg-pink-light rounded-lg transition-colors"
+              className="p-2 hover:bg-pink-light rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
               aria-label="Edit guest"
+              disabled={isReadOnly}
+              title={isReadOnly ? 'Upgrade to edit guests' : undefined}
             >
               <Edit size={16} className="text-pink-primary" />
             </button>
             <button
               onClick={() => onDelete(guest.id)}
-              className="p-2 hover:bg-red-50 rounded-lg transition-colors"
+              className="p-2 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
               aria-label="Delete guest"
+              disabled={isReadOnly}
+              title={isReadOnly ? 'Upgrade to delete guests' : undefined}
             >
               <Trash2 size={16} className="text-red-500" />
             </button>

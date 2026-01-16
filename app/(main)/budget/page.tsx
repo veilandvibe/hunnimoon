@@ -11,10 +11,12 @@ import { useWedding } from '@/components/providers/WeddingProvider'
 import db from '@/lib/instant'
 import { id } from '@instantdb/react'
 import toast from 'react-hot-toast'
+import { useReadOnly } from '@/lib/use-read-only'
 
 export default function BudgetPage() {
   const { user, isLoading: authLoading } = db.useAuth()
   const { wedding, isLoading: weddingLoading } = useWedding()
+  const { isReadOnly } = useReadOnly()
   
   // Query only budget items
   const { data, isLoading: dataLoading, error } = db.useQuery(
@@ -227,7 +229,13 @@ export default function BudgetPage() {
             {activeItems.length} categories
           </p>
         </div>
-        <Button onClick={handleAddItem} size="lg" data-tour="add-category">
+        <Button 
+          onClick={handleAddItem} 
+          size="lg" 
+          data-tour="add-category"
+          disabled={isReadOnly}
+          title={isReadOnly ? 'Upgrade to add budget categories' : undefined}
+        >
           <Plus size={20} />
           Add Category
         </Button>
@@ -268,8 +276,10 @@ export default function BudgetPage() {
                     setBudgetInputValue(totalBudget.toString())
                     setIsEditingBudget(true)
                   }}
-                  className="p-2 hover:bg-pink-light rounded-lg transition-colors"
+                  className="p-2 hover:bg-pink-light rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                   aria-label="Edit total budget"
+                  disabled={isReadOnly}
+                  title={isReadOnly ? 'Upgrade to edit budget' : undefined}
                 >
                   <Edit2 size={18} className="text-pink-primary" />
                 </button>
@@ -371,7 +381,11 @@ export default function BudgetPage() {
       {activeItems.length === 0 ? (
         <Card padding="lg" className="text-center" data-tour="budget-list">
           <p className="text-pink-primary/60 mb-4">No budget categories yet</p>
-          <Button onClick={handleAddItem}>
+          <Button 
+            onClick={handleAddItem}
+            disabled={isReadOnly}
+            title={isReadOnly ? 'Upgrade to add budget categories' : undefined}
+          >
             <Plus size={20} />
             Add Your First Category
           </Button>
@@ -385,6 +399,7 @@ export default function BudgetPage() {
               onEdit={handleEditItem}
               onDelete={handleDeleteItem}
               onTogglePaid={handleTogglePaid}
+              isReadOnly={isReadOnly}
             />
           ))}
         </div>

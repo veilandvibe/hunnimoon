@@ -14,12 +14,14 @@ import db from '@/lib/instant'
 import { id } from '@instantdb/react'
 import { Copy, Check, ExternalLink, Users, Settings, ClipboardCheck } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { useReadOnly } from '@/lib/use-read-only'
 
 export default function RSVPManagerPage() {
   const [copied, setCopied] = useState(false)
   const [saving, setSaving] = useState(false)
   const [saveSuccess, setSaveSuccess] = useState(false)
   const { wedding, isLoading: weddingLoading } = useWedding()
+  const { isReadOnly } = useReadOnly()
   
   // Query only guests and rsvpSettings
   const { data, isLoading: dataLoading } = db.useQuery(
@@ -378,6 +380,7 @@ export default function RSVPManagerPage() {
                   <Toggle
                     checked={showMealChoice}
                     onChange={setShowMealChoice}
+                    disabled={isReadOnly}
                   />
                 </div>
 
@@ -390,6 +393,7 @@ export default function RSVPManagerPage() {
                       value={mealOptions}
                       onChange={(e) => setMealOptions(e.target.value)}
                       placeholder="Chicken, Fish, Vegetarian, Vegan"
+                      disabled={isReadOnly}
                     />
                   </div>
                 )}
@@ -406,6 +410,7 @@ export default function RSVPManagerPage() {
                   <Toggle
                     checked={showDietaryRestrictions}
                     onChange={setShowDietaryRestrictions}
+                    disabled={isReadOnly}
                   />
                 </div>
 
@@ -418,6 +423,7 @@ export default function RSVPManagerPage() {
                       <Toggle
                         checked={requireDietaryRestrictions}
                         onChange={setRequireDietaryRestrictions}
+                        disabled={isReadOnly}
                       />
                     </div>
                   </div>
@@ -435,6 +441,7 @@ export default function RSVPManagerPage() {
                   <Toggle
                     checked={showShuttleService}
                     onChange={setShowShuttleService}
+                    disabled={isReadOnly}
                   />
                 </div>
 
@@ -450,6 +457,7 @@ export default function RSVPManagerPage() {
                   <Toggle
                     checked={showSongRequest}
                     onChange={setShowSongRequest}
+                    disabled={isReadOnly}
                   />
                 </div>
 
@@ -465,6 +473,7 @@ export default function RSVPManagerPage() {
                   <Toggle
                     checked={showAccommodationQuestion}
                     onChange={setShowAccommodationQuestion}
+                    disabled={isReadOnly}
                   />
                 </div>
 
@@ -480,6 +489,7 @@ export default function RSVPManagerPage() {
                   <Toggle
                     checked={showNotesField}
                     onChange={setShowNotesField}
+                    disabled={isReadOnly}
                   />
                 </div>
               </div>
@@ -497,10 +507,11 @@ export default function RSVPManagerPage() {
                 onChange={(e) => setCustomMessage(e.target.value)}
                 rows={3}
                 placeholder="Thank you for RSVPing! We can't wait to celebrate with you."
+                disabled={isReadOnly}
               />
             </div>
 
-            <Button onClick={handleSaveSettings} disabled={saving} fullWidth>
+            <Button onClick={handleSaveSettings} disabled={saving || isReadOnly} fullWidth title={isReadOnly ? 'Upgrade to save settings' : undefined}>
               {saving ? (
                 'Saving...'
               ) : saveSuccess ? (

@@ -16,10 +16,12 @@ import db from '@/lib/instant'
 import { id } from '@instantdb/react'
 import { ParsedGuest } from '@/lib/guestParser'
 import toast from 'react-hot-toast'
+import { useReadOnly } from '@/lib/use-read-only'
 
 export default function GuestsPage() {
   const { user, isLoading: authLoading } = db.useAuth()
   const { wedding, isLoading: weddingLoading } = useWedding()
+  const { isReadOnly } = useReadOnly()
   
   // Query only guests data
   const { data, isLoading: dataLoading, error } = db.useQuery(
@@ -539,6 +541,8 @@ export default function GuestsPage() {
               onClick={() => setIsImportModalOpen(true)} 
               variant="outline" 
               className="w-[100px] md:flex-none h-[44px] text-sm md:text-base px-2 md:px-4"
+              disabled={isReadOnly}
+              title={isReadOnly ? 'Upgrade to add guests' : undefined}
             >
               <Upload size={20} className="flex-shrink-0" />
               Import
@@ -559,6 +563,8 @@ export default function GuestsPage() {
             <Button 
               onClick={handleAddGuest} 
               className="flex-1 md:flex-none h-[44px] text-sm md:text-base px-2 md:px-4 whitespace-nowrap"
+              disabled={isReadOnly}
+              title={isReadOnly ? 'Upgrade to add guests' : undefined}
             >
               <Plus size={20} className="flex-shrink-0" />
               Add Guest
@@ -666,6 +672,7 @@ export default function GuestsPage() {
             onMarkNotInvited={() => handleBulkMarkInvited(false)}
             onChangeSide={handleBulkChangeSide}
             onCancel={cancelSelection}
+            isReadOnly={isReadOnly}
           />
         </div>
       )}
@@ -678,7 +685,12 @@ export default function GuestsPage() {
               ? 'No guests match your filters'
               : 'No guests added yet'}
           </p>
-          <Button onClick={handleAddGuest} className="mt-4">
+          <Button 
+            onClick={handleAddGuest} 
+            className="mt-4"
+            disabled={isReadOnly}
+            title={isReadOnly ? 'Upgrade to add guests' : undefined}
+          >
             Add Your First Guest
           </Button>
         </div>
@@ -710,6 +722,7 @@ export default function GuestsPage() {
                 onToggleSelect={toggleGuestSelection}
                 onHover={setHoveredGuestId}
                 onSelectMultiple={handleSelectMultiple}
+                isReadOnly={isReadOnly}
               />
             ))}
           </div>
@@ -746,6 +759,7 @@ export default function GuestsPage() {
                     isSelectMode={isSelectMode}
                     onToggleSelect={toggleGuestSelection}
                     onHover={setHoveredGuestId}
+                    isReadOnly={isReadOnly}
                   />
                 ))}
               </div>
@@ -761,6 +775,7 @@ export default function GuestsPage() {
                   guest={guest}
                   onEdit={handleEditGuest}
                   onDelete={handleDeleteGuest}
+                  isReadOnly={isReadOnly}
                   onView={handleViewGuest}
                   isSelected={selectedGuestIds.has(guest.id)}
                   isHovered={hoveredGuestId === guest.id}

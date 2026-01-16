@@ -7,9 +7,10 @@ interface BudgetItemCardProps {
   onEdit: (item: any) => void
   onDelete: (itemId: string) => void
   onTogglePaid: (itemId: string, isPaid: boolean) => void
+  isReadOnly?: boolean
 }
 
-export default function BudgetItemCard({ item, onEdit, onDelete, onTogglePaid }: BudgetItemCardProps) {
+export default function BudgetItemCard({ item, onEdit, onDelete, onTogglePaid, isReadOnly = false }: BudgetItemCardProps) {
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -48,15 +49,19 @@ export default function BudgetItemCard({ item, onEdit, onDelete, onTogglePaid }:
           <div className="flex gap-1">
             <button
               onClick={() => onEdit(item)}
-              className="p-2 hover:bg-pink-light rounded-lg transition-colors"
+              className="p-2 hover:bg-pink-light rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
               aria-label="Edit budget item"
+              disabled={isReadOnly}
+              title={isReadOnly ? 'Upgrade to edit budget items' : undefined}
             >
               <Edit size={16} className="text-pink-primary" />
             </button>
             <button
               onClick={() => onDelete(item.id)}
-              className="p-2 hover:bg-red-50 rounded-lg transition-colors"
+              className="p-2 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
               aria-label="Delete budget item"
+              disabled={isReadOnly}
+              title={isReadOnly ? 'Upgrade to delete budget items' : undefined}
             >
               <Trash2 size={16} className="text-red-500" />
             </button>
@@ -105,6 +110,7 @@ export default function BudgetItemCard({ item, onEdit, onDelete, onTogglePaid }:
             checked={item.is_paid}
             onChange={(checked) => onTogglePaid(item.id, checked)}
             label={item.is_paid ? 'Paid ✓' : 'Mark as paid'}
+            disabled={isReadOnly}
           />
         </div>
       </div>

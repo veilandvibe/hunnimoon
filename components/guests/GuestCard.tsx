@@ -16,6 +16,7 @@ interface GuestCardProps {
   isSelectMode?: boolean
   onToggleSelect?: (id: string) => void
   onHover?: (id: string | null) => void
+  isReadOnly?: boolean
 }
 
 export default function GuestCard({ 
@@ -27,7 +28,8 @@ export default function GuestCard({
   isHovered,
   isSelectMode,
   onToggleSelect,
-  onHover
+  onHover,
+  isReadOnly = false
 }: GuestCardProps) {
   const getStatusVariant = (status: string) => {
     switch (status) {
@@ -92,15 +94,19 @@ export default function GuestCard({
             </button>
             <button
               onClick={() => onEdit(guest)}
-              className="p-2 hover:bg-pink-light rounded-lg transition-colors"
+              className="p-2 hover:bg-pink-light rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
               aria-label="Edit guest"
+              disabled={isReadOnly}
+              title={isReadOnly ? 'Upgrade to edit guests' : undefined}
             >
               <Edit size={16} className="text-pink-primary" />
             </button>
             <button
               onClick={() => onDelete(guest.id)}
-              className="p-2 hover:bg-red-50 rounded-lg transition-colors"
+              className="p-2 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
               aria-label="Delete guest"
+              disabled={isReadOnly}
+              title={isReadOnly ? 'Upgrade to delete guests' : undefined}
             >
               <Trash2 size={16} className="text-red-500" />
             </button>

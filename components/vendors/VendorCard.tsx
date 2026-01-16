@@ -6,9 +6,10 @@ interface VendorCardProps {
   vendor: any
   onEdit: (vendor: any) => void
   onDelete: (vendorId: string) => void
+  isReadOnly?: boolean
 }
 
-export default function VendorCard({ vendor, onEdit, onDelete }: VendorCardProps) {
+export default function VendorCard({ vendor, onEdit, onDelete, isReadOnly = false }: VendorCardProps) {
   return (
     <Card padding="md">
       <div className="space-y-4">
@@ -27,15 +28,19 @@ export default function VendorCard({ vendor, onEdit, onDelete }: VendorCardProps
           <div className="flex gap-1">
             <button
               onClick={() => onEdit(vendor)}
-              className="p-2 hover:bg-pink-light rounded-lg transition-colors"
+              className="p-2 hover:bg-pink-light rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
               aria-label="Edit vendor"
+              disabled={isReadOnly}
+              title={isReadOnly ? 'Upgrade to edit vendors' : undefined}
             >
               <Edit size={16} className="text-pink-primary" />
             </button>
             <button
               onClick={() => onDelete(vendor.id)}
-              className="p-2 hover:bg-red-50 rounded-lg transition-colors"
+              className="p-2 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
               aria-label="Delete vendor"
+              disabled={isReadOnly}
+              title={isReadOnly ? 'Upgrade to delete vendors' : undefined}
             >
               <Trash2 size={16} className="text-red-500" />
             </button>

@@ -92,19 +92,40 @@ export default function OnboardingPage() {
         throw new Error('You must be logged in to create a wedding')
       }
 
-      // Create wedding record
+      // Get acquisition source from localStorage (set on landing page)
+      const acqSource = typeof window !== 'undefined' 
+        ? localStorage.getItem('acq_source') 
+        : null
+
+      // Create wedding record and initialize trial
       const weddingId = id()
+      const now = Date.now()
       
-      await db.transact([
+      const transactions = [
         db.tx.weddings[weddingId].update({
           user_id: user.id,
           partner1_name: formData.partner1_name,
           partner2_name: formData.partner2_name,
           wedding_date: weddingDate.toISOString(),
           wedding_slug: formData.wedding_slug,
-          created_at: Date.now(),
+          created_at: now,
         }),
-      ])
+        db.tx.$users[user.id].update({
+          trial_start_date: now,
+          billing_status: 'trial',
+          ...(acqSource && {
+            acq_source: acqSource,
+            acq_source_set_at: now,
+          }),
+        }),
+      ]
+      
+      await db.transact(transactions)
+
+      // Clear acquisition source from localStorage after saving to DB
+      if (typeof window !== 'undefined' && acqSource) {
+        localStorage.removeItem('acq_source')
+      }
 
       router.push('/dashboard')
     } catch (err: any) {

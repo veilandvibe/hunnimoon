@@ -10,20 +10,30 @@ import db from '@/lib/instant'
 import { Copy, Check, Calendar, User, LogOut, Loader2, HelpCircle, RotateCcw } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useTour } from '@/components/providers/TourContext'
+import BillingSection from '@/components/settings/BillingSection'
+import { useReadOnly } from '@/lib/use-read-only'
 
 export default function SettingsPage() {
   const router = useRouter()
   const { user, isLoading: authLoading } = db.useAuth()
   const { wedding, isLoading: weddingLoading } = useWedding()
   const { startOnboarding } = useTour()
+  const { isReadOnly } = useReadOnly()
   
-  // Query only rsvpSettings if needed
+  // Query user data with billing fields and rsvpSettings
   const { data, isLoading: dataLoading, error } = db.useQuery(
-    wedding?.id ? {
+    wedding?.id && user?.id ? {
       rsvpSettings: {
         $: {
           where: {
             wedding: wedding.id
+          }
+        }
+      },
+      $users: {
+        $: {
+          where: {
+            id: user.id
           }
         }
       }
@@ -31,6 +41,7 @@ export default function SettingsPage() {
   )
   
   const rsvpSettings = data?.rsvpSettings?.[0]
+  const userData = data?.$users?.[0]
   
   const [weddingDetails, setWeddingDetails] = useState({
     partner1_name: '',
@@ -217,9 +228,10 @@ export default function SettingsPage() {
               setWeddingDetails({ ...weddingDetails, wedding_slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-') })
             }
             placeholder="john-and-jane-2026"
+            disabled={isReadOnly}
           />
 
-          <Button type="submit" fullWidth disabled={saving}>
+          <Button type="submit" fullWidth disabled={saving || isReadOnly} title={isReadOnly ? 'Upgrade to edit settings' : undefined}>
             {saving ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -231,6 +243,17 @@ export default function SettingsPage() {
           </Button>
         </form>
       </Card>
+
+      {/* Billing & Subscription */}
+      {userData && (
+        <BillingSection 
+          user={{
+            ...userData,
+            id: user!.id,
+            email: user?.email,
+          }} 
+        />
+      )}
 
       {/* Account */}
       <Card>
