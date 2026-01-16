@@ -250,7 +250,7 @@ export default function SettingsPage() {
           user={{
             ...userData,
             id: user!.id,
-            email: user?.email,
+            email: user?.email ?? undefined,
           }} 
         />
       )}
