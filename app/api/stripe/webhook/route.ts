@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
 
         // Update user in InstantDB
         await db.transact([
-          db.tx.users[userId].update({
+          db.tx.$users[userId].update({
             billing_status: 'active',
             stripe_customer_id: session.customer as string,
             stripe_subscription_id: subscriptionId,
@@ -153,7 +153,7 @@ export async function POST(request: NextRequest) {
         }
 
         await db.transact([
-          db.tx.users[userId].update({
+          db.tx.$users[userId].update({
             billing_status: billingStatus,
             subscription_plan: subscriptionPlan,
           }),
@@ -175,7 +175,7 @@ export async function POST(request: NextRequest) {
         console.log(`[Webhook] Subscription deleted for user: ${userId}`)
 
         await db.transact([
-          db.tx.users[userId].update({
+          db.tx.$users[userId].update({
             billing_status: 'canceled',
           }),
         ])
@@ -205,7 +205,7 @@ export async function POST(request: NextRequest) {
         console.log(`[Webhook] Payment failed for user: ${userId}`)
 
         await db.transact([
-          db.tx.users[userId].update({
+          db.tx.$users[userId].update({
             billing_status: 'expired',
           }),
         ])
