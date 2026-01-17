@@ -9,25 +9,30 @@ interface UpgradeModalProps {
   onClose: () => void
   onSelectPlan: (plan: 'monthly' | 'yearly') => void
   loading?: boolean
+  isTrialExpired?: boolean
 }
 
 export default function UpgradeModal({ 
   isOpen, 
   onClose, 
   onSelectPlan,
-  loading = false 
+  loading = false,
+  isTrialExpired = true
 }: UpgradeModalProps) {
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Your Trial Has Ended"
+      title={isTrialExpired ? "Your Trial Has Ended" : "Upgrade to Pro"}
       size="lg"
     >
       <div className="space-y-6">
         <div className="text-center">
           <p className="text-pink-primary/70 mb-4">
-            Your 7-day trial has ended. Upgrade to Hunnimoon Pro to continue managing your wedding with full access to all features.
+            {isTrialExpired 
+              ? "Your 7-day trial has ended. Upgrade to Hunnimoon Pro to continue managing your wedding with full access to all features."
+              : "Upgrade to Hunnimoon Pro to unlock full access to all features and keep your wedding planning on track."
+            }
           </p>
           <p className="text-sm text-pink-primary/60">
             Don't worry – your data is safe! We never delete your information.
@@ -38,10 +43,11 @@ export default function UpgradeModal({
           onSelectPlan={onSelectPlan}
           loading={loading}
           showTrialCard={false}
+          showToggle={false}
         />
 
         <p className="text-xs text-pink-primary/60 text-center">
-          Have questions? Email us at <a href="mailto:support@hunnimoon.app" className="underline">support@hunnimoon.app</a>
+          Have questions? Email us at <a href="mailto:hunnimoon@veilandvibe.com" className="underline">hunnimoon@veilandvibe.com</a>
         </p>
       </div>
     </Modal>

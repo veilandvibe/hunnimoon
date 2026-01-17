@@ -1,28 +1,12 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import Button from '@/components/ui/Button'
-import Modal from '@/components/ui/Modal'
-import Input from '@/components/ui/Input'
 
 export default function Hero() {
-  const [isTrialModalOpen, setIsTrialModalOpen] = useState(false)
-  const [email, setEmail] = useState('')
-
-  const handleStartTrial = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log('Start Free Trial with email:', email)
-    // Stub: Actual logic will be implemented later
-    setIsTrialModalOpen(false)
-    setEmail('')
-    // TODO: Redirect to signup/login flow
-  }
-
   return (
-    <>
-      <section className="relative bg-gradient-to-br from-pink-light via-white to-pink-light/30 pt-20 pb-32 overflow-hidden">
+    <section className="relative bg-gradient-to-br from-pink-light via-white to-pink-light/30 pt-20 pb-32 overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute top-0 left-0 w-72 h-72 bg-pink-primary/5 rounded-full blur-3xl" />
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-pink-primary/5 rounded-full blur-3xl" />
@@ -38,13 +22,14 @@ export default function Hero() {
                 Hunnimoon replaces messy spreadsheets and keeps your guest list, budget, vendors, and RSVPs organized in one place. No more juggling tabs or losing track of details.
               </p>
               <div className="flex justify-center lg:justify-start">
-                <Button 
-                  onClick={() => setIsTrialModalOpen(true)}
-                  size="lg"
-                  className="shadow-xl hover:shadow-2xl"
-                >
-                  Start Free Trial
-                </Button>
+                <Link href="/login">
+                  <Button 
+                    size="lg"
+                    className="shadow-xl hover:shadow-2xl"
+                  >
+                    Start Free Trial
+                  </Button>
+                </Link>
               </div>
               <p className="text-pink-primary/60 text-sm mt-4">
                 No credit card required · 7-day free trial
@@ -65,33 +50,5 @@ export default function Hero() {
           </div>
         </div>
       </section>
-
-      {/* Start Free Trial Modal */}
-      <Modal
-        isOpen={isTrialModalOpen}
-        onClose={() => setIsTrialModalOpen(false)}
-        title="Start Your Free 7-Day Trial"
-      >
-        <form onSubmit={handleStartTrial} className="space-y-4">
-          <p className="text-pink-primary/70 text-sm">
-            No credit card required. Get instant access to all Hunnimoon features and start planning your dream wedding today.
-          </p>
-          <Input
-            label="Email Address"
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="your@email.com"
-          />
-          <Button type="submit" fullWidth>
-            Start Free Trial
-          </Button>
-          <p className="text-pink-primary/60 text-xs text-center">
-            By signing up, you agree to our Terms of Service and Privacy Policy.
-          </p>
-        </form>
-      </Modal>
-    </>
-  )
+    )
 }

@@ -9,6 +9,7 @@ import PageTransition from './PageTransition'
 import SpotlightTour from '@/components/tour/SpotlightTour'
 import OnboardingModal from '@/components/onboarding/OnboardingModal'
 import TrialManager from '@/components/trial/TrialManager'
+import TrialTestingPanel from '@/components/trial/TrialTestingPanel'
 import { SidebarProvider, useSidebar } from './SidebarContext'
 import { useTour } from '@/components/providers/TourContext'
 
@@ -61,6 +62,9 @@ function MainLayoutContent({
       </main>
 
       <BottomNav />
+      
+      {/* 🧪 Testing Panel - REMOVE BEFORE PRODUCTION */}
+      <TrialTestingPanel />
       
       {/* Spotlight Tour - Always rendered, shown when active */}
       <SpotlightTour />

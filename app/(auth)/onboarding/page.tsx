@@ -8,7 +8,56 @@ import Card from '@/components/ui/Card'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import LoadingSpinner from '@/components/ui/LoadingSpinner'
-import { Heart, Sparkles } from 'lucide-react'
+import { Heart, Sparkles, CheckCircle, Loader2 } from 'lucide-react'
+
+// Helper function to check if slug exists
+const checkSlugExists = async (slug: string): Promise<boolean> => {
+  try {
+    const response = await fetch(`/api/check-slug?slug=${encodeURIComponent(slug)}`)
+    
+    // If the API returns an error status, throw an error
+    if (!response.ok) {
+      throw new Error('API check failed')
+    }
+    
+    const data = await response.json()
+    
+    // Check if the response has an error field
+    if (data.error) {
+      throw new Error(data.error)
+    }
+    
+    return data.exists
+  } catch (error) {
+    console.error('Error checking slug:', error)
+    // Re-throw the error so the caller knows the check failed
+    throw error
+  }
+}
+
+// Helper to find next available slug with -1, -2, -3 suffix
+const findAvailableSlug = async (baseSlug: string): Promise<string> => {
+  try {
+    // First try the base slug
+    const baseExists = await checkSlugExists(baseSlug)
+    if (!baseExists) return baseSlug
+    
+    // Try with incrementing suffixes: -1, -2, -3, etc.
+    let counter = 1
+    while (counter < 100) { // Safety limit
+      const candidateSlug = `${baseSlug}-${counter}`
+      const exists = await checkSlugExists(candidateSlug)
+      if (!exists) return candidateSlug
+      counter++
+    }
+    
+    // Fallback with timestamp if we somehow hit 100 duplicates
+    return `${baseSlug}-${Date.now()}`
+  } catch (error) {
+    // If checking fails, throw the error to be handled by caller
+    throw new Error('Unable to verify slug availability. Please check your connection.')
+  }
+}
 
 export default function OnboardingPage() {
   const router = useRouter()
@@ -32,6 +81,9 @@ export default function OnboardingPage() {
     wedding_date: '',
     wedding_slug: '',
   })
+  const [slugAvailable, setSlugAvailable] = useState<boolean | null>(null)
+  const [checkingSlug, setCheckingSlug] = useState(false)
+  const [autoGenerating, setAutoGenerating] = useState(false) // Track if we're auto-generating
 
   // Check if user already has a wedding
   useEffect(() => {
@@ -40,6 +92,33 @@ export default function OnboardingPage() {
       router.push('/dashboard')
     }
   }, [data, queryLoading, router])
+
+  // Real-time slug availability check ONLY for manual edits
+  useEffect(() => {
+    // Skip if we're auto-generating (to avoid race condition)
+    if (autoGenerating) return
+    
+    const checkSlugAvailability = async () => {
+      if (!formData.wedding_slug || formData.wedding_slug.length < 3) {
+        setSlugAvailable(null)
+        return
+      }
+      
+      setCheckingSlug(true)
+      try {
+        const exists = await checkSlugExists(formData.wedding_slug)
+        setSlugAvailable(!exists)
+      } catch (error) {
+        console.error('Error checking slug availability:', error)
+        setSlugAvailable(null)
+      } finally {
+        setCheckingSlug(false)
+      }
+    }
+    
+    const debounceTimer = setTimeout(checkSlugAvailability, 500)
+    return () => clearTimeout(debounceTimer)
+  }, [formData.wedding_slug, autoGenerating])
 
   // Show loading while checking for existing wedding
   if (queryLoading) {
@@ -60,28 +139,136 @@ export default function OnboardingPage() {
       .replace(/^-|-$/g, '')
   }
 
-  const handlePartner1Change = (value: string) => {
+  const handlePartner1Change = async (value: string) => {
+    const baseSlug = generateSlug(value, formData.partner2_name)
+    
+    // Update the form data immediately
     setFormData(prev => ({
       ...prev,
       partner1_name: value,
-      wedding_slug: generateSlug(value, prev.partner2_name),
+      wedding_slug: baseSlug,
     }))
+    
+    // If we don't have both names yet, stop here
+    if (!value || !formData.partner2_name) {
+      setSlugAvailable(null)
+      setError('')
+      return
+    }
+
+    // We have both names - auto-generate available slug
+    setAutoGenerating(true)
+    setCheckingSlug(true)
+    setSlugAvailable(null)
+    setError('')
+    
+    try {
+      // Find an available slug (base or with suffix)
+      const availableSlug = await findAvailableSlug(baseSlug)
+      
+      setFormData(prev => ({
+        ...prev,
+        wedding_slug: availableSlug,
+      }))
+      setSlugAvailable(true) // Always available because we auto-adjusted
+    } catch (error: any) {
+      console.error('Error generating slug:', error)
+      setSlugAvailable(null)
+      setError(error.message || 'Unable to check RSVP link availability. Please try again.')
+    } finally {
+      setCheckingSlug(false)
+      setAutoGenerating(false)
+    }
   }
 
-  const handlePartner2Change = (value: string) => {
+  const handlePartner2Change = async (value: string) => {
+    const baseSlug = generateSlug(formData.partner1_name, value)
+    
+    // Update the form data immediately
     setFormData(prev => ({
       ...prev,
       partner2_name: value,
-      wedding_slug: generateSlug(prev.partner1_name, value),
+      wedding_slug: baseSlug,
     }))
+    
+    // If we don't have both names yet, stop here
+    if (!formData.partner1_name || !value) {
+      setSlugAvailable(null)
+      setError('')
+      return
+    }
+
+    // We have both names - auto-generate available slug
+    setAutoGenerating(true)
+    setCheckingSlug(true)
+    setSlugAvailable(null)
+    setError('')
+    
+    try {
+      // Find an available slug (base or with suffix)
+      const availableSlug = await findAvailableSlug(baseSlug)
+      
+      setFormData(prev => ({
+        ...prev,
+        wedding_slug: availableSlug,
+      }))
+      setSlugAvailable(true) // Always available because we auto-adjusted
+    } catch (error: any) {
+      console.error('Error generating slug:', error)
+      setSlugAvailable(null)
+      setError(error.message || 'Unable to check RSVP link availability. Please try again.')
+    } finally {
+      setCheckingSlug(false)
+      setAutoGenerating(false)
+    }
+  }
+
+  // Manual slug change - validate in real-time
+  const handleSlugChange = (value: string) => {
+    const cleanedSlug = value.toLowerCase().replace(/[^a-z0-9-]/g, '-')
+    setFormData(prev => ({ ...prev, wedding_slug: cleanedSlug }))
+    setAutoGenerating(false) // User is manually editing, enable debounced check
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+    
+    // Don't proceed if we're still checking
+    if (checkingSlug) {
+      setError('Please wait while we check your RSVP link...')
+      return
+    }
+    
+    // Don't proceed if slug check failed (slugAvailable is null due to error)
+    if (slugAvailable === null && formData.partner1_name && formData.partner2_name) {
+      setError('Unable to verify RSVP link. Please check your connection and try again.')
+      return
+    }
+    
     setLoading(true)
 
     try {
+      // Final server-side check before creating account
+      let slugExists: boolean
+      try {
+        slugExists = await checkSlugExists(formData.wedding_slug)
+      } catch (error) {
+        throw new Error('Unable to verify RSVP link. Please check your connection and try again.')
+      }
+      
+      if (slugExists) {
+        // Race condition - someone took it between check and submit
+        // Auto-generate a new one
+        const baseSlug = generateSlug(formData.partner1_name, formData.partner2_name)
+        const availableSlug = await findAvailableSlug(baseSlug)
+        setFormData(prev => ({ ...prev, wedding_slug: availableSlug }))
+        setSlugAvailable(true)
+        setError('That link was just taken - we found you a new one! Please submit again.')
+        setLoading(false)
+        return // DO NOT CREATE ACCOUNT
+      }
+
       // Validate wedding date is in the future
       const weddingDate = new Date(formData.wedding_date)
       if (weddingDate <= new Date()) {
@@ -92,7 +279,7 @@ export default function OnboardingPage() {
         throw new Error('You must be logged in to create a wedding')
       }
 
-      // Get acquisition source from localStorage (set on landing page)
+      // Get acquisition source from localStorage
       const acqSource = typeof window !== 'undefined' 
         ? localStorage.getItem('acq_source') 
         : null
@@ -122,14 +309,34 @@ export default function OnboardingPage() {
       
       await db.transact(transactions)
 
-      // Clear acquisition source from localStorage after saving to DB
+      // Clear acquisition source from localStorage
       if (typeof window !== 'undefined' && acqSource) {
         localStorage.removeItem('acq_source')
       }
 
+      // ONLY redirect on successful creation
       router.push('/dashboard')
     } catch (err: any) {
-      setError(err.message || 'Failed to create wedding. Please try again.')
+      console.error('Error creating wedding:', err)
+      
+      let friendlyMessage = 'Something went wrong. Please try again.'
+      
+      if (err.message?.includes('wedding_slug') || err.message?.includes('unique')) {
+        friendlyMessage = 'That RSVP link is already taken. Refreshing the page...'
+        setSlugAvailable(false)
+        // Auto-regenerate after a moment
+        setTimeout(() => {
+          handlePartner1Change(formData.partner1_name)
+        }, 1000)
+      } else if (err.message === 'Wedding date must be in the future') {
+        friendlyMessage = err.message
+      } else if (err.message === 'You must be logged in to create a wedding') {
+        friendlyMessage = err.message
+      } else if (err.message?.includes('Unable to verify')) {
+        friendlyMessage = err.message
+      }
+      
+      setError(friendlyMessage)
       setLoading(false)
     }
   }
@@ -179,18 +386,29 @@ export default function OnboardingPage() {
               min={new Date().toISOString().split('T')[0]}
             />
 
-            <Input
-              label="Wedding Slug (for your RSVP URL)"
-              required
-              value={formData.wedding_slug}
-              onChange={(e) => setFormData({ 
-                ...formData, 
-                wedding_slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-') 
-              })}
-              placeholder="alex-and-jordan-2026"
-            />
+            <div className="relative">
+              <Input
+                label="Wedding Slug (for your RSVP URL)"
+                required
+                value={formData.wedding_slug}
+                onChange={(e) => handleSlugChange(e.target.value)}
+                placeholder="alex-and-jordan-2026"
+              />
+              {formData.wedding_slug && formData.wedding_slug.length >= 3 && (
+                <div className="absolute right-3 top-9 flex items-center gap-1">
+                  {checkingSlug ? (
+                    <Loader2 size={18} className="text-pink-primary/50 animate-spin" />
+                  ) : slugAvailable === true ? (
+                    <>
+                      <CheckCircle size={18} className="text-green-600" />
+                      <span className="text-xs text-green-600 font-medium">Available</span>
+                    </>
+                  ) : null}
+                </div>
+              )}
+            </div>
 
-            <div className="p-4 bg-pink-light rounded-xl">
+            <div className="p-4 rounded-xl bg-pink-light">
               <p className="text-sm text-pink-primary">
                 <strong>Your RSVP URL will be:</strong>
                 <br />
@@ -206,9 +424,14 @@ export default function OnboardingPage() {
               </div>
             )}
 
-            <Button type="submit" fullWidth size="lg" disabled={loading}>
+            <Button 
+              type="submit" 
+              fullWidth 
+              size="lg" 
+              disabled={loading || checkingSlug}
+            >
               <Heart size={20} />
-              {loading ? 'Creating Your Wedding...' : 'Create My Wedding'}
+              {loading ? 'Creating Your Wedding...' : checkingSlug ? 'Checking availability...' : 'Create My Wedding'}
             </Button>
           </form>
         </Card>

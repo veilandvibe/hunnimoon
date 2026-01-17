@@ -7,12 +7,10 @@ import Button from '@/components/ui/Button'
 
 export default function PublicHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
-    <>
-      <header className="sticky top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-pink-primary/10 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-pink-primary/10 z-50 transition-all duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href="/" className="flex items-center">
@@ -48,12 +46,14 @@ export default function PublicHeader() {
               <Link href="/pricing" className="text-pink-primary hover:text-pink-primary/80 transition-colors font-medium">
                 Pricing
               </Link>
-              <Link href="/dashboard" className="text-pink-primary hover:text-pink-primary/80 transition-colors font-medium">
+              <Link href="/login" className="text-pink-primary hover:text-pink-primary/80 transition-colors font-medium">
                 Sign In
               </Link>
-              <Button onClick={() => setIsModalOpen(true)}>
-                Start Free Trial
-              </Button>
+              <Link href="/login">
+                <Button>
+                  Start Free Trial
+                </Button>
+              </Link>
             </nav>
 
             {/* Mobile Menu Button */}
@@ -85,55 +85,24 @@ export default function PublicHeader() {
                   Pricing
                 </Link>
                 <Link 
-                  href="/dashboard" 
+                  href="/login" 
                   className="text-pink-primary hover:text-pink-primary/80 transition-colors font-medium py-2"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Sign In
                 </Link>
-                <Button onClick={() => {
-                  setIsMenuOpen(false)
-                  setIsModalOpen(true)
-                }} fullWidth>
-                  Start Free Trial
-                </Button>
+                <Link href="/login">
+                  <Button 
+                    onClick={() => setIsMenuOpen(false)}
+                    fullWidth
+                  >
+                    Start Free Trial
+                  </Button>
+                </Link>
               </div>
             </nav>
           )}
         </div>
       </header>
-
-      {/* Start Free Trial Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-8 max-w-md w-full relative">
-            <button
-              onClick={() => setIsModalOpen(false)}
-              className="absolute top-4 right-4 p-2 text-pink-primary/60 hover:text-pink-primary transition-colors"
-              aria-label="Close modal"
-            >
-              <X size={20} />
-            </button>
-            
-            <h2 className="text-2xl font-black text-pink-primary mb-4">
-              Start Your Free Trial
-            </h2>
-            <p className="text-pink-primary/70 mb-6">
-              Sign up functionality will be implemented here. For now, you can sign in to access the app.
-            </p>
-            <div className="flex gap-3">
-              <Button variant="outline" onClick={() => setIsModalOpen(false)} fullWidth>
-                Cancel
-              </Button>
-              <Link href="/dashboard" className="flex-1">
-                <Button fullWidth>
-                  Go to App
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
-    </>
-  )
+    )
 }

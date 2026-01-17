@@ -7,7 +7,7 @@ import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import { useWedding } from '@/components/providers/WeddingProvider'
 import db from '@/lib/instant'
-import { Copy, Check, Calendar, User, LogOut, Loader2, HelpCircle, RotateCcw } from 'lucide-react'
+import { Copy, Check, Calendar, User, LogOut, Loader2, HelpCircle, RotateCcw, X } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useTour } from '@/components/providers/TourContext'
 import BillingSection from '@/components/settings/BillingSection'
@@ -49,6 +49,9 @@ export default function SettingsPage() {
     wedding_date: '',
     wedding_slug: '',
   })
+  const [originalSlug, setOriginalSlug] = useState('')
+  const [slugAvailable, setSlugAvailable] = useState<boolean | null>(null)
+  const [checkingSlug, setCheckingSlug] = useState(false)
   const [signingOut, setSigningOut] = useState(false)
   const [saving, setSaving] = useState(false)
   
@@ -61,14 +64,57 @@ export default function SettingsPage() {
         wedding_date: wedding.wedding_date || '',
         wedding_slug: wedding.wedding_slug || '',
       })
+      setOriginalSlug(wedding.wedding_slug || '')
+      setSlugAvailable(true) // Current slug is always valid
     }
   }, [wedding])
+
+  // Real-time slug availability check for manual edits
+  useEffect(() => {
+    const checkSlugAvailability = async () => {
+      // Don't check if it's the original slug (unchanged)
+      if (!weddingDetails.wedding_slug || 
+          weddingDetails.wedding_slug === originalSlug ||
+          weddingDetails.wedding_slug.length < 3) {
+        setSlugAvailable(true) // Original slug is always valid
+        return
+      }
+      
+      setCheckingSlug(true)
+      try {
+        // Check if the new slug is available
+        const response = await fetch(`/api/check-slug?slug=${encodeURIComponent(weddingDetails.wedding_slug)}`)
+        const data = await response.json()
+        setSlugAvailable(!data.exists)
+      } catch (error) {
+        console.error('Error checking slug availability:', error)
+        setSlugAvailable(null)
+      } finally {
+        setCheckingSlug(false)
+      }
+    }
+    
+    const debounceTimer = setTimeout(checkSlugAvailability, 500)
+    return () => clearTimeout(debounceTimer)
+  }, [weddingDetails.wedding_slug, originalSlug])
 
   const handleSaveChanges = async (e: React.FormEvent) => {
     e.preventDefault()
     
     if (!wedding?.id) {
       toast.error('Wedding not found. Please refresh the page.')
+      return
+    }
+    
+    // CRITICAL: Block save if slug is unavailable
+    if (slugAvailable === false) {
+      toast.error('That RSVP link is already taken. Please choose a different one.')
+      return
+    }
+    
+    // Block save while checking
+    if (checkingSlug) {
+      toast.error('Please wait while we verify your RSVP link.')
       return
     }
     
@@ -93,10 +139,21 @@ export default function SettingsPage() {
         }),
       ])
       
+      // Update the original slug tracker after successful save
+      setOriginalSlug(weddingDetails.wedding_slug)
+      
       toast.success('Wedding details updated!')
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving settings:', error)
-      toast.error('Failed to save settings. Please try again.')
+      
+      let friendlyMessage = 'Failed to save settings. Please try again.'
+      
+      if (error.message?.includes('wedding_slug') || error.message?.includes('unique')) {
+        friendlyMessage = 'That RSVP link is already taken. Please choose a different one.'
+        setSlugAvailable(false) // Mark as unavailable for real-time feedback
+      }
+      
+      toast.error(friendlyMessage)
     } finally {
       setSaving(false)
     }
@@ -220,22 +277,68 @@ export default function SettingsPage() {
             }
           />
 
-          <Input
-            label="Wedding Slug (for RSVP URL)"
-            required
-            value={weddingDetails.wedding_slug}
-            onChange={(e) =>
-              setWeddingDetails({ ...weddingDetails, wedding_slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-') })
-            }
-            placeholder="john-and-jane-2026"
-            disabled={isReadOnly}
-          />
+          <div className="relative">
+            <Input
+              label="Wedding Slug (for RSVP URL)"
+              required
+              value={weddingDetails.wedding_slug}
+              onChange={(e) =>
+                setWeddingDetails({ ...weddingDetails, wedding_slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-') })
+              }
+              placeholder="john-and-jane-2026"
+              disabled={isReadOnly}
+            />
+            {/* Visual feedback indicator */}
+            {weddingDetails.wedding_slug && 
+             weddingDetails.wedding_slug !== originalSlug && 
+             weddingDetails.wedding_slug.length >= 3 && (
+              <div className="absolute right-3 top-9 flex items-center gap-1">
+                {checkingSlug ? (
+                  <Loader2 size={18} className="text-pink-primary/50 animate-spin" />
+                ) : slugAvailable === true ? (
+                  <>
+                    <Check size={18} className="text-green-600" />
+                    <span className="text-xs text-green-600 font-medium">Available</span>
+                  </>
+                ) : slugAvailable === false ? (
+                  <>
+                    <X size={18} className="text-red-600" />
+                    <span className="text-xs text-red-600 font-medium">Taken</span>
+                  </>
+                ) : null}
+              </div>
+            )}
+          </div>
 
-          <Button type="submit" fullWidth disabled={saving || isReadOnly} title={isReadOnly ? 'Upgrade to edit settings' : undefined}>
+          {/* Show warning if slug is taken */}
+          {slugAvailable === false && (
+            <div className="p-3 bg-red-50 border border-red-200 rounded-xl">
+              <p className="text-sm text-red-700">
+                This RSVP link is already in use. Please choose a different one.
+              </p>
+            </div>
+          )}
+
+          <Button 
+            type="submit" 
+            fullWidth 
+            disabled={
+              saving || 
+              checkingSlug || 
+              slugAvailable === false || 
+              isReadOnly
+            } 
+            title={isReadOnly ? 'Upgrade to edit settings' : undefined}
+          >
             {saving ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
                 Saving...
+              </>
+            ) : checkingSlug ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Checking...
               </>
             ) : (
               'Save Changes'

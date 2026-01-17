@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Tool } from '@/types/tools'
@@ -13,15 +13,25 @@ interface ToolSliderProps {
 
 export default function ToolSlider({ tools, currentToolSlug }: ToolSliderProps) {
   const [startIndex, setStartIndex] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
+  
+  // Detect mobile viewport
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
   
   // Filter out current tool
   const otherTools = tools.filter(tool => tool.slug !== currentToolSlug)
   
-  // Show 3 tools at a time
-  const visibleTools = otherTools.slice(startIndex, startIndex + 3)
+  // Show 1 tool on mobile, 3 on desktop
+  const toolsPerView = isMobile ? 1 : 3
+  const visibleTools = otherTools.slice(startIndex, startIndex + toolsPerView)
   
   const canGoBack = startIndex > 0
-  const canGoForward = startIndex + 3 < otherTools.length
+  const canGoForward = startIndex + toolsPerView < otherTools.length
 
   const handlePrev = () => {
     if (canGoBack) {

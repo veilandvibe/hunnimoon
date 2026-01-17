@@ -136,7 +136,7 @@ export default function TrialManager() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          plan: 'yearly', // Default to yearly for Etsy users
+          plan: 'monthly', // Default to monthly for Etsy 3-month promo
           userId: user.id,
           userEmail: user.email,
           allowPromoCode: true, // Enable promo code field
@@ -204,6 +204,7 @@ export default function TrialManager() {
           onClose={() => setUpgradeModalOpen(false)}
           onSelectPlan={handleUpgrade}
           loading={checkoutLoading}
+          isTrialExpired={trialStatus.isExpired}
         />
       )}
 

@@ -28,10 +28,10 @@ export default function EtsyTrialExpiredModal({
       <div className="space-y-6">
         <div className="space-y-3">
           <p className="text-pink-primary/80">
-            But you can keep going for free! You already have lifetime access from your Etsy purchase.
+            But you can keep going! You already have 3 months free from your Etsy purchase.
           </p>
           <p className="text-pink-primary/80">
-            Grab your code from your Etsy download PDF and enter it at checkout. You won't be charged.
+            Grab your code from your Etsy download PDF and enter it at checkout. You won't be charged. Cancel anytime.
           </p>
         </div>
 
@@ -60,7 +60,7 @@ export default function EtsyTrialExpiredModal({
                 <li>Click "Purchases and Reviews"</li>
                 <li>Locate your digital purchase from Veil & Vibe</li>
                 <li>Click "Download Files"</li>
-                <li>Open the PDF—your lifetime code is located in it</li>
+                <li>Open the PDF—your 3 months free code is located in it</li>
               </ol>
               <div className="pt-3 border-t border-pink-primary/10">
                 <p className="font-medium mb-1">Still need help?</p>
@@ -82,7 +82,7 @@ export default function EtsyTrialExpiredModal({
             fullWidth
             size="lg"
           >
-            Activate Lifetime Access
+            Get 3 Months Free
           </Button>
           <Button
             onClick={onClose}

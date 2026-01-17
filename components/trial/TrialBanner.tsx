@@ -33,7 +33,7 @@ export default function TrialBanner({ user, onUpgradeClick }: TrialBannerProps) 
           <div className="text-sm">
             {isEtsy ? (
               <p>
-                <strong>💝 Your trial ends soon!</strong> Use your Etsy lifetime code to continue free forever.
+                <strong>💝 Your trial ends in {trialStatus.daysRemaining} {trialStatus.daysRemaining === 1 ? 'day' : 'days'}!</strong> Use your Etsy code to get 3 months free.
               </p>
             ) : (
               <p>

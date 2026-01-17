@@ -8,12 +8,14 @@ export interface PlanSelectorProps {
   onSelectPlan: (plan: 'monthly' | 'yearly') => void
   loading?: boolean
   showTrialCard?: boolean
+  showToggle?: boolean
 }
 
 export default function PlanSelector({ 
   onSelectPlan, 
   loading = false,
-  showTrialCard = false 
+  showTrialCard = false,
+  showToggle = true
 }: PlanSelectorProps) {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('yearly')
 
@@ -31,28 +33,30 @@ export default function PlanSelector({
   return (
     <div className="space-y-8">
       {/* Billing Toggle */}
-      <div className="flex items-center justify-center gap-4">
-        <span className={`text-lg font-medium ${billingCycle === 'monthly' ? 'text-pink-primary' : 'text-pink-primary/50'}`}>
-          Monthly
-        </span>
-        <button
-          onClick={() => setBillingCycle(billingCycle === 'monthly' ? 'yearly' : 'monthly')}
-          className="relative w-16 h-8 bg-pink-primary/20 rounded-full transition-colors hover:bg-pink-primary/30"
-          disabled={loading}
-        >
-          <div
-            className={`absolute top-1 left-1 w-6 h-6 bg-pink-primary rounded-full transition-transform ${
-              billingCycle === 'yearly' ? 'translate-x-8' : ''
-            }`}
-          />
-        </button>
-        <span className={`text-lg font-medium ${billingCycle === 'yearly' ? 'text-pink-primary' : 'text-pink-primary/50'}`}>
-          Yearly
-        </span>
-        <span className="text-sm text-pink-primary bg-pink-light px-3 py-1 rounded-full font-medium">
-          Save 33%
-        </span>
-      </div>
+      {showToggle && (
+        <div className="flex items-center justify-center gap-4">
+          <span className={`text-lg font-medium ${billingCycle === 'monthly' ? 'text-pink-primary' : 'text-pink-primary/50'}`}>
+            Monthly
+          </span>
+          <button
+            onClick={() => setBillingCycle(billingCycle === 'monthly' ? 'yearly' : 'monthly')}
+            className="relative w-16 h-8 bg-pink-primary/20 rounded-full transition-colors hover:bg-pink-primary/30"
+            disabled={loading}
+          >
+            <div
+              className={`absolute top-1 left-1 w-6 h-6 bg-pink-primary rounded-full transition-transform ${
+                billingCycle === 'yearly' ? 'translate-x-8' : ''
+              }`}
+            />
+          </button>
+          <span className={`text-lg font-medium ${billingCycle === 'yearly' ? 'text-pink-primary' : 'text-pink-primary/50'}`}>
+            Yearly
+          </span>
+          <span className="text-sm text-pink-primary bg-pink-light px-3 py-1 rounded-full font-medium">
+            Save 33%
+          </span>
+        </div>
+      )}
 
       {/* Plan Cards */}
       <div className={`grid ${showTrialCard ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-6`}>
@@ -81,9 +85,9 @@ export default function PlanSelector({
 
         {/* Monthly Card */}
         <div className={`bg-white rounded-3xl p-6 shadow-lg border-2 ${
-          billingCycle === 'monthly' ? 'border-pink-primary ring-2 ring-pink-primary/20' : 'border-pink-primary/10'
+          billingCycle === 'monthly' && showToggle ? 'border-pink-primary ring-2 ring-pink-primary/20' : 'border-pink-primary/10'
         } transition-all`}>
-          {billingCycle === 'monthly' && (
+          {billingCycle === 'monthly' && showToggle && (
             <div className="bg-pink-primary text-white text-xs font-bold px-3 py-1 rounded-full inline-block mb-3">
               SELECTED
             </div>
@@ -119,9 +123,9 @@ export default function PlanSelector({
 
         {/* Yearly Card */}
         <div className={`bg-white rounded-3xl p-6 shadow-lg border-2 ${
-          billingCycle === 'yearly' ? 'border-pink-primary ring-2 ring-pink-primary/20' : 'border-pink-primary/10'
+          billingCycle === 'yearly' && showToggle ? 'border-pink-primary ring-2 ring-pink-primary/20' : 'border-pink-primary/10'
         } transition-all`}>
-          {billingCycle === 'yearly' && (
+          {billingCycle === 'yearly' && showToggle && (
             <div className="bg-pink-primary text-white text-xs font-bold px-3 py-1 rounded-full inline-block mb-3">
               SELECTED
             </div>
@@ -134,7 +138,7 @@ export default function PlanSelector({
               <span className="text-pink-primary/60 text-sm">/ year</span>
             </div>
             <p className="text-pink-primary/70 text-xs">
-              <span className="line-through">$119.88</span> • Save 33%
+              <span className="line-through">$119.88</span> • <span className="text-pink-primary font-bold text-sm">Save 33%</span>
             </p>
           </div>
 

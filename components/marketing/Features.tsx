@@ -1,24 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import Link from 'next/link'
 import Image from 'next/image'
 import Button from '@/components/ui/Button'
-import Modal from '@/components/ui/Modal'
-import Input from '@/components/ui/Input'
 
 export default function Features() {
-  const [isTrialModalOpen, setIsTrialModalOpen] = useState(false)
-  const [email, setEmail] = useState('')
-
-  const handleStartTrial = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log('Start Free Trial with email:', email)
-    // Stub: Actual logic will be implemented later
-    setIsTrialModalOpen(false)
-    setEmail('')
-    // TODO: Redirect to signup/login flow
-  }
-
   const features = [
     {
       image: "/Guests.png",
@@ -83,42 +69,16 @@ export default function Features() {
 
         {/* CTA Button */}
         <div className="flex justify-center mt-12">
-          <Button 
-            onClick={() => setIsTrialModalOpen(true)}
-            size="lg"
-            className="shadow-xl hover:shadow-2xl"
-          >
-            Start Free Trial
-          </Button>
+          <Link href="/login">
+            <Button 
+              size="lg"
+              className="shadow-xl hover:shadow-2xl"
+            >
+              Start Free Trial
+            </Button>
+          </Link>
         </div>
       </div>
-
-      {/* Start Free Trial Modal */}
-      <Modal
-        isOpen={isTrialModalOpen}
-        onClose={() => setIsTrialModalOpen(false)}
-        title="Start Your Free 7-Day Trial"
-      >
-        <form onSubmit={handleStartTrial} className="space-y-4">
-          <p className="text-pink-primary/70 text-sm">
-            No credit card required. Get instant access to all Hunnimoon features and start planning your dream wedding today.
-          </p>
-          <Input
-            label="Email Address"
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="your@email.com"
-          />
-          <Button type="submit" fullWidth>
-            Start Free Trial
-          </Button>
-          <p className="text-pink-primary/60 text-xs text-center">
-            By signing up, you agree to our Terms of Service and Privacy Policy.
-          </p>
-        </form>
-      </Modal>
     </section>
   )
 }

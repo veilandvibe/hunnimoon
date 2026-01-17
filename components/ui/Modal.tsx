@@ -69,7 +69,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
               {/* Header */}
               {title && (
                 <div className="flex items-center justify-between p-6 border-b border-pink-primary/10">
-                  <h2 className="text-xl md:text-2xl font-black text-pink-primary">
+                  <h2 className="text-xl md:text-2xl font-black text-pink-primary text-center flex-1">
                     {title}
                   </h2>
                   <button

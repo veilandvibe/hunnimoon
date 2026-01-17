@@ -42,7 +42,7 @@ export default function LandingFAQs() {
     },
     {
       question: "What if I need help using Hunnimoon?",
-      answer: "We are here to help. You can reach out through email, and we will get back to you quickly. Most questions are answered within a few hours."
+      answer: "We are here to help. Reach out to us at hunnimoon@veilandvibe.com and we will get back to you quickly. Most questions are answered within a few hours."
     },
     {
       question: "Can I use Hunnimoon on my phone?",

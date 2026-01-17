@@ -42,7 +42,7 @@ export default function CheckoutCanceledPage() {
           <p className="text-sm text-pink-primary/70">
             <strong>Need help?</strong>
             <br />
-            Contact us at <a href="mailto:support@hunnimoon.app" className="text-pink-primary underline">support@hunnimoon.app</a>
+            Contact us at <a href="mailto:hunnimoon@veilandvibe.com" className="text-pink-primary underline">hunnimoon@veilandvibe.com</a>
           </p>
         </div>
       </div>

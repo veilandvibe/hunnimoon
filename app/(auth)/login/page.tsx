@@ -2,10 +2,13 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import db from '@/lib/instant'
 import Card from '@/components/ui/Card'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
+import Modal from '@/components/ui/Modal'
+import PublicHeader from '@/components/marketing/PublicHeader'
 import { Mail } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -16,6 +19,8 @@ export default function LoginPage() {
   const [sentEmail, setSentEmail] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [showTermsModal, setShowTermsModal] = useState(false)
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false)
 
   const handleSendCode = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -42,13 +47,16 @@ export default function LoginPage() {
       // Auth state will update automatically, redirect will happen in middleware
       router.push('/onboarding')
     } catch (err: any) {
-      setError(err.message || 'Invalid code. Please try again.')
+      console.error('Error verifying code:', err)
+      setError('Invalid code. Please check and try again.')
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-b from-pink-gradient-from to-pink-gradient-to">
+    <>
+      <PublicHeader />
+      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-b from-pink-gradient-from to-pink-gradient-to pt-24">
       <div className="w-full max-w-md space-y-6">
         {/* Logo */}
         <div className="text-center">
@@ -121,6 +129,23 @@ export default function LoginPage() {
                 <Mail size={18} />
                 {loading ? 'Sending...' : 'Send Magic Code'}
               </Button>
+
+              <p className="text-xs text-pink-primary/60 text-center">
+                By signing in, you agree to our{' '}
+                <button 
+                  onClick={() => setShowTermsModal(true)}
+                  className="text-pink-primary underline hover:text-pink-primary/80"
+                >
+                  Terms of Service
+                </button>
+                {' '}and{' '}
+                <button 
+                  onClick={() => setShowPrivacyModal(true)}
+                  className="text-pink-primary underline hover:text-pink-primary/80"
+                >
+                  Privacy Policy
+                </button>
+              </p>
             </motion.form>
           ) : (
             <motion.form
@@ -175,16 +200,137 @@ export default function LoginPage() {
                   Use a different email
                 </button>
               </div>
+
+              <p className="text-xs text-pink-primary/60 text-center">
+                By signing in, you agree to our{' '}
+                <button 
+                  type="button"
+                  onClick={() => setShowTermsModal(true)}
+                  className="text-pink-primary underline hover:text-pink-primary/80"
+                >
+                  Terms of Service
+                </button>
+                {' '}and{' '}
+                <button 
+                  type="button"
+                  onClick={() => setShowPrivacyModal(true)}
+                  className="text-pink-primary underline hover:text-pink-primary/80"
+                >
+                  Privacy Policy
+                </button>
+              </p>
             </motion.form>
           )}
           </AnimatePresence>
         </Card>
-
-        {/* Footer */}
-        <p className="text-center text-xs text-pink-primary/60">
-          By signing in, you agree to our Terms of Service and Privacy Policy
-        </p>
       </div>
     </div>
+
+    {/* Terms of Service Modal */}
+    <Modal
+      isOpen={showTermsModal}
+      onClose={() => setShowTermsModal(false)}
+      title="Terms of Service"
+      size="xl"
+    >
+      <div className="prose prose-sm max-w-none space-y-4 text-pink-primary/80 max-h-[60vh] overflow-y-auto">
+        <p className="text-xs text-pink-primary/60">Last Updated: January 17, 2026</p>
+        <p>
+          By accessing or using Hunnimoon, you agree to be bound by these Terms of Service. 
+          Hunnimoon is a wedding planning platform operated by Veil and Vibe, a product of 1497239 B.C. LTD.
+        </p>
+        <p className="text-sm">
+          For the complete Terms of Service, please visit{' '}
+          <Link href="/terms" target="_blank" className="text-pink-primary underline">
+            our full Terms page
+          </Link>.
+        </p>
+        <div className="space-y-3">
+          <div>
+            <h3 className="font-bold text-pink-primary mb-1">Service Description</h3>
+            <p className="text-sm">
+              Hunnimoon provides wedding planning tools including guest management, RSVP tracking, 
+              budget monitoring, and vendor organization.
+            </p>
+          </div>
+          <div>
+            <h3 className="font-bold text-pink-primary mb-1">Free Trial & Billing</h3>
+            <p className="text-sm">
+              New users receive a 7-day free trial. No credit card required. After the trial, 
+              you may subscribe to continue with full functionality.
+            </p>
+          </div>
+          <div>
+            <h3 className="font-bold text-pink-primary mb-1">Your Content</h3>
+            <p className="text-sm">
+              You retain all rights to your wedding data. We store and process it only to provide the Service.
+            </p>
+          </div>
+          <div>
+            <h3 className="font-bold text-pink-primary mb-1">Contact</h3>
+            <p className="text-sm">
+              Email: <a href="mailto:hunnimoon@veilandvibe.com" className="underline">hunnimoon@veilandvibe.com</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </Modal>
+
+    {/* Privacy Policy Modal */}
+    <Modal
+      isOpen={showPrivacyModal}
+      onClose={() => setShowPrivacyModal(false)}
+      title="Privacy Policy"
+      size="xl"
+    >
+      <div className="prose prose-sm max-w-none space-y-4 text-pink-primary/80 max-h-[60vh] overflow-y-auto">
+        <p className="text-xs text-pink-primary/60">Last Updated: January 17, 2026</p>
+        <p>
+          This Privacy Policy describes how we collect, use, and protect your personal information 
+          when you use Hunnimoon.
+        </p>
+        <p className="text-sm">
+          For the complete Privacy Policy, please visit{' '}
+          <Link href="/privacy" target="_blank" className="text-pink-primary underline">
+            our full Privacy page
+          </Link>.
+        </p>
+        <div className="space-y-3">
+          <div>
+            <h3 className="font-bold text-pink-primary mb-1">Information We Collect</h3>
+            <p className="text-sm">
+              We collect your email, wedding details, guest information, budget data, and vendor contacts 
+              that you provide to use the Service.
+            </p>
+          </div>
+          <div>
+            <h3 className="font-bold text-pink-primary mb-1">How We Use Your Information</h3>
+            <p className="text-sm">
+              We use your information to provide the Service, manage your account, process RSVPs, 
+              and improve user experience.
+            </p>
+          </div>
+          <div>
+            <h3 className="font-bold text-pink-primary mb-1">We Do Not Sell Your Data</h3>
+            <p className="text-sm">
+              We never sell, rent, or trade your personal information to third parties for marketing purposes.
+            </p>
+          </div>
+          <div>
+            <h3 className="font-bold text-pink-primary mb-1">Data Security</h3>
+            <p className="text-sm">
+              We implement encryption, secure authentication, and regular backups to protect your information.
+            </p>
+          </div>
+          <div>
+            <h3 className="font-bold text-pink-primary mb-1">Contact</h3>
+            <p className="text-sm">
+              Email: <a href="mailto:hunnimoon@veilandvibe.com" className="underline">hunnimoon@veilandvibe.com</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </Modal>
+  </>
   )
 }

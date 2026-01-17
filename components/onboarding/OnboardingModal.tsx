@@ -26,67 +26,67 @@ const onboardingPages: OnboardingPage[] = [
   {
     icon: Home,
     title: 'Dashboard',
-    description: 'Your wedding planning command center. See everything at a glance - countdown, guest counts, RSVPs, and budget.',
+    description: 'See everything at a glance - your countdown, guest list, RSVPs, and budget.',
     features: [
-      'Real-time countdown to your big day',
-      'Guest metrics and attendance tracking',
-      'RSVP status visualization',
-      'Budget overview and spending progress'
+      'Countdown to your big day',
+      'Guest and attendance numbers',
+      'See who\'s attending at a glance',
+      'Track your budget and spending'
     ]
   },
   {
     icon: Users,
     title: 'Guests',
-    description: 'Manage your guest list with ease. Add guests individually or import from CSV, organize by households, and track their RSVP status.',
+    description: 'Build your guest list. Add guests one by one or import a spreadsheet, group them into households, and track who\'s coming.',
     features: [
-      'Add guests individually or import from CSV',
-      'Group guests together as households for better organization',
-      'Search and filter by side, status, or household',
-      'Switch between list and grid views'
+      'Add guests one by one or import a list',
+      'Group guests into households',
+      'Search and filter your list',
+      'Track RSVP status for each guest'
     ]
   },
   {
     icon: ClipboardCheck,
     title: 'RSVP Manager',
-    description: 'Share your custom RSVP link and watch responses come in automatically. No manual tracking needed!',
+    description: 'Get RSVPs online. Share your unique link with guests and their responses come straight to you - no manual tracking needed.',
     features: [
-      'Share a unique RSVP link with your guests',
-      'Guests find their names and RSVP for themselves or their household',
-      'Responses automatically update in your guest list',
-      'Customize form fields (meals, dietary restrictions, song requests, etc.)'
+      'Share one link with all your guests',
+      'Guests find their name and RSVP online',
+      'Responses update your guest list instantly',
+      'Ask about meals, dietary needs, song requests, and more'
     ]
   },
   {
     icon: DollarSign,
     title: 'Budget',
-    description: 'Keep your wedding spending on track. Set your budget, add categories, and see exactly where your money is going.',
+    description: 'Keep your spending on track. Set your budget, add categories, and see where every dollar goes.',
     features: [
-      'Set your total wedding budget',
-      'Track allocated, spent, and remaining funds',
-      'Add custom or preset budget categories',
-      'Mark items as paid to auto-update your spending'
+      'Set your total budget',
+      'See what you\'ve spent and what\'s left',
+      'Use our categories or create your own',
+      'Check off paid items to update your total'
     ]
   },
   {
     icon: Briefcase,
     title: 'Vendors',
-    description: 'Store all your vendor contacts in one place. Never lose track of photographers, florists, caterers, and more.',
+    description: 'Keep all your vendor contacts in one place. Photographers, florists, caterers - everyone you need.',
     features: [
-      'Store vendor contact information (name, email, phone, website)',
-      'Add notes for each vendor',
-      'Quick access to all vendor details',
-      'Easy editing and management'
+      'Save contact info for each vendor',
+      'Add notes and details',
+      'Click to call, email, or visit their website',
+      'Link vendors to your budget categories'
     ]
   },
   {
     icon: Settings,
     title: 'Settings',
-    description: 'Manage your wedding details and account preferences. Update dates, names, and other key information anytime.',
+    description: 'Update your wedding details anytime. Change your date, names, RSVP link, and more.',
     features: [
-      'Edit wedding date and partner names',
-      'Update your RSVP link slug',
-      'Manage account settings',
-      'Retake this tour anytime'
+      'Edit your wedding date and names',
+      'Change your RSVP link',
+      'View your subscription status',
+      'Replay this tour anytime'
     ]
   }
 ]

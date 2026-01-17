@@ -6,7 +6,7 @@ import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import Modal from '@/components/ui/Modal'
 import PlanSelector from '@/components/billing/PlanSelector'
-import { getUserTrialStatus, UserBillingData } from '@/lib/trial-helpers'
+import { getUserTrialStatus, UserBillingData, isEtsyUser } from '@/lib/trial-helpers'
 import { getBillingStatusText } from '@/lib/billing-status'
 
 interface BillingSectionProps {
@@ -82,12 +82,15 @@ export default function BillingSection({ user }: BillingSectionProps) {
   const handleApplyPromoCode = async () => {
     setLoading(true)
     try {
-      // Default to yearly plan when applying promo code
+      // Route Etsy users to monthly, others to yearly
+      const isEtsy = isEtsyUser(user)
+      const defaultPlan = isEtsy ? 'monthly' : 'yearly'
+      
       const response = await fetch('/api/stripe/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          plan: 'yearly',
+          plan: defaultPlan,
           userId: user.id,
           userEmail: user.email,
           allowPromoCode: true, // Enable promo code field
