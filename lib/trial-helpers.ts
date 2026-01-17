@@ -20,7 +20,7 @@ export interface UserBillingData {
   subscription_plan?: 'monthly' | 'yearly' | null
 }
 
-const TRIAL_DAYS = 0.00278  // ~4 minutes for testing (change back to 7 for production!)
+const TRIAL_DURATION_MS = 4 * 60 * 1000  // 4 minutes for testing (change to 7 * 24 * 60 * 60 * 1000 for production 7 days!)
 
 /**
  * Get the current trial status for a user
@@ -37,8 +37,7 @@ export function getUserTrialStatus(user: UserBillingData | null): TrialStatus {
   }
 
   const startDate = new Date(user.trial_start_date)
-  const endDate = new Date(startDate)
-  endDate.setDate(endDate.getDate() + TRIAL_DAYS)
+  const endDate = new Date(startDate.getTime() + TRIAL_DURATION_MS)
 
   const now = new Date()
   const msRemaining = endDate.getTime() - now.getTime()
