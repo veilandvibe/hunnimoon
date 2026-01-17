@@ -20,7 +20,7 @@ export interface UserBillingData {
   subscription_plan?: 'monthly' | 'yearly' | null
 }
 
-const TRIAL_DURATION_MS = 4 * 60 * 1000  // 4 minutes for testing (change to 7 * 24 * 60 * 60 * 1000 for production 7 days!)
+const TRIAL_DURATION_MS = 30 * 1000  // 30 seconds for testing (change to 7 * 24 * 60 * 60 * 1000 for production 7 days!)
 
 /**
  * Get the current trial status for a user
