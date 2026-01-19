@@ -82,15 +82,12 @@ export default function BillingSection({ user }: BillingSectionProps) {
   const handleApplyPromoCode = async () => {
     setLoading(true)
     try {
-      // Route Etsy users to monthly, others to yearly
-      const isEtsy = isEtsyUser(user)
-      const defaultPlan = isEtsy ? 'monthly' : 'yearly'
-      
+      // Always route to monthly plan for promo codes
       const response = await fetch('/api/stripe/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          plan: defaultPlan,
+          plan: 'monthly',
           userId: user.id,
           userEmail: user.email,
           allowPromoCode: true, // Enable promo code field
@@ -220,13 +217,14 @@ export default function BillingSection({ user }: BillingSectionProps) {
         size="lg"
       >
         <div className="space-y-6">
-          <p className="text-pink-primary/70">
+          <p className="text-pink-primary/70 text-center">
             Choose your plan and get full access to all features:
           </p>
           <PlanSelector
             onSelectPlan={handleUpgrade}
             loading={loading}
             showTrialCard={false}
+            showToggle={false}
           />
         </div>
       </Modal>
