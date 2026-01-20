@@ -643,7 +643,7 @@ export default function RSVPPage() {
                     <button
                       type="button"
                       onClick={() => setRsvpStatus('Yes')}
-                      className={`py-4 rounded-xl font-bold transition-all ${
+                      className={`py-3 md:py-4 rounded-xl font-bold text-sm md:text-base transition-all ${
                         rsvpStatus === 'Yes'
                           ? 'bg-pink-primary text-white'
                           : 'bg-white border-2 border-pink-primary/20 text-pink-primary hover:border-pink-primary'
@@ -654,7 +654,7 @@ export default function RSVPPage() {
                     <button
                       type="button"
                       onClick={() => setRsvpStatus('No')}
-                      className={`py-4 rounded-xl font-bold transition-all ${
+                      className={`py-3 md:py-4 rounded-xl font-bold text-sm md:text-base transition-all ${
                         rsvpStatus === 'No'
                           ? 'bg-pink-primary text-white'
                           : 'bg-white border-2 border-pink-primary/20 text-pink-primary hover:border-pink-primary'
@@ -813,11 +813,6 @@ export default function RSVPPage() {
             </Button>
           </form>
         </Card>
-
-        {/* Footer */}
-        <p className="text-center text-pink-primary/60 text-sm">
-          Questions? Contact us at wedding@example.com
-        </p>
       </div>
     </div>
   )

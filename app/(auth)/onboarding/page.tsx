@@ -85,13 +85,19 @@ export default function OnboardingPage() {
   const [checkingSlug, setCheckingSlug] = useState(false)
   const [autoGenerating, setAutoGenerating] = useState(false) // Track if we're auto-generating
 
-  // Check if user already has a wedding
+  // Check if user already has a wedding - redirect immediately to prevent flash
   useEffect(() => {
     if (queryLoading) return
     if (data?.weddings && data.weddings.length > 0) {
-      router.push('/dashboard')
+      // Use replace instead of push to prevent back button issues
+      router.replace('/dashboard')
     }
   }, [data, queryLoading, router])
+
+  // Don't render onboarding UI if user already has a wedding
+  if (!queryLoading && data?.weddings && data.weddings.length > 0) {
+    return null
+  }
 
   // Real-time slug availability check ONLY for manual edits
   useEffect(() => {
