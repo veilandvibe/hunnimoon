@@ -48,13 +48,18 @@ export default function SpotlightTour() {
   // Detect device capabilities once
   const isMobile = useRef(isMobileDevice())
   const shouldReduceMotion = useRef(prefersReducedMotion() || (isMobile.current && isLowEndDevice()))
+  
+  // Flag to prevent scroll listener interference during step transitions
+  const isScrolling = useRef(false)
 
   const steps = currentTourPage ? getTourSteps(currentTourPage) : undefined
   const isActive = !!currentTourPage && !!steps && steps.length > 0
 
   // Get the target element and its position
-  const updateTargetRect = useCallback(() => {
+  const updateTargetRect = useCallback((forceScroll = true) => {
     if (!steps || !isActive) return
+    // Prevent updates during programmatic scrolling
+    if (isScrolling.current && !forceScroll) return
 
     const currentStepData = steps[currentStep]
     
@@ -67,28 +72,48 @@ export default function SpotlightTour() {
     const element = document.querySelector(currentStepData.target)
 
     if (element) {
-      // Use requestAnimationFrame for smoother updates on mobile
-      requestAnimationFrame(() => {
-        const rect = element.getBoundingClientRect()
-        setTargetRect(rect)
-
-        // Smart scroll behavior based on element size
-        const viewportHeight = window.innerHeight
-        const elementHeight = rect.height
-        
-        // If element is very tall (> 50% of viewport), scroll to top
-        // Otherwise scroll to center
-        const scrollBlock = elementHeight > viewportHeight * 0.5 ? 'start' : 'center'
-        
+      // Smart scroll behavior based on element size
+      const viewportHeight = window.innerHeight
+      const rect = element.getBoundingClientRect()
+      const elementHeight = rect.height
+      
+      // If element is very tall (> 50% of viewport), scroll to top
+      // Otherwise scroll to center
+      const scrollBlock = elementHeight > viewportHeight * 0.5 ? 'start' : 'center'
+      
+      if (forceScroll) {
         // Adaptive scroll behavior: use instant scroll on mobile for better performance
         const scrollBehavior = isMobile.current ? 'auto' : 'smooth'
+        
+        // Set scrolling flag to prevent listener interference
+        isScrolling.current = true
         
         element.scrollIntoView({
           behavior: scrollBehavior,
           block: scrollBlock,
           inline: 'center',
         })
-      })
+        
+        // On mobile, clear flag immediately since scroll is instant
+        // On desktop, wait for smooth scroll to complete
+        setTimeout(() => {
+          isScrolling.current = false
+        }, isMobile.current ? 0 : 500)
+      }
+      
+      // Update rect position (use RAF only for smooth desktop repaints)
+      const updateRect = () => {
+        const updatedRect = element.getBoundingClientRect()
+        setTargetRect(updatedRect)
+      }
+      
+      if (isMobile.current) {
+        // Mobile: update immediately, no animation frame needed
+        updateRect()
+      } else {
+        // Desktop: use RAF for smoother transition coordination
+        requestAnimationFrame(updateRect)
+      }
     } else {
       setTargetRect(null)
     }
@@ -98,22 +123,28 @@ export default function SpotlightTour() {
   useEffect(() => {
     if (!isActive) return
 
-    updateTargetRect()
+    // Force scroll on initial step change
+    updateTargetRect(true)
 
+    // Create handlers for resize/scroll that don't force scroll
+    const handleResize = () => updateTargetRect(false)
+    const handleScroll = () => updateTargetRect(false)
+    
     // Debounce updates for better mobile performance
     // Use longer debounce on mobile devices
     const debounceDelay = isMobile.current ? 150 : 100
-    const debouncedUpdate = debounce(updateTargetRect, debounceDelay)
+    const debouncedResize = debounce(handleResize, debounceDelay)
+    const debouncedScroll = debounce(handleScroll, debounceDelay)
     
     // Use passive listeners on mobile for better scroll performance
     const scrollOptions = isMobile.current ? { capture: true, passive: true } : true
     
-    window.addEventListener('resize', debouncedUpdate)
-    window.addEventListener('scroll', debouncedUpdate, scrollOptions)
+    window.addEventListener('resize', debouncedResize)
+    window.addEventListener('scroll', debouncedScroll, scrollOptions)
 
     return () => {
-      window.removeEventListener('resize', debouncedUpdate)
-      window.removeEventListener('scroll', debouncedUpdate, scrollOptions)
+      window.removeEventListener('resize', debouncedResize)
+      window.removeEventListener('scroll', debouncedScroll, scrollOptions)
     }
   }, [isActive, updateTargetRect])
 
