@@ -130,21 +130,25 @@ export default function SpotlightTour() {
     const handleResize = () => updateTargetRect(false)
     const handleScroll = () => updateTargetRect(false)
     
-    // Debounce updates for better mobile performance
-    // Use longer debounce on mobile devices
-    const debounceDelay = isMobile.current ? 150 : 100
+    // Debounce updates
+    const debounceDelay = 100
     const debouncedResize = debounce(handleResize, debounceDelay)
     const debouncedScroll = debounce(handleScroll, debounceDelay)
     
-    // Use passive listeners on mobile for better scroll performance
-    const scrollOptions = isMobile.current ? { capture: true, passive: true } : true
-    
+    // Always listen to resize for orientation changes
     window.addEventListener('resize', debouncedResize)
-    window.addEventListener('scroll', debouncedScroll, scrollOptions)
+    
+    // Only listen to scroll on desktop - on mobile, this interferes with native scroll momentum
+    // Mobile will only update spotlight on step changes and resize
+    if (!isMobile.current) {
+      window.addEventListener('scroll', debouncedScroll, true)
+    }
 
     return () => {
       window.removeEventListener('resize', debouncedResize)
-      window.removeEventListener('scroll', debouncedScroll, scrollOptions)
+      if (!isMobile.current) {
+        window.removeEventListener('scroll', debouncedScroll, true)
+      }
     }
   }, [isActive, updateTargetRect])
 
