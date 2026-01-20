@@ -25,6 +25,7 @@ interface TourStepProps {
   onBack: () => void
   onExit: () => void
   targetRect: DOMRect | null
+  isMobile?: boolean
 }
 
 export default function TourStep({
@@ -35,6 +36,7 @@ export default function TourStep({
   onBack,
   onExit,
   targetRect,
+  isMobile = false,
 }: TourStepProps) {
   const { isExpanded } = useSidebar()
   
@@ -153,31 +155,11 @@ export default function TourStep({
   const tooltipPosition = getTooltipPosition()
   
   // Optimize animations for mobile
-  const isMobile = isMobileDevice()
   const shouldReduceMotion = prefersReducedMotion()
-  const animationDuration = shouldReduceMotion ? 0 : (isMobile ? 0.2 : 0.3)
+  const animationDuration = shouldReduceMotion ? 0 : 0.3
 
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95, y: 10 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.95, y: -10 }}
-      transition={{ 
-        duration: animationDuration,
-        ease: isMobile ? 'easeOut' : [0.4, 0, 0.2, 1]
-      }}
-      style={{
-        position: 'fixed',
-        top: tooltipPosition.top,
-        left: tooltipPosition.left,
-        zIndex: 47,
-        transform: 'translateZ(0)', // Force GPU layer
-        backfaceVisibility: 'hidden', // GPU acceleration hint
-        WebkitBackfaceVisibility: 'hidden',
-        willChange: 'transform, opacity',
-      }}
-      className="w-80 bg-white rounded-3xl shadow-2xl p-6"
-    >
+  const tooltipContent = (
+    <>
       {/* Close button */}
       <button
         onClick={onExit}
@@ -222,6 +204,46 @@ export default function TourStep({
           {currentStep === totalSteps - 1 ? 'Finish' : 'Next'}
         </Button>
       </div>
+    </>
+  )
+
+  // Mobile: No animations, instant rendering
+  if (isMobile) {
+    return (
+      <div
+        style={{
+          position: 'fixed',
+          top: tooltipPosition.top,
+          left: tooltipPosition.left,
+          zIndex: 47,
+        }}
+        className="w-80 bg-white rounded-3xl shadow-2xl p-6"
+      >
+        {tooltipContent}
+      </div>
+    )
+  }
+
+  // Desktop: Animated with Framer Motion
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95, y: 10 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95, y: -10 }}
+      transition={{ 
+        duration: animationDuration,
+        ease: [0.4, 0, 0.2, 1]
+      }}
+      style={{
+        position: 'fixed',
+        top: tooltipPosition.top,
+        left: tooltipPosition.left,
+        zIndex: 47,
+        willChange: 'transform, opacity',
+      }}
+      className="w-80 bg-white rounded-3xl shadow-2xl p-6"
+    >
+      {tooltipContent}
     </motion.div>
   )
 }
