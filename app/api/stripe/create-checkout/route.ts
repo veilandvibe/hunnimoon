@@ -26,6 +26,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    console.log('Creating checkout with price ID:', finalPriceId)
+
     // Get the origin for redirect URLs
     const origin = request.headers.get('origin') || 'http://localhost:3000'
 
@@ -60,6 +62,13 @@ export async function POST(request: NextRequest) {
     })
   } catch (error: any) {
     console.error('Error creating checkout session:', error)
+    console.error('Error details:', {
+      message: error.message,
+      type: error.type,
+      code: error.code,
+      statusCode: error.statusCode,
+      raw: error.raw,
+    })
     return NextResponse.json(
       { error: error.message || 'Failed to create checkout session' },
       { status: 500 }
