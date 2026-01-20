@@ -51,15 +51,57 @@ export default function SpotlightTour() {
   
   // Flag to prevent scroll listener interference during step transitions
   const isScrolling = useRef(false)
+  
+  // Store scroll position for body lock
+  const scrollPosition = useRef(0)
 
   const steps = currentTourPage ? getTourSteps(currentTourPage) : undefined
   const isActive = !!currentTourPage && !!steps && steps.length > 0
 
-  // Get the target element and its position
-  const updateTargetRect = useCallback((forceScroll = true) => {
+  // Prevent user scrolling on mobile when tour is active (touch shield approach)
+  useEffect(() => {
+    if (!isActive || !isMobile.current) return
+
+    // Prevent touch scrolling but allow programmatic scrolling
+    const preventScroll = (e: TouchEvent) => {
+      // Allow interactions with tour buttons/close button
+      const target = e.target as HTMLElement
+      if (target.closest('button') || target.closest('[role="button"]')) {
+        return
+      }
+      e.preventDefault()
+    }
+
+    // Add touch listener with passive: false to allow preventDefault
+    document.addEventListener('touchmove', preventScroll, { passive: false })
+
+    return () => {
+      document.removeEventListener('touchmove', preventScroll)
+    }
+  }, [isActive])
+
+  // Separate function to scroll to element
+  const scrollToElement = useCallback((element: Element) => {
+    const viewportHeight = window.innerHeight
+    const rect = element.getBoundingClientRect()
+    const elementHeight = rect.height
+    
+    // If element is very tall (> 50% of viewport), scroll to top
+    // Otherwise scroll to center
+    const scrollBlock = elementHeight > viewportHeight * 0.5 ? 'start' : 'center'
+    
+    // On mobile: instant scroll (no animation overhead)
+    // On desktop: smooth scroll
+    element.scrollIntoView({
+      behavior: isMobile.current ? 'auto' : 'smooth',
+      block: scrollBlock,
+      inline: 'center',
+    })
+  }, [])
+
+  // Update spotlight position without scrolling
+  const updateSpotlightPosition = useCallback(() => {
     if (!steps || !isActive) return
-    // Prevent updates during programmatic scrolling
-    if (isScrolling.current && !forceScroll) return
 
     const currentStepData = steps[currentStep]
     
@@ -72,85 +114,62 @@ export default function SpotlightTour() {
     const element = document.querySelector(currentStepData.target)
 
     if (element) {
-      // Smart scroll behavior based on element size
-      const viewportHeight = window.innerHeight
       const rect = element.getBoundingClientRect()
-      const elementHeight = rect.height
-      
-      // If element is very tall (> 50% of viewport), scroll to top
-      // Otherwise scroll to center
-      const scrollBlock = elementHeight > viewportHeight * 0.5 ? 'start' : 'center'
-      
-      if (forceScroll) {
-        // Adaptive scroll behavior: use instant scroll on mobile for better performance
-        const scrollBehavior = isMobile.current ? 'auto' : 'smooth'
-        
-        // Set scrolling flag to prevent listener interference
-        isScrolling.current = true
-        
-        element.scrollIntoView({
-          behavior: scrollBehavior,
-          block: scrollBlock,
-          inline: 'center',
-        })
-        
-        // On mobile, clear flag immediately since scroll is instant
-        // On desktop, wait for smooth scroll to complete
-        setTimeout(() => {
-          isScrolling.current = false
-        }, isMobile.current ? 0 : 500)
-      }
-      
-      // Update rect position (use RAF only for smooth desktop repaints)
-      const updateRect = () => {
-        const updatedRect = element.getBoundingClientRect()
-        setTargetRect(updatedRect)
-      }
-      
-      if (isMobile.current) {
-        // Mobile: update immediately, no animation frame needed
-        updateRect()
-      } else {
-        // Desktop: use RAF for smoother transition coordination
-        requestAnimationFrame(updateRect)
-      }
+      setTargetRect(rect)
     } else {
       setTargetRect(null)
     }
   }, [steps, currentStep, isActive])
+  
+  // Combined function for step changes: scroll then update spotlight
+  const scrollAndUpdateSpotlight = useCallback(() => {
+    if (!steps || !isActive) return
 
-  // Update target rect on step change or window resize
+    const currentStepData = steps[currentStep]
+    
+    if (currentStepData.target === 'body') {
+      setTargetRect(null)
+      return
+    }
+    
+    const element = document.querySelector(currentStepData.target)
+    
+    if (element) {
+      // Step 1: Scroll to element
+      scrollToElement(element)
+      
+      // Step 2: Wait for scroll to complete, then update spotlight
+      // Mobile: instant scroll, update immediately
+      // Desktop: smooth scroll, wait for animation
+      const delay = isMobile.current ? 50 : 350
+      
+      setTimeout(() => {
+        const rect = element.getBoundingClientRect()
+        setTargetRect(rect)
+      }, delay)
+    } else {
+      setTargetRect(null)
+    }
+  }, [steps, currentStep, isActive, scrollToElement])
+
+  // Scroll to element and update spotlight on step change
   useEffect(() => {
     if (!isActive) return
 
-    // Force scroll on initial step change
-    updateTargetRect(true)
-
-    // Create handlers for resize/scroll that don't force scroll
-    const handleResize = () => updateTargetRect(false)
-    const handleScroll = () => updateTargetRect(false)
+    scrollAndUpdateSpotlight()
+  }, [isActive, currentStep, scrollAndUpdateSpotlight])
+  
+  // Update spotlight position on window resize (no scrolling)
+  useEffect(() => {
+    if (!isActive) return
     
-    // Debounce updates
-    const debounceDelay = 100
-    const debouncedResize = debounce(handleResize, debounceDelay)
-    const debouncedScroll = debounce(handleScroll, debounceDelay)
+    const handleResize = debounce(updateSpotlightPosition, 100)
+    window.addEventListener('resize', handleResize)
     
-    // Always listen to resize for orientation changes
-    window.addEventListener('resize', debouncedResize)
-    
-    // Only listen to scroll on desktop - on mobile, this interferes with native scroll momentum
-    // Mobile will only update spotlight on step changes and resize
-    if (!isMobile.current) {
-      window.addEventListener('scroll', debouncedScroll, true)
-    }
-
     return () => {
-      window.removeEventListener('resize', debouncedResize)
-      if (!isMobile.current) {
-        window.removeEventListener('scroll', debouncedScroll, true)
-      }
+      window.removeEventListener('resize', handleResize)
     }
-  }, [isActive, updateTargetRect])
+  }, [isActive, updateSpotlightPosition])
 
   // Reset step when tour page changes
   useEffect(() => {
@@ -197,6 +216,18 @@ export default function SpotlightTour() {
     <AnimatePresence>
       {isActive && (
         <>
+          {/* Touch shield for mobile - prevents user scrolling */}
+          {isMobile.current && (
+            <div
+              style={{
+                position: 'fixed',
+                inset: 0,
+                zIndex: 45, // Below overlays but above content
+                touchAction: 'none',
+              }}
+            />
+          )}
+          
           {targetRect ? (
             // Mobile: No animations, instant rendering for smooth scrolling
             // Desktop: Use box-shadow technique with animations
