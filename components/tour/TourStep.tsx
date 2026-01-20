@@ -171,7 +171,10 @@ export default function TourStep({
         top: tooltipPosition.top,
         left: tooltipPosition.left,
         zIndex: 47,
-        willChange: 'transform, opacity', // GPU acceleration hint
+        transform: 'translateZ(0)', // Force GPU layer
+        backfaceVisibility: 'hidden', // GPU acceleration hint
+        WebkitBackfaceVisibility: 'hidden',
+        willChange: 'transform, opacity',
       }}
       className="w-80 bg-white rounded-3xl shadow-2xl p-6"
     >

@@ -217,6 +217,9 @@ export default function SpotlightTour() {
                     backgroundColor: 'rgba(0, 0, 0, 0.6)',
                     zIndex: 46,
                     pointerEvents: 'none',
+                    transform: 'translateZ(0)', // Force GPU layer
+                    backfaceVisibility: 'hidden', // GPU acceleration hint
+                    WebkitBackfaceVisibility: 'hidden',
                   }}
                 />
                 
@@ -238,6 +241,8 @@ export default function SpotlightTour() {
                     transform: `translate3d(${targetRect.left - 8}px, ${targetRect.top - 8}px, 0)`,
                     zIndex: 46,
                     pointerEvents: 'none',
+                    backfaceVisibility: 'hidden', // GPU acceleration hint
+                    WebkitBackfaceVisibility: 'hidden',
                   }}
                   className="rounded-2xl ring-4 ring-pink-primary/50"
                 />
@@ -261,6 +266,8 @@ export default function SpotlightTour() {
                   zIndex: 46,
                   pointerEvents: 'none',
                   boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.6)',
+                  transform: 'translateZ(0)', // Force GPU layer
+                  backfaceVisibility: 'hidden',
                   willChange: 'transform, opacity',
                 }}
                 className="rounded-2xl ring-4 ring-pink-primary/50"
@@ -282,6 +289,9 @@ export default function SpotlightTour() {
                 backgroundColor: 'rgba(0, 0, 0, 0.6)',
                 zIndex: 46,
                 pointerEvents: 'none',
+                transform: 'translateZ(0)', // Force GPU layer
+                backfaceVisibility: 'hidden',
+                WebkitBackfaceVisibility: 'hidden',
               }}
             />
           )}
