@@ -17,7 +17,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
         <input
           ref={ref}
-          className={`w-full px-4 py-3 rounded-xl border-2 transition-all duration-200 ${
+          className={`w-full px-4 py-3 min-h-[48px] rounded-xl border-2 transition-all duration-200 text-base touch-manipulation ${
             error
               ? 'border-red-500 focus:border-red-600'
               : 'border-pink-primary/20 focus:border-pink-primary'

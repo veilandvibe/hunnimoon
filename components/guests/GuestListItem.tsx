@@ -3,12 +3,14 @@
 import { useState, useRef, useEffect } from 'react'
 import Badge from '../ui/Badge'
 import { Eye, Edit, Trash2, MoreVertical, Users2 } from 'lucide-react'
+import { getSideLabel } from '@/lib/sideLabels'
 
 interface GuestListItemProps {
   guest: any
   onView: (guest: any) => void
   onEdit: (guest: any) => void
   onDelete: (guestId: string) => void
+  wedding?: any
   isSelected?: boolean
   isHovered?: boolean
   isSelectMode?: boolean
@@ -23,6 +25,7 @@ export default function GuestListItem({
   onView, 
   onEdit, 
   onDelete,
+  wedding,
   isSelected,
   isHovered,
   isSelectMode,
@@ -112,7 +115,11 @@ export default function GuestListItem({
         {/* Side column - Center aligned, Desktop only */}
         <div className="hidden md:flex justify-center">
           <span className="text-sm text-pink-primary/70">
-            {guest.side}
+            {wedding?.partner1_name && guest.side === 'Bride' 
+              ? wedding.partner1_name 
+              : wedding?.partner2_name && guest.side === 'Groom' 
+                ? wedding.partner2_name 
+                : guest.side}
           </span>
         </div>
         

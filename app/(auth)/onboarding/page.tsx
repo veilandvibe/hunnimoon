@@ -8,7 +8,7 @@ import Card from '@/components/ui/Card'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import LoadingSpinner from '@/components/ui/LoadingSpinner'
-import { Heart, Sparkles, CheckCircle, Loader2 } from 'lucide-react'
+import { Heart, Sparkles, CheckCircle, Loader2, X } from 'lucide-react'
 
 // Helper function to check if slug exists
 const checkSlugExists = async (slug: string): Promise<boolean> => {
@@ -309,6 +309,23 @@ export default function OnboardingPage() {
       
       await db.transact(transactions)
 
+      // Send welcome email (fire-and-forget, don't block user)
+      try {
+        const firstName = formData.partner1_name.split(' ')[0] || formData.partner1_name
+        fetch('/api/emails/send-trial-started', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: user.email,
+            firstName,
+            isEtsyUser: acqSource === 'etsy',
+          }),
+        }).catch(err => console.error('Failed to send welcome email:', err))
+      } catch (emailError) {
+        // Don't block onboarding if email fails
+        console.error('Error sending welcome email:', emailError)
+      }
+
       // Clear acquisition source from localStorage
       if (typeof window !== 'undefined' && acqSource) {
         localStorage.removeItem('acq_source')
@@ -403,6 +420,11 @@ export default function OnboardingPage() {
                       <CheckCircle size={18} className="text-green-600" />
                       <span className="text-xs text-green-600 font-medium">Available</span>
                     </>
+                  ) : slugAvailable === false ? (
+                    <>
+                      <X size={18} className="text-red-600" />
+                      <span className="text-xs text-red-600 font-medium">Taken</span>
+                    </>
                   ) : null}
                 </div>
               )}
@@ -428,10 +450,16 @@ export default function OnboardingPage() {
               type="submit" 
               fullWidth 
               size="lg" 
-              disabled={loading || checkingSlug}
+              disabled={loading || checkingSlug || slugAvailable === false}
             >
               <Heart size={20} />
-              {loading ? 'Creating Your Wedding...' : checkingSlug ? 'Checking availability...' : 'Create My Wedding'}
+              {loading 
+                ? 'Creating Your Wedding...' 
+                : checkingSlug 
+                  ? 'Checking availability...' 
+                  : slugAvailable === false 
+                    ? 'Link Unavailable' 
+                    : 'Create My Wedding'}
             </Button>
           </form>
         </Card>

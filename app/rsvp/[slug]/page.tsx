@@ -1,12 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
 import Select from '@/components/ui/Select'
 import Textarea from '@/components/ui/Textarea'
 import Card from '@/components/ui/Card'
+import PasswordPrompt from '@/components/rsvp/PasswordPrompt'
 import db from '@/lib/instant'
 import { Heart, Check, Loader2 } from 'lucide-react'
 import { id } from '@instantdb/react'
@@ -32,6 +33,57 @@ export default function RSVPPage() {
   const wedding = data?.weddings?.[0]
   const weddingGuests = wedding?.guests || []
   const rsvpSettings = wedding?.rsvpSettings
+
+  // Check password authentication on mount and when wedding changes
+  useEffect(() => {
+    if (!wedding || !rsvpSettings) return
+
+    // If password protection is not enabled, user is automatically authenticated
+    if (!rsvpSettings.password_protected) {
+      setIsAuthenticated(true)
+      return
+    }
+
+    // Check localStorage for existing authentication
+    const authKey = `rsvp_auth_${wedding.id}`
+    const storedAuth = localStorage.getItem(authKey)
+
+    if (storedAuth) {
+      try {
+        const authData = JSON.parse(storedAuth)
+        const expiryTime = authData.timestamp + (24 * 60 * 60 * 1000) // 24 hours
+
+        if (Date.now() < expiryTime) {
+          // Authentication is still valid
+          setIsAuthenticated(true)
+        } else {
+          // Authentication expired, clear it
+          localStorage.removeItem(authKey)
+          setIsAuthenticated(false)
+        }
+      } catch (error) {
+        // Invalid stored data, clear it
+        localStorage.removeItem(authKey)
+        setIsAuthenticated(false)
+      }
+    } else {
+      setIsAuthenticated(false)
+    }
+  }, [wedding, rsvpSettings])
+
+  // Handle successful password authentication
+  const handlePasswordSuccess = () => {
+    if (!wedding) return
+
+    // Store authentication in localStorage
+    const authKey = `rsvp_auth_${wedding.id}`
+    const authData = {
+      timestamp: Date.now(),
+      verified: true
+    }
+    localStorage.setItem(authKey, JSON.stringify(authData))
+    setIsAuthenticated(true)
+  }
 
   // Debug logging
   console.log('RSVP Form Debug:', {
@@ -59,6 +111,7 @@ export default function RSVPPage() {
   const [notes, setNotes] = useState('')
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   // Loading state
   if (isLoading) {
@@ -85,6 +138,17 @@ export default function RSVPPage() {
           </p>
         </Card>
       </div>
+    )
+  }
+
+  // Password protection gate
+  if (rsvpSettings?.password_protected && !isAuthenticated) {
+    return (
+      <PasswordPrompt
+        onSuccess={handlePasswordSuccess}
+        correctPassword={rsvpSettings.rsvp_password || ''}
+        coupleName={`${wedding.partner1_name} & ${wedding.partner2_name}`}
+      />
     )
   }
 

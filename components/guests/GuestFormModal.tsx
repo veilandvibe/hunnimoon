@@ -8,6 +8,7 @@ import Textarea from '../ui/Textarea'
 import Toggle from '../ui/Toggle'
 import Button from '../ui/Button'
 import { Side, RSVPStatus } from '@/lib/dummyData'
+import { getSideLabel } from '@/lib/sideLabels'
 
 interface GuestFormModalProps {
   isOpen: boolean
@@ -16,9 +17,10 @@ interface GuestFormModalProps {
   editingGuest?: any | null
   existingHouseholds?: string[]
   viewOnly?: boolean
+  wedding?: any
 }
 
-export default function GuestFormModal({ isOpen, onClose, onSave, editingGuest, existingHouseholds = [], viewOnly = false }: GuestFormModalProps) {
+export default function GuestFormModal({ isOpen, onClose, onSave, editingGuest, existingHouseholds = [], viewOnly = false, wedding }: GuestFormModalProps) {
   const [formData, setFormData] = useState<any>({
     full_name: '',
     email: '',
@@ -104,7 +106,7 @@ export default function GuestFormModal({ isOpen, onClose, onSave, editingGuest, 
               </div>
               <div>
                 <div className="text-xs font-medium text-pink-primary/60 mb-1">Side</div>
-                <div className="text-base text-pink-primary">{formData.side || '-'}</div>
+                <div className="text-base text-pink-primary">{formData.side ? getSideLabel(formData.side, wedding) : '-'}</div>
               </div>
             </div>
 
@@ -266,9 +268,9 @@ export default function GuestFormModal({ isOpen, onClose, onSave, editingGuest, 
             value={formData.side}
             onChange={(e) => setFormData({ ...formData, side: e.target.value as Side })}
             options={[
-              { value: 'Bride', label: 'Bride' },
-              { value: 'Groom', label: 'Groom' },
-              { value: 'Both', label: 'Both' },
+              { value: 'Bride', label: getSideLabel('Bride', wedding) },
+              { value: 'Groom', label: getSideLabel('Groom', wedding) },
+              { value: 'Both', label: 'Both Sides' },
               { value: 'Unknown', label: 'Unknown' },
             ]}
             disabled={viewOnly}
