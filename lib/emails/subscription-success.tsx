@@ -61,7 +61,7 @@ export const SubscriptionSuccessEmail = ({
 
               <Section style={planBox}>
                 <Text style={planTitle}>Your Plan</Text>
-                <Text style={planType}>
+                <Text style={planTypeStyle}>
                   {planName} Plan - 3 Months Free
                 </Text>
                 <Text style={planDetails}>
@@ -88,7 +88,7 @@ export const SubscriptionSuccessEmail = ({
 
               <Section style={planBox}>
                 <Text style={planTitle}>Your Plan</Text>
-                <Text style={planType}>{planName} Plan</Text>
+                <Text style={planTypeStyle}>{planName} Plan</Text>
                 <Text style={planDetails}>
                   {planPrice}
                   {savings} • Cancel anytime
@@ -208,7 +208,7 @@ const planTitle = {
   margin: '0 0 8px',
 };
 
-const planType = {
+const planTypeStyle = {
   fontSize: '24px',
   fontWeight: '700',
   color: '#E91E63',

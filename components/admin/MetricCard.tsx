@@ -1,13 +1,13 @@
 'use client';
 
 import Card from '@/components/ui/Card';
-import { LucideIcon } from 'lucide-react';
+import React from 'react';
 
 interface MetricCardProps {
   title: string;
   value: string | number;
   description?: string;
-  icon?: LucideIcon;
+  icon?: React.ComponentType<{ className?: string }>;
   trend?: {
     value: string;
     isPositive: boolean;

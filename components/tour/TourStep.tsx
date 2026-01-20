@@ -6,6 +6,17 @@ import Button from '@/components/ui/Button'
 import { TourStep as TourStepType } from '@/lib/tourSteps'
 import { useSidebar } from '@/components/layout/SidebarContext'
 
+// Device detection for performance optimization
+const isMobileDevice = () => {
+  if (typeof window === 'undefined') return false
+  return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+}
+
+const prefersReducedMotion = () => {
+  if (typeof window === 'undefined') return false
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
 interface TourStepProps {
   step: TourStepType
   currentStep: number
@@ -140,6 +151,11 @@ export default function TourStep({
   }
 
   const tooltipPosition = getTooltipPosition()
+  
+  // Optimize animations for mobile
+  const isMobile = isMobileDevice()
+  const shouldReduceMotion = prefersReducedMotion()
+  const animationDuration = shouldReduceMotion ? 0 : (isMobile ? 0.2 : 0.3)
 
   return (
     <motion.div
@@ -147,14 +163,15 @@ export default function TourStep({
       animate={{ opacity: 1, scale: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95, y: -10 }}
       transition={{ 
-        duration: 0.3,
-        ease: [0.4, 0, 0.2, 1]
+        duration: animationDuration,
+        ease: isMobile ? 'easeOut' : [0.4, 0, 0.2, 1]
       }}
       style={{
         position: 'fixed',
         top: tooltipPosition.top,
         left: tooltipPosition.left,
         zIndex: 47,
+        willChange: 'transform, opacity', // GPU acceleration hint
       }}
       className="w-80 bg-white rounded-3xl shadow-2xl p-6"
     >

@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
     oneDayAfterExpiry.setDate(now.getDate() - 8); // 7 day trial + 1 day after
 
     // Query all users with trials
-    const { data: users } = await db.query({
+    const result = await db.query({
       users: {
         $: {
           where: {
@@ -48,7 +48,7 @@ export async function GET(req: NextRequest) {
     let expiringEmailsSent = 0;
     let expiredEmailsSent = 0;
 
-    for (const user of users.users || []) {
+    for (const user of result.users || []) {
       if (!user.trial_start_date || !user.email) continue;
 
       const trialStart = new Date(user.trial_start_date);
@@ -118,7 +118,7 @@ export async function GET(req: NextRequest) {
       success: true,
       expiringEmailsSent,
       expiredEmailsSent,
-      checkedUsers: users.users?.length || 0,
+      checkedUsers: result.users?.length || 0,
     });
   } catch (error) {
     console.error('Error in check-trials cron:', error);
