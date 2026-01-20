@@ -6,12 +6,7 @@ import Button from '@/components/ui/Button'
 import { TourStep as TourStepType } from '@/lib/tourSteps'
 import { useSidebar } from '@/components/layout/SidebarContext'
 
-// Device detection for performance optimization
-const isMobileDevice = () => {
-  if (typeof window === 'undefined') return false
-  return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-}
-
+// Check if user prefers reduced motion
 const prefersReducedMotion = () => {
   if (typeof window === 'undefined') return false
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -25,7 +20,6 @@ interface TourStepProps {
   onBack: () => void
   onExit: () => void
   targetRect: DOMRect | null
-  isMobile?: boolean
 }
 
 export default function TourStep({
@@ -36,7 +30,6 @@ export default function TourStep({
   onBack,
   onExit,
   targetRect,
-  isMobile = false,
 }: TourStepProps) {
   const { isExpanded } = useSidebar()
   
@@ -154,12 +147,28 @@ export default function TourStep({
 
   const tooltipPosition = getTooltipPosition()
   
-  // Optimize animations for mobile
+  // Optimize animations based on user preferences
   const shouldReduceMotion = prefersReducedMotion()
   const animationDuration = shouldReduceMotion ? 0 : 0.3
 
-  const tooltipContent = (
-    <>
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95, y: 10 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95, y: -10 }}
+      transition={{ 
+        duration: animationDuration,
+        ease: [0.4, 0, 0.2, 1]
+      }}
+      style={{
+        position: 'fixed',
+        top: tooltipPosition.top,
+        left: tooltipPosition.left,
+        zIndex: 47,
+        willChange: 'transform, opacity',
+      }}
+      className="w-80 bg-white rounded-3xl shadow-2xl p-6"
+    >
       {/* Close button */}
       <button
         onClick={onExit}
@@ -204,46 +213,6 @@ export default function TourStep({
           {currentStep === totalSteps - 1 ? 'Finish' : 'Next'}
         </Button>
       </div>
-    </>
-  )
-
-  // Mobile: No animations, instant rendering
-  if (isMobile) {
-    return (
-      <div
-        style={{
-          position: 'fixed',
-          top: tooltipPosition.top,
-          left: tooltipPosition.left,
-          zIndex: 47,
-        }}
-        className="w-80 bg-white rounded-3xl shadow-2xl p-6"
-      >
-        {tooltipContent}
-      </div>
-    )
-  }
-
-  // Desktop: Animated with Framer Motion
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95, y: 10 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.95, y: -10 }}
-      transition={{ 
-        duration: animationDuration,
-        ease: [0.4, 0, 0.2, 1]
-      }}
-      style={{
-        position: 'fixed',
-        top: tooltipPosition.top,
-        left: tooltipPosition.left,
-        zIndex: 47,
-        willChange: 'transform, opacity',
-      }}
-      className="w-80 bg-white rounded-3xl shadow-2xl p-6"
-    >
-      {tooltipContent}
     </motion.div>
   )
 }

@@ -90,10 +90,10 @@ export default function SpotlightTour() {
     // Otherwise scroll to center
     const scrollBlock = elementHeight > viewportHeight * 0.5 ? 'start' : 'center'
     
-    // On mobile: instant scroll (no animation overhead)
-    // On desktop: smooth scroll
+    // Use smooth scroll on both mobile and desktop
+    // Now that user scrolling is locked, smooth scroll won't cause jank
     element.scrollIntoView({
-      behavior: isMobile.current ? 'auto' : 'smooth',
+      behavior: 'smooth',
       block: scrollBlock,
       inline: 'center',
     })
@@ -139,9 +139,8 @@ export default function SpotlightTour() {
       scrollToElement(element)
       
       // Step 2: Wait for scroll to complete, then update spotlight
-      // Mobile: instant scroll, update immediately
-      // Desktop: smooth scroll, wait for animation
-      const delay = isMobile.current ? 50 : 350
+      // Both mobile and desktop use smooth scroll now (user scroll is locked on mobile)
+      const delay = 350
       
       setTimeout(() => {
         const rect = element.getBoundingClientRect()
@@ -229,90 +228,46 @@ export default function SpotlightTour() {
           )}
           
           {targetRect ? (
-            // Mobile: No animations, instant rendering for smooth scrolling
-            // Desktop: Use box-shadow technique with animations
-            isMobile.current ? (
-              <>
-                {/* Layer 1: Full-screen dark overlay - instant, no animation */}
-                <div
-                  style={{
-                    position: 'fixed',
-                    inset: 0,
-                    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                    zIndex: 46,
-                    pointerEvents: 'none',
-                  }}
-                />
-                
-                {/* Layer 2: Highlight border - instant, no animation */}
-                <div
-                  style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    width: targetRect.width + 16,
-                    height: targetRect.height + 16,
-                    transform: `translate3d(${targetRect.left - 8}px, ${targetRect.top - 8}px, 0)`,
-                    zIndex: 46,
-                    pointerEvents: 'none',
-                  }}
-                  className="rounded-2xl ring-4 ring-pink-primary/50"
-                />
-              </>
-            ) : (
-              // Desktop: Original box-shadow approach with animations
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ 
-                  duration: shouldReduceMotion.current ? 0 : 0.3,
-                  ease: 'easeInOut'
-                }}
-                style={{
-                  position: 'fixed',
-                  top: targetRect.top - 8,
-                  left: targetRect.left - 8,
-                  width: targetRect.width + 16,
-                  height: targetRect.height + 16,
-                  zIndex: 46,
-                  pointerEvents: 'none',
-                  boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.6)',
-                  willChange: 'transform, opacity',
-                }}
-                className="rounded-2xl ring-4 ring-pink-primary/50"
-              />
-            )
+            // Spotlight with box-shadow overlay - now smooth on mobile with scroll lock
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ 
+                duration: shouldReduceMotion.current ? 0 : 0.3,
+                ease: 'easeInOut'
+              }}
+              style={{
+                position: 'fixed',
+                top: targetRect.top - 8,
+                left: targetRect.left - 8,
+                width: targetRect.width + 16,
+                height: targetRect.height + 16,
+                zIndex: 46,
+                pointerEvents: 'none',
+                boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.6)',
+                willChange: 'transform, opacity',
+              }}
+              className="rounded-2xl ring-4 ring-pink-primary/50"
+            />
           ) : (
             // Full-screen overlay for tips without a target
-            isMobile.current ? (
-              <div
-                style={{
-                  position: 'fixed',
-                  inset: 0,
-                  backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                  zIndex: 46,
-                  pointerEvents: 'none',
-                }}
-              />
-            ) : (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ 
-                  duration: shouldReduceMotion.current ? 0 : 0.3,
-                  ease: 'easeInOut'
-                }}
-                style={{
-                  position: 'fixed',
-                  inset: 0,
-                  backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                  zIndex: 46,
-                  pointerEvents: 'none',
-                }}
-              />
-            )
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ 
+                duration: shouldReduceMotion.current ? 0 : 0.3,
+                ease: 'easeInOut'
+              }}
+              style={{
+                position: 'fixed',
+                inset: 0,
+                backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                zIndex: 46,
+                pointerEvents: 'none',
+              }}
+            />
           )}
 
           {/* Tooltip */}
@@ -326,7 +281,6 @@ export default function SpotlightTour() {
               onBack={handleBack}
               onExit={handleExit}
               targetRect={targetRect}
-              isMobile={isMobile.current}
             />
           </AnimatePresence>
         </>
