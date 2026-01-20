@@ -94,11 +94,6 @@ export default function OnboardingPage() {
     }
   }, [data, queryLoading, router])
 
-  // Don't render onboarding UI if user already has a wedding
-  if (!queryLoading && data?.weddings && data.weddings.length > 0) {
-    return null
-  }
-
   // Real-time slug availability check ONLY for manual edits
   useEffect(() => {
     // Skip if we're auto-generating (to avoid race condition)
@@ -126,8 +121,8 @@ export default function OnboardingPage() {
     return () => clearTimeout(debounceTimer)
   }, [formData.wedding_slug, autoGenerating])
 
-  // Show loading while checking for existing wedding
-  if (queryLoading) {
+  // Show loading while checking for existing wedding or if user already has one
+  if (queryLoading || (!queryLoading && data?.weddings && data.weddings.length > 0)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-pink-gradient-from to-pink-gradient-to">
         <LoadingSpinner size="lg" />
