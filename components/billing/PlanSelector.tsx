@@ -84,14 +84,7 @@ export default function PlanSelector({
         )}
 
         {/* Monthly Card */}
-        <div className={`bg-white rounded-3xl p-6 shadow-lg border-2 ${
-          billingCycle === 'monthly' && showToggle ? 'border-pink-primary ring-2 ring-pink-primary/20' : 'border-pink-primary/10'
-        } transition-all`}>
-          {billingCycle === 'monthly' && showToggle && (
-            <div className="bg-pink-primary text-white text-xs font-bold px-3 py-1 rounded-full inline-block mb-3">
-              SELECTED
-            </div>
-          )}
+        <div className="bg-white rounded-3xl p-6 shadow-lg border-2 border-pink-primary/10 transition-all">
           
           <div className="mb-4">
             <h3 className="text-xl font-black text-pink-primary mb-2">Pro Monthly</h3>
@@ -104,11 +97,11 @@ export default function PlanSelector({
 
           <Button
             onClick={() => onSelectPlan('monthly')}
-            variant={billingCycle === 'monthly' ? 'primary' : 'outline'}
+            variant="primary"
             fullWidth
             disabled={loading}
           >
-            {loading && billingCycle === 'monthly' ? 'Processing...' : 'Select Monthly'}
+            {loading ? 'Processing...' : 'Select Monthly'}
           </Button>
 
           <div className="mt-4 space-y-2 text-sm">
@@ -122,14 +115,7 @@ export default function PlanSelector({
         </div>
 
         {/* Yearly Card */}
-        <div className={`bg-white rounded-3xl p-6 shadow-lg border-2 ${
-          billingCycle === 'yearly' && showToggle ? 'border-pink-primary ring-2 ring-pink-primary/20' : 'border-pink-primary/10'
-        } transition-all`}>
-          {billingCycle === 'yearly' && showToggle && (
-            <div className="bg-pink-primary text-white text-xs font-bold px-3 py-1 rounded-full inline-block mb-3">
-              SELECTED
-            </div>
-          )}
+        <div className="bg-white rounded-3xl p-6 shadow-lg border-2 border-pink-primary/10 transition-all">
           
           <div className="mb-4">
             <h3 className="text-xl font-black text-pink-primary mb-2">Pro Yearly</h3>
@@ -144,11 +130,11 @@ export default function PlanSelector({
 
           <Button
             onClick={() => onSelectPlan('yearly')}
-            variant={billingCycle === 'yearly' ? 'primary' : 'outline'}
+            variant="primary"
             fullWidth
             disabled={loading}
           >
-            {loading && billingCycle === 'yearly' ? 'Processing...' : 'Select Yearly'}
+            {loading ? 'Processing...' : 'Select Yearly'}
           </Button>
 
           <div className="mt-4 space-y-2 text-sm">

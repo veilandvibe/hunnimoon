@@ -5,12 +5,14 @@ import Badge from '../ui/Badge'
 import Button from '../ui/Button'
 import { Guest } from '@/lib/dummyData'
 import { Mail, Phone, Edit, Trash2, Users, Eye } from 'lucide-react'
+import { getSideLabel } from '@/lib/sideLabels'
 
 interface GuestCardProps {
   guest: Guest
   onEdit: (guest: Guest) => void
   onDelete: (guestId: string) => void
   onView: (guest: Guest) => void
+  wedding?: any
   isSelected?: boolean
   isHovered?: boolean
   isSelectMode?: boolean
@@ -24,6 +26,7 @@ export default function GuestCard({
   onEdit, 
   onDelete, 
   onView,
+  wedding,
   isSelected,
   isHovered,
   isSelectMode,
@@ -77,7 +80,7 @@ export default function GuestCard({
             </h3>
             <div className="flex items-center gap-2 mt-1">
               <Badge variant="default" size="sm">
-                {guest.side}
+                {getSideLabel(guest.side, wedding)}
               </Badge>
               <Badge variant={getStatusVariant(guest.rsvp_status)} size="sm">
                 {guest.rsvp_status}

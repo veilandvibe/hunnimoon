@@ -21,10 +21,12 @@ import {
   hasModalBeenShownThisSession,
   markModalAsShown,
 } from '@/lib/modal-manager'
+import { useTour } from '@/components/providers/TourContext'
 
 export default function TrialManager() {
   const router = useRouter()
   const { user } = db.useAuth()
+  const { onboardingCompleted } = useTour()
   
   // Query user data with billing fields
   const { data } = db.useQuery(
@@ -47,20 +49,43 @@ export default function TrialManager() {
   const [etsyExpiredOpen, setEtsyExpiredOpen] = useState(false)
   const [checkoutLoading, setCheckoutLoading] = useState(false)
 
-  // Check if we should show Etsy welcome modal on mount
+  // Check if we should show Etsy welcome modal - wait for onboarding to complete
   useEffect(() => {
     if (!userData) return
 
-    const acqSource = typeof window !== 'undefined' 
-      ? localStorage.getItem('acq_source') 
-      : null
-
-    // Show Etsy welcome if they just landed from Etsy link and haven't seen it
-    if (acqSource === 'etsy' && !hasModalBeenShown('etsy_welcome_shown')) {
-      setEtsyWelcomeOpen(true)
-      markModalAsShown('etsy_welcome_shown', true) // Persistent
+    // Show Etsy welcome if they're an Etsy user, on trial, and haven't seen it
+    // Use database acq_source (permanent) instead of localStorage (temporary)
+    if (isEtsyUser(userData) && 
+        userData.billing_status === 'trial' && 
+        !hasModalBeenShown('etsy_welcome_shown')) {
+      
+      // If onboarding not complete, wait for it
+      if (!onboardingCompleted) {
+        // Check again later
+        const checkInterval = setInterval(() => {
+          const completed = localStorage.getItem('onboardingCompleted') === 'true'
+          if (completed) {
+            clearInterval(checkInterval)
+            // Small delay after onboarding finishes
+            setTimeout(() => {
+              setEtsyWelcomeOpen(true)
+              markModalAsShown('etsy_welcome_shown', true) // Persistent
+            }, 2000) // 2 seconds after onboarding closes
+          }
+        }, 1000)
+        
+        return () => clearInterval(checkInterval)
+      } else {
+        // Onboarding already complete, show after short delay
+        const timer = setTimeout(() => {
+          setEtsyWelcomeOpen(true)
+          markModalAsShown('etsy_welcome_shown', true) // Persistent
+        }, 2000)
+        
+        return () => clearTimeout(timer)
+      }
     }
-  }, [userData])
+  }, [userData, onboardingCompleted])
 
   // Check trial status and show appropriate modals
   useEffect(() => {
@@ -214,6 +239,7 @@ export default function TrialManager() {
           isOpen={etsyWelcomeOpen}
           onClose={() => setEtsyWelcomeOpen(false)}
           onStartTrial={handleStartTrial}
+          onUpgrade={handleActivateCode}
         />
       )}
 

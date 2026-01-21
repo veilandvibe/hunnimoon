@@ -48,6 +48,35 @@ body {
   background: #a01f5f;
 }
 
+/* iOS Safari form element fixes */
+@supports (-webkit-touch-callout: none) {
+  select {
+    -webkit-appearance: none;
+    appearance: none;
+    min-height: 48px;
+    font-size: 16px;
+    padding: 12px 16px;
+  }
+  
+  input,
+  textarea {
+    font-size: 16px; /* Prevent zoom on focus */
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  
+  /* Ensure proper height for form controls on iOS */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="password"],
+  input[type="number"],
+  textarea,
+  select {
+    min-height: 48px;
+  }
+}
+
 /* Smooth transitions for marketing pages */
 @layer utilities {
   .smooth-transition {

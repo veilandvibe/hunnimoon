@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Trash2, Users } from 'lucide-react'
 import Button from '@/components/ui/Button'
+import { getSideLabel } from '@/lib/sideLabels'
 
 interface BulkActionBarProps {
   selectedCount: number
@@ -13,6 +14,7 @@ interface BulkActionBarProps {
   onMarkNotInvited: () => void
   onChangeSide: (side: 'Bride' | 'Groom' | 'Both' | 'Unknown') => void
   onCancel: () => void
+  wedding?: any
   isReadOnly?: boolean
 }
 
@@ -25,6 +27,7 @@ export default function BulkActionBar({
   onMarkNotInvited,
   onChangeSide,
   onCancel,
+  wedding,
   isReadOnly = false
 }: BulkActionBarProps) {
   const [showSideMenu, setShowSideMenu] = useState(false)
@@ -152,7 +155,7 @@ export default function BulkActionBar({
                     }}
                     className="w-full text-left px-3 py-2 text-sm text-pink-primary hover:bg-pink-light transition-colors first:rounded-t-xl last:rounded-b-xl"
                   >
-                    {side}
+                    {getSideLabel(side, wedding)}
                   </button>
                 ))}
               </div>

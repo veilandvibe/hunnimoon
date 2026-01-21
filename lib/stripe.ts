@@ -10,9 +10,11 @@ if (!stripeSecretKey) {
   throw new Error('STRIPE_SECRET_KEY is not set in environment variables')
 }
 
+// Log key type for debugging (only first few chars for security)
+console.log('Stripe key type:', stripeSecretKey.substring(0, 7) + '...')
+
 // Initialize Stripe client (server-side only)
 export const stripe = new Stripe(stripeSecretKey, {
-  apiVersion: '2025-12-15.clover',
   typescript: true,
 })
 

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useContext } from 'react'
+import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
 import { SidebarContext } from '@/components/layout/SidebarContext'
@@ -14,9 +15,22 @@ interface ModalProps {
 }
 
 export default function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalProps) {
+  const pathname = usePathname()
+  
+  // Check if we're on a marketing/public page (no sidebar)
+  const isPublicPage = pathname === '/' || 
+    pathname?.startsWith('/login') || 
+    pathname?.startsWith('/pricing') || 
+    pathname?.startsWith('/tools') ||
+    pathname?.startsWith('/terms') ||
+    pathname?.startsWith('/privacy') ||
+    pathname?.startsWith('/refunds') ||
+    pathname?.startsWith('/checkout')
+  
   // Use sidebar context if available (for main app), otherwise default to collapsed
   const sidebarContext = useContext(SidebarContext)
   const isExpanded = sidebarContext?.isExpanded ?? false
+  
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
@@ -46,17 +60,21 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-[35] transition-[left] duration-300 ease-out ${
-                isExpanded ? 'md:left-[240px]' : 'md:left-[69px]'
-              }`}
+            className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] transition-[left] duration-300 ease-out ${
+              isPublicPage 
+                ? '' 
+                : (isExpanded ? 'md:left-[240px]' : 'md:left-[69px]')
+            }`}
           />
 
           {/* Modal */}
           <div 
-            className={`fixed top-[72px] left-0 right-0 bottom-[80px] z-[36] flex items-end justify-center p-4 pointer-events-none transition-[left] duration-300 ease-out
+            className={`fixed top-[72px] left-0 right-0 bottom-[80px] z-[61] flex items-end justify-center p-4 pointer-events-none transition-[left] duration-300 ease-out
               md:top-[88px] md:items-center md:bottom-[16px] ${
-                isExpanded ? 'md:left-[240px]' : 'md:left-[69px]'
-              }`}
+              isPublicPage 
+                ? '' 
+                : (isExpanded ? 'md:left-[240px]' : 'md:left-[69px]')
+            }`}
           >
             <motion.div
               initial={{ opacity: 0, y: 100, scale: 0.95 }}

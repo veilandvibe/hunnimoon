@@ -144,7 +144,7 @@ export default function GuestImportModal({
                 <h3 className="text-lg font-bold text-pink-primary">Download Template</h3>
               </div>
               <p className="text-sm text-pink-primary/70 ml-11">
-                Get our standardized template to ensure your data uploads correctly
+                Download our simple spreadsheet template to get started
               </p>
               <div className="ml-11">
                 <Button onClick={onDownloadTemplate} variant="outline" className="w-full md:w-auto">
@@ -163,7 +163,7 @@ export default function GuestImportModal({
                 <h3 className="text-lg font-bold text-pink-primary">Add Your Guests</h3>
               </div>
               <div className="ml-11 space-y-2">
-                <p className="text-sm text-pink-primary/70">Open the template in Excel, Google Sheets, or Numbers</p>
+                <p className="text-sm text-pink-primary/70">Open the template in Excel, Google Sheets, or Numbers. Already have a guest list? Just copy and paste your info into the template columns.</p>
                 <ul className="text-sm text-pink-primary/70 space-y-1">
                   <li className="flex items-start gap-2">
                     <span className="text-pink-primary">•</span>
@@ -194,26 +194,26 @@ export default function GuestImportModal({
                 <h3 className="text-lg font-bold text-pink-primary">Upload Your Completed File</h3>
               </div>
               <div className="ml-11">
-                <div className="border-2 border-dashed border-pink-primary/30 rounded-2xl p-6 text-center hover:border-pink-primary/50 transition-colors">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".csv"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                  id="file-upload"
+                />
+                <label
+                  htmlFor="file-upload"
+                  className="block border-2 border-dashed border-pink-primary/30 rounded-2xl p-6 text-center hover:border-pink-primary/50 transition-colors cursor-pointer"
+                >
                   <Upload className="mx-auto mb-3 text-pink-primary/60" size={40} />
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept=".csv"
-                    onChange={handleFileUpload}
-                    className="hidden"
-                    id="file-upload"
-                  />
-                  <label
-                    htmlFor="file-upload"
-                    className="cursor-pointer text-pink-primary font-medium hover:underline text-base"
-                  >
+                  <span className="text-pink-primary font-medium hover:underline text-base">
                     Click to Upload CSV
-                  </label>
+                  </span>
                   <p className="text-xs text-pink-primary/60 mt-2">
                     Only accepts CSV files from our template
                   </p>
-                </div>
+                </label>
               </div>
             </div>
 
