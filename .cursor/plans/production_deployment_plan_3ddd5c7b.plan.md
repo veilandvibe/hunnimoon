@@ -361,9 +361,19 @@ curl -X GET https://hunnimoon.app/api/cron/check-trials \
 
 ## Phase 8: Post-Launch Monitoring
 
+### 8.0 Analytics Setup ✅ COMPLETED
+
+**Vercel Analytics installed and configured:**
+
+- Package `@vercel/analytics` installed
+- Analytics component added to root layout
+- Will track page views and user interactions automatically
+- Access analytics at: Vercel Dashboard → Analytics tab
+
 ### 8.1 Monitor First 24 Hours
 
 - Check Vercel deployment logs
+- Check Vercel Analytics (after 30 seconds of site visits)
 - Monitor Stripe webhook delivery (Dashboard → Developers → Webhooks → Events)
 - Monitor Resend email delivery (Dashboard → Logs)
 - Watch error monitoring tool (if configured)
@@ -388,7 +398,7 @@ curl -X GET https://hunnimoon.app/api/cron/check-trials \
 1. [`lib/trial-helpers.ts`](lib/trial-helpers.ts) - Reset trial duration to 7 days
 2. [`app/robots.txt`](app/robots.txt) - Add robots.txt (new file)
 3. [`app/sitemap.ts`](app/sitemap.ts) - Add sitemap (new file)
-4. [`app/layout.tsx`](app/layout.tsx) - Enhanced metadata (optional)
+4. [`app/layout.tsx`](app/layout.tsx) - Enhanced metadata & Vercel Analytics component added ✅
 
 ---
 

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import AuthProvider from '@/components/providers/AuthProvider'
 import { TourProvider } from '@/components/providers/TourContext'
 import { Toaster } from 'react-hot-toast'
+import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -40,6 +41,7 @@ export default function RootLayout({
             }}
           />
         </TourProvider>
+        <Analytics />
       </body>
     </html>
   )
