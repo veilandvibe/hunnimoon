@@ -159,13 +159,13 @@ acq_source_set_at: timestamp | null
 
 ### Etsy Source Tracking
 
-**Modify [`app/(marketing)/page.tsx`](app/\\\\(marketing)/page.tsx)**
+**Modify [`app/(marketing)/page.tsx`](app/\\\(marketing)/page.tsx)**
 
 - Add client-side effect to check for `?src=etsy` URL parameter
 - Store in localStorage: `localStorage.setItem('acq_source', 'etsy')`
 - Persist across signup
 
-**Modify [`app/(marketing)/layout.tsx`](app/\\\\(marketing)/layout.tsx)**
+**Modify [`app/(marketing)/layout.tsx`](app/\\\(marketing)/layout.tsx)**
 
 - Add `useSearchParams()` to capture `?src=` on any marketing page
 - Store source in localStorage if present
@@ -176,7 +176,7 @@ acq_source_set_at: timestamp | null
 
 **Goal:** Build a beautiful pricing page with trial, monthly, and yearly options.
 
-### Create [`app/(marketing)/pricing/page.tsx`](app/\\\\(marketing)/pricing/page.tsx)
+### Create [`app/(marketing)/pricing/page.tsx`](app/\\\(marketing)/pricing/page.tsx)
 
 **Layout:** 3 cards side-by-side (desktop), stacked (mobile)
 
@@ -249,12 +249,12 @@ acq_source_set_at: timestamp | null
 - Initialize Stripe client
 - Export price IDs as constants
 
-**Create [`app/(marketing)/checkout/success/page.tsx`](app/\\\\(marketing)/checkout/success/page.tsx)**
+**Create [`app/(marketing)/checkout/success/page.tsx`](app/\\\(marketing)/checkout/success/page.tsx)**
 
 - Thank you page after successful checkout
 - Redirects to dashboard after 3 seconds
 
-**Create [`app/(marketing)/checkout/canceled/page.tsx`](app/\\\\(marketing)/checkout/canceled/page.tsx)**
+**Create [`app/(marketing)/checkout/canceled/page.tsx`](app/\\\(marketing)/checkout/canceled/page.tsx)**
 
 - Handles canceled checkout
 - CTA to try again or contact support
@@ -323,7 +323,7 @@ stripe trigger checkout.session.completed
 - Creates Stripe billing portal session
 - Returns: `{ url }`
 
-**Modify [`app/(main)/settings/page.tsx`](app/\\\\(main)/settings/page.tsx)**
+**Modify [`app/(main)/settings/page.tsx`](app/\\\(main)/settings/page.tsx)**
 
 - Add `<BillingSection />` at the bottom
 - Show trial countdown or active plan info
@@ -528,7 +528,7 @@ Track which modals have been shown using localStorage:
 
 **Goal:** Build a simple admin dashboard to track key metrics.
 
-### Create [`app/(main)/admin/page.tsx`](app/\\\\(main)/admin/page.tsx)
+### Create [`app/(main)/admin/page.tsx`](app/\\\(main)/admin/page.tsx)
 
 **Protection:** Only accessible if user email is your admin email (hardcoded check for now)
 

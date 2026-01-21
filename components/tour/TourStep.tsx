@@ -6,12 +6,6 @@ import Button from '@/components/ui/Button'
 import { TourStep as TourStepType } from '@/lib/tourSteps'
 import { useSidebar } from '@/components/layout/SidebarContext'
 
-// Check if user prefers reduced motion
-const prefersReducedMotion = () => {
-  if (typeof window === 'undefined') return false
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
-}
-
 interface TourStepProps {
   step: TourStepType
   currentStep: number
@@ -146,10 +140,6 @@ export default function TourStep({
   }
 
   const tooltipPosition = getTooltipPosition()
-  
-  // Optimize animations based on user preferences
-  const shouldReduceMotion = prefersReducedMotion()
-  const animationDuration = shouldReduceMotion ? 0 : 0.3
 
   return (
     <motion.div
@@ -157,7 +147,7 @@ export default function TourStep({
       animate={{ opacity: 1, scale: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95, y: -10 }}
       transition={{ 
-        duration: animationDuration,
+        duration: 0.3,
         ease: [0.4, 0, 0.2, 1]
       }}
       style={{
@@ -165,7 +155,6 @@ export default function TourStep({
         top: tooltipPosition.top,
         left: tooltipPosition.left,
         zIndex: 47,
-        willChange: 'transform, opacity',
       }}
       className="w-80 bg-white rounded-3xl shadow-2xl p-6"
     >

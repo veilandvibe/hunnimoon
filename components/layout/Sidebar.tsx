@@ -2,11 +2,10 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Home, Users, ClipboardCheck, DollarSign, Briefcase, Settings, Menu, HelpCircle, LogOut, Shield } from 'lucide-react'
+import { Home, Users, ClipboardCheck, DollarSign, Briefcase, Settings, Menu, HelpCircle, LogOut } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useSidebar } from './SidebarContext'
 import { useTour } from '@/components/providers/TourContext'
-import { isAdminEmail, getAdminPath } from '@/lib/admin-helpers'
 import db from '@/lib/instant'
 
 const navItems = [
@@ -23,8 +22,6 @@ export default function Sidebar() {
   const router = useRouter()
   const { isExpanded, setIsExpanded } = useSidebar()
   const { startPageTour } = useTour()
-  const { user } = db.useAuth()
-  const isAdmin = isAdminEmail(user?.email)
 
   const handleHelpClick = () => {
     // Determine current page from pathname
@@ -103,42 +100,10 @@ export default function Sidebar() {
           )
         })}
 
-        {/* Admin Link (only visible to admins) */}
-        {isAdmin && (
-          <Link
-            href={getAdminPath()}
-            className="group mt-auto"
-            title={!isExpanded ? 'Admin Dashboard' : undefined}
-          >
-            <motion.div
-              className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-colors ${
-                pathname === getAdminPath()
-                  ? 'bg-pink-primary text-white'
-                  : 'text-pink-primary hover:bg-pink-primary/10'
-              }`}
-            >
-              <Shield size={20} strokeWidth={2} className="flex-shrink-0" />
-              <AnimatePresence mode="wait">
-                {isExpanded && (
-                  <motion.span
-                    initial={{ opacity: 0, width: 0 }}
-                    animate={{ opacity: 1, width: 'auto' }}
-                    exit={{ opacity: 0, width: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="font-medium text-sm whitespace-nowrap overflow-hidden"
-                  >
-                    Admin
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          </Link>
-        )}
-
         {/* Sign Out Button */}
         <button
           onClick={handleSignOut}
-          className={`group ${!isAdmin ? 'mt-auto' : ''}`}
+          className="group mt-auto"
           title={!isExpanded ? 'Sign Out' : undefined}
         >
           <motion.div

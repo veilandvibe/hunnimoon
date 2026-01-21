@@ -22,22 +22,6 @@ export default function LoginPage() {
   const [showTermsModal, setShowTermsModal] = useState(false)
   const [showPrivacyModal, setShowPrivacyModal] = useState(false)
 
-  const handleOpenTermsModal = () => {
-    // Remove focus from any active input to prevent validation tooltips
-    if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur()
-    }
-    setShowTermsModal(true)
-  }
-
-  const handleOpenPrivacyModal = () => {
-    // Remove focus from any active input to prevent validation tooltips
-    if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur()
-    }
-    setShowPrivacyModal(true)
-  }
-
   const handleSendCode = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
@@ -149,16 +133,14 @@ export default function LoginPage() {
               <p className="text-xs text-pink-primary/60 text-center">
                 By signing in, you agree to our{' '}
                 <button 
-                  type="button"
-                  onClick={handleOpenTermsModal}
+                  onClick={() => setShowTermsModal(true)}
                   className="text-pink-primary underline hover:text-pink-primary/80"
                 >
                   Terms of Service
                 </button>
                 {' '}and{' '}
                 <button 
-                  type="button"
-                  onClick={handleOpenPrivacyModal}
+                  onClick={() => setShowPrivacyModal(true)}
                   className="text-pink-primary underline hover:text-pink-primary/80"
                 >
                   Privacy Policy
@@ -223,7 +205,7 @@ export default function LoginPage() {
                 By signing in, you agree to our{' '}
                 <button 
                   type="button"
-                  onClick={handleOpenTermsModal}
+                  onClick={() => setShowTermsModal(true)}
                   className="text-pink-primary underline hover:text-pink-primary/80"
                 >
                   Terms of Service
@@ -231,7 +213,7 @@ export default function LoginPage() {
                 {' '}and{' '}
                 <button 
                   type="button"
-                  onClick={handleOpenPrivacyModal}
+                  onClick={() => setShowPrivacyModal(true)}
                   className="text-pink-primary underline hover:text-pink-primary/80"
                 >
                   Privacy Policy
@@ -251,7 +233,7 @@ export default function LoginPage() {
       title="Terms of Service"
       size="xl"
     >
-      <div className="prose prose-sm max-w-none space-y-4 text-pink-primary/80">
+      <div className="prose prose-sm max-w-none space-y-4 text-pink-primary/80 max-h-[60vh] overflow-y-auto">
         <p className="text-xs text-pink-primary/60">Last Updated: January 17, 2026</p>
         <p>
           By accessing or using Hunnimoon, you agree to be bound by these Terms of Service. 
@@ -301,7 +283,7 @@ export default function LoginPage() {
       title="Privacy Policy"
       size="xl"
     >
-      <div className="prose prose-sm max-w-none space-y-4 text-pink-primary/80">
+      <div className="prose prose-sm max-w-none space-y-4 text-pink-primary/80 max-h-[60vh] overflow-y-auto">
         <p className="text-xs text-pink-primary/60">Last Updated: January 17, 2026</p>
         <p>
           This Privacy Policy describes how we collect, use, and protect your personal information 

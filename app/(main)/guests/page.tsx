@@ -13,7 +13,6 @@ import ConfirmDialog from '@/components/ui/ConfirmDialog'
 import { RSVPStatus, Side } from '@/lib/dummyData'
 import { useWedding } from '@/components/providers/WeddingProvider'
 import db from '@/lib/instant'
-import { getSideLabel } from '@/lib/sideLabels'
 import { id } from '@instantdb/react'
 import { ParsedGuest } from '@/lib/guestParser'
 import toast from 'react-hot-toast'
@@ -633,8 +632,8 @@ export default function GuestsPage() {
                 label: '━━━━━ SIDE ━━━━━',
                 options: [
                   { value: 'All', label: 'All Guests' },
-                  { value: 'side-Bride', label: getSideLabel('Bride', wedding) },
-                  { value: 'side-Groom', label: getSideLabel('Groom', wedding) },
+                  { value: 'side-Bride', label: "Bride's Side" },
+                  { value: 'side-Groom', label: "Groom's Side" },
                   { value: 'side-Both', label: 'Both Sides' },
                   { value: 'side-Unknown', label: 'Unknown Side' },
                 ]
@@ -673,7 +672,6 @@ export default function GuestsPage() {
             onMarkNotInvited={() => handleBulkMarkInvited(false)}
             onChangeSide={handleBulkChangeSide}
             onCancel={cancelSelection}
-            wedding={wedding}
             isReadOnly={isReadOnly}
           />
         </div>
@@ -718,7 +716,6 @@ export default function GuestsPage() {
                 onView={handleViewGuest}
                 onEdit={handleEditGuest}
                 onDelete={handleDeleteGuest}
-                wedding={wedding}
                 isSelected={selectedGuestIds.has(guest.id)}
                 isHovered={hoveredGuestId === guest.id}
                 isSelectMode={isSelectMode}
@@ -763,7 +760,6 @@ export default function GuestsPage() {
                     onToggleSelect={toggleGuestSelection}
                     onHover={setHoveredGuestId}
                     isReadOnly={isReadOnly}
-                    wedding={wedding}
                   />
                 ))}
               </div>
@@ -786,7 +782,6 @@ export default function GuestsPage() {
                   isSelectMode={isSelectMode}
                   onToggleSelect={toggleGuestSelection}
                   onHover={setHoveredGuestId}
-                  wedding={wedding}
                 />
               ))}
             </div>
@@ -802,7 +797,6 @@ export default function GuestsPage() {
         editingGuest={editingGuest}
         existingHouseholds={existingHouseholds}
         viewOnly={viewOnly}
-        wedding={wedding}
       />
 
       {/* Guest Import Modal */}

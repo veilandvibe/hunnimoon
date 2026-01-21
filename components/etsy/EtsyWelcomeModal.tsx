@@ -9,14 +9,12 @@ interface EtsyWelcomeModalProps {
   isOpen: boolean
   onClose: () => void
   onStartTrial: () => void
-  onUpgrade?: () => void
 }
 
 export default function EtsyWelcomeModal({
   isOpen,
   onClose,
   onStartTrial,
-  onUpgrade,
 }: EtsyWelcomeModalProps) {
   const [showInstructions, setShowInstructions] = useState(false)
 
@@ -29,7 +27,7 @@ export default function EtsyWelcomeModal({
     >
       <div className="space-y-6">
         <p className="text-pink-primary/80">
-          Purchased from Veil & Vibe on Etsy? Your 3 months free promo code is included in your Etsy files (the PDF download). When your 7-day trial ends, enter that code at checkout—you won't be charged a thing.
+          Purchased from Veil & Vibe on Etsy? Your lifetime access code is included in your Etsy files (the PDF download). When your 7-day trial ends, enter that code at checkout—you won't be charged a thing.
         </p>
 
         {/* Instructions Toggle */}
@@ -53,7 +51,7 @@ export default function EtsyWelcomeModal({
                 <li>Click "Purchases and Reviews"</li>
                 <li>Locate your digital purchase from Veil & Vibe</li>
                 <li>Click "Download Files"</li>
-                <li>Open the PDF—your 3 months free promo code is located in it</li>
+                <li>Open the PDF—your lifetime code is located in it</li>
                 <li>Need help? Email <a href="mailto:hunnimoon@veilandvibe.com" className="text-pink-primary underline">hunnimoon@veilandvibe.com</a></li>
               </ol>
             </div>
@@ -64,26 +62,13 @@ export default function EtsyWelcomeModal({
         <div className="flex flex-col gap-3">
           <Button
             onClick={() => {
-              onUpgrade?.()
-              onClose()
-            }}
-            variant="primary"
-            fullWidth
-            size="lg"
-          >
-            Get 3 Months Free
-          </Button>
-          
-          <Button
-            onClick={() => {
               onStartTrial()
               onClose()
             }}
-            variant="outline"
             fullWidth
             size="lg"
           >
-            Continue to Free Trial
+            Start Free Trial
           </Button>
         </div>
       </div>

@@ -17,11 +17,8 @@ interface CountdownTimerProps {
 
 export default function CountdownTimer({ weddingDate, partner1Name, partner2Name }: CountdownTimerProps) {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 })
-  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
-    
     const calculateTimeLeft = () => {
       const difference = +new Date(weddingDate) - +new Date()
       
@@ -40,25 +37,6 @@ export default function CountdownTimer({ weddingDate, partner1Name, partner2Name
 
     return () => clearInterval(timer)
   }, [weddingDate])
-
-  // Prevent hydration mismatch by not rendering countdown until client-side
-  if (!mounted) {
-    return (
-      <div className="bg-gradient-to-r from-pink-primary to-pink-primary/80 rounded-4xl p-6 md:p-8 text-white shadow-lg">
-        <div className="text-center space-y-4">
-          <h2 className="text-2xl md:text-3xl font-black">
-            {partner1Name} & {partner2Name}
-          </h2>
-          <p className="text-sm md:text-base font-medium opacity-90">
-            Your wedding is in
-          </p>
-          <div className="flex justify-center items-center gap-3 md:gap-4">
-            <div className="h-[60px] md:h-[68px]" />
-          </div>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className="bg-gradient-to-r from-pink-primary to-pink-primary/80 rounded-4xl p-6 md:p-8 text-white shadow-lg">

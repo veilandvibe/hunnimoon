@@ -92,12 +92,6 @@ export const tourSteps: Record<string, TourStep[]> = {
       position: 'bottom'
     },
     {
-      target: '[data-tour="password-protection"]',
-      title: 'Password Protection (Optional)',
-      description: 'Add an extra layer of security to your RSVP page. When enabled, guests will need to enter a password before they can access your RSVP form',
-      position: 'bottom'
-    },
-    {
       target: '[data-tour="rsvp-settings"]',
       title: 'Customize Your Form',
       description: 'Customize what questions appear on your RSVP form including meal choices, dietary restrictions, song requests, shuttle needs, and more',

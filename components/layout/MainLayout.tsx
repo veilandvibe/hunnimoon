@@ -26,13 +26,7 @@ function MainLayoutContent({
 
   // Scroll to top on route change
   useEffect(() => {
-    // Small delay to ensure DOM has updated, especially important on mobile
-    setTimeout(() => {
-      // Scroll both window and document element for iOS Safari compatibility
-      window.scrollTo({ top: 0, behavior: 'instant' })
-      document.documentElement.scrollTop = 0
-      document.body.scrollTop = 0
-    }, 10)
+    window.scrollTo(0, 0)
   }, [pathname])
 
   // Check if onboarding should be shown on first load

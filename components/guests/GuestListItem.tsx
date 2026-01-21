@@ -2,15 +2,13 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Badge from '../ui/Badge'
-import { Eye, Edit, Trash2, MoreVertical, Users2, Check } from 'lucide-react'
-import { getSideLabel } from '@/lib/sideLabels'
+import { Eye, Edit, Trash2, MoreVertical, Users2 } from 'lucide-react'
 
 interface GuestListItemProps {
   guest: any
   onView: (guest: any) => void
   onEdit: (guest: any) => void
   onDelete: (guestId: string) => void
-  wedding?: any
   isSelected?: boolean
   isHovered?: boolean
   isSelectMode?: boolean
@@ -25,7 +23,6 @@ export default function GuestListItem({
   onView, 
   onEdit, 
   onDelete,
-  wedding,
   isSelected,
   isHovered,
   isSelectMode,
@@ -75,26 +72,16 @@ export default function GuestListItem({
         <div className={`absolute left-3 top-1/2 -translate-y-1/2 z-10 ${
           isSelectMode ? 'block' : 'hidden md:block'
         } ${isHovered || isSelectMode ? 'opacity-100' : 'md:opacity-0'} transition-opacity`}>
-          <label className="cursor-pointer" onClick={(e) => e.stopPropagation()}>
-            <input
-              type="checkbox"
-              checked={isSelected}
-              onChange={(e) => {
-                e.stopPropagation()
-                onToggleSelect(guest.id)
-              }}
-              className="sr-only"
-            />
-            <div
-              className={`w-5 h-5 rounded border-2 transition-all shadow-sm flex items-center justify-center ${
-                isSelected
-                  ? 'bg-pink-primary border-pink-primary'
-                  : 'bg-white border-pink-primary/30'
-              }`}
-            >
-              {isSelected && <Check size={16} className="text-white" strokeWidth={3} />}
-            </div>
-          </label>
+          <input
+            type="checkbox"
+            checked={isSelected}
+            onChange={(e) => {
+              e.stopPropagation()
+              onToggleSelect(guest.id)
+            }}
+            onClick={(e) => e.stopPropagation()}
+            className="w-5 h-5 rounded border-2 border-pink-primary/30 text-pink-primary focus:ring-pink-primary cursor-pointer bg-white shadow-sm"
+          />
         </div>
       )}
       
@@ -125,11 +112,7 @@ export default function GuestListItem({
         {/* Side column - Center aligned, Desktop only */}
         <div className="hidden md:flex justify-center">
           <span className="text-sm text-pink-primary/70">
-            {wedding?.partner1_name && guest.side === 'Bride' 
-              ? wedding.partner1_name 
-              : wedding?.partner2_name && guest.side === 'Groom' 
-                ? wedding.partner2_name 
-                : guest.side}
+            {guest.side}
           </span>
         </div>
         

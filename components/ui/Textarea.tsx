@@ -17,7 +17,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         )}
         <textarea
           ref={ref}
-          className={`w-full px-4 py-3 min-h-[48px] rounded-xl border-2 transition-all duration-200 text-base touch-manipulation ${
+          className={`w-full px-4 py-3 rounded-xl border-2 transition-all duration-200 ${
             error
               ? 'border-red-500 focus:border-red-600'
               : 'border-pink-primary/20 focus:border-pink-primary'

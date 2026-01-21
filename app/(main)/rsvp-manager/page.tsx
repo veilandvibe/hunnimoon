@@ -47,8 +47,6 @@ export default function RSVPManagerPage() {
   const rsvpSettings = wedding?.rsvpSettings
   
   // Local state for form settings
-  const [passwordProtected, setPasswordProtected] = useState(false)
-  const [rsvpPassword, setRsvpPassword] = useState('')
   const [showMealChoice, setShowMealChoice] = useState(false)
   const [showDietaryRestrictions, setShowDietaryRestrictions] = useState(true)
   const [requireDietaryRestrictions, setRequireDietaryRestrictions] = useState(false)
@@ -62,8 +60,6 @@ export default function RSVPManagerPage() {
   // Sync local state with rsvpSettings when data loads
   useEffect(() => {
     if (rsvpSettings) {
-      setPasswordProtected(rsvpSettings.password_protected ?? false)
-      setRsvpPassword(rsvpSettings.rsvp_password ?? '')
       setShowMealChoice(rsvpSettings.show_meal_choice ?? false)
       setShowDietaryRestrictions(rsvpSettings.show_dietary_restrictions ?? true)
       setRequireDietaryRestrictions(rsvpSettings.require_dietary_restrictions ?? false)
@@ -115,8 +111,6 @@ export default function RSVPManagerPage() {
         console.log('Updating existing settings:', rsvpSettings.id)
         await db.transact([
           db.tx.rsvpSettings[rsvpSettings.id].update({
-            password_protected: passwordProtected,
-            rsvp_password: rsvpPassword,
             show_meal_choice: showMealChoice,
             show_dietary_restrictions: showDietaryRestrictions,
             require_dietary_restrictions: requireDietaryRestrictions,
@@ -136,8 +130,6 @@ export default function RSVPManagerPage() {
         await db.transact([
           db.tx.rsvpSettings[settingsId]
             .update({
-              password_protected: passwordProtected,
-              rsvp_password: rsvpPassword,
               show_meal_choice: showMealChoice,
               show_dietary_restrictions: showDietaryRestrictions,
               require_dietary_restrictions: requireDietaryRestrictions,
@@ -371,49 +363,6 @@ export default function RSVPManagerPage() {
           </div>
 
           <div className="space-y-4">
-            {/* Password Protection Section */}
-            <div className="border-b border-pink-primary/10 pb-4" data-tour="password-protection">
-              <h3 className="text-sm font-bold text-pink-primary mb-3">
-                Password Protection
-              </h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <label className="text-sm font-medium text-pink-primary">
-                      Enable password protection
-                    </label>
-                    <p className="text-xs text-pink-primary/60 mt-0.5">
-                      Require guests to enter a password to access your RSVP form
-                    </p>
-                  </div>
-                  <Toggle
-                    checked={passwordProtected}
-                    onChange={setPasswordProtected}
-                    disabled={isReadOnly}
-                  />
-                </div>
-
-                {passwordProtected && (
-                  <div className="ml-4 pl-4 border-l-2 border-pink-primary/10">
-                    <label className="text-xs font-medium text-pink-primary block mb-2">
-                      RSVP Password
-                    </label>
-                    <Input
-                      type="text"
-                      value={rsvpPassword}
-                      onChange={(e) => setRsvpPassword(e.target.value)}
-                      placeholder="Enter password for guests"
-                      disabled={isReadOnly}
-                      required={passwordProtected}
-                    />
-                    <p className="text-xs text-pink-primary/50 mt-2">
-                      Share this password with your guests so they can access your RSVP form
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-
             <div className="border-b border-pink-primary/10 pb-4">
               <h3 className="text-sm font-bold text-pink-primary mb-3">
                 Form Fields
