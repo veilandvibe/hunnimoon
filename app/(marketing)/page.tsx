@@ -54,6 +54,7 @@ function EtsyModalHandler() {
       isOpen={showEtsyModal}
       onClose={handleCloseModal}
       onStartTrial={handleStartTrial}
+      onUpgrade={handleStartTrial}
     />
   )
 }

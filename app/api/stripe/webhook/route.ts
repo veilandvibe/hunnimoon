@@ -121,6 +121,42 @@ export async function POST(request: NextRequest) {
         ])
 
         console.log(`[Webhook] Successfully updated user ${userId} to active with ${subscriptionPlan} plan`)
+
+        // Send subscription success email
+        try {
+          const userQuery = await db.query({
+            $users: {
+              $: {
+                where: { id: userId }
+              }
+            }
+          })
+          
+          const user = userQuery.$users?.[0]
+          if (user && user.email) {
+            console.log(`[Webhook] Sending subscription success email to ${user.email}`)
+            
+            // Call email API
+            const emailResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'https://hunnimoon.app'}/api/emails/send-subscription-success`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                email: user.email,
+                subscriptionPlan: subscriptionPlan,
+              }),
+            })
+
+            if (emailResponse.ok) {
+              console.log(`[Webhook] Subscription success email sent to ${user.email}`)
+            } else {
+              console.error(`[Webhook] Failed to send email: ${await emailResponse.text()}`)
+            }
+          }
+        } catch (emailError) {
+          // Don't fail the webhook if email fails
+          console.error('[Webhook] Error sending subscription success email:', emailError)
+        }
+        
         break
       }
 
