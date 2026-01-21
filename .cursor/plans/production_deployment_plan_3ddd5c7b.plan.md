@@ -27,7 +27,7 @@ todos:
     status: pending
   - id: seo-setup
     content: Add robots.txt, sitemap.xml, and submit to Google Search Console
-    status: pending
+    status: completed
   - id: testing
     content: Complete end-to-end testing of all flows
     status: pending
@@ -191,109 +191,102 @@ Ensure `NEXT_PUBLIC_APP_URL=https://hunnimoon.app` is set in Vercel (covered in 
 - Enable Web Analytics (free tier included)
 - Provides page views, performance metrics
 
-### 5.2 Set Up Error Monitoring (Choose One - All Have Free Tiers)
+### 5.2 Set Up Error Monitoring ✅ COMPLETED
 
-**Option A: Sentry (Recommended)**
+**Sentry Configured:**
 
-- Free tier: 5,000 errors/month
-- Sign up at sentry.io
-- Add `@sentry/nextjs` package
-- Configure DSN in environment variables
+- ✅ Package `@sentry/nextjs` installed
+- ✅ Configuration files created:
+  - `instrumentation.ts` - Enables Next.js instrumentation
+  - `sentry.client.config.ts` - Client-side error tracking
+  - `sentry.server.config.ts` - Server-side error tracking
+  - `sentry.edge.config.ts` - Edge runtime error tracking
+- ✅ `next.config.js` updated with Sentry integration
+- ✅ `.gitignore` updated to exclude Sentry credentials
+- ✅ Environment variables added to `ENV_VARIABLES_TO_ADD.md`
 
-**Option B: Highlight.io**
+**What You Need to Do:**
 
-- Free tier: 1,000 sessions/month
-- Includes session replay + error tracking
-- Sign up at highlight.io
-- Add package and configure
+1. Get your Sentry DSN from: https://sentry.io/settings/veil-and-vibe/projects/javascript-nextjs/keys/
+2. Create an Auth Token: https://sentry.io/settings/account/api/auth-tokens/
 
-**Option C: Better Stack (Logtail)**
+   - Required scopes: `project:releases`, `org:read`
 
-- Free tier: 1GB logs/month
-- Sign up at betterstack.com
-- Configure logging endpoint
+3. Add to Vercel environment variables:
+   ```
+   NEXT_PUBLIC_SENTRY_DSN=https://your-dsn@sentry.io/your-project-id
+   SENTRY_AUTH_TOKEN=your-auth-token
+   ```
 
-**Option D: Vercel Log Drains**
 
-- Built-in with Vercel
-- Forward logs to external services
-- Configure in Vercel project settings
+**Features Enabled:**
+
+- ✅ Automatic error tracking (client + server + edge)
+- ✅ Session Replay (10% of sessions, 100% of errors)
+- ✅ Source map uploads for readable stack traces
+- ✅ Vercel Cron Monitors integration
+- ✅ Ad-blocker bypass via `/monitoring` tunnel route
 
 ---
 
-## Phase 6: SEO Configuration
+## Phase 6: SEO Configuration ✅ COMPLETED
 
-### 6.1 Verify Metadata
+### 6.1 Enhanced Metadata ✅
 
 **File:** [`app/layout.tsx`](app/layout.tsx)
 
-Current metadata (lines 7-10):
+Enhanced metadata now includes:
 
-```typescript
-export const metadata: Metadata = {
-  title: 'Hunnimoon - Wedding Planning Made Simple',
-  description: 'Plan your perfect wedding with guest management, RSVPs, budget tracking, and more.',
-}
-```
+- ✅ Comprehensive SEO keywords
+- ✅ Open Graph tags for social sharing (Facebook, LinkedIn)
+- ✅ Twitter Card metadata
+- ✅ Favicon and Apple touch icon configuration
+- ✅ Canonical URLs
+- ✅ Structured metadata with proper `metadataBase`
+- ✅ Enhanced robot directives for Google
 
-Consider adding:
+### 6.2 Robots.txt Added ✅
 
-- Open Graph tags for social sharing
-- Twitter Card metadata
-- Favicon configuration
+**File:** [`app/robots.ts`](app/robots.ts)
 
-### 6.2 Add robots.txt
+Created Next.js robots file that:
 
-Create `app/robots.txt` or `public/robots.txt`:
+- ✅ Allows all pages by default
+- ✅ Blocks private routes (dashboard, admin, API routes, auth pages)
+- ✅ Includes sitemap reference
+- ✅ Uses environment variable for base URL
 
-```
-User-agent: *
-Allow: /
-Disallow: /dashboard
-Disallow: /dashboard-a8f3k2
-Disallow: /api/
+### 6.3 Sitemap.xml Added ✅
 
-Sitemap: https://hunnimoon.app/sitemap.xml
-```
+**File:** [`app/sitemap.ts`](app/sitemap.ts)
 
-### 6.3 Add sitemap.xml
+Created dynamic sitemap that includes:
 
-Create Next.js sitemap at `app/sitemap.ts`:
+- ✅ Homepage (priority 1.0)
+- ✅ Pricing page (priority 0.9)
+- ✅ Tools landing page (priority 0.8)
+- ✅ All 3 dynamic tool pages (priority 0.7):
+  - Wedding Timeline Generator
+  - Wedding Day Timeline Generator
+  - Wedding Reception Timeline Generator
+- ✅ Legal pages (privacy, terms, refunds - priority 0.3)
+- ✅ Proper change frequencies set for each page type
+- ✅ Uses environment variable for base URL
 
-```typescript
-import { MetadataRoute } from 'next'
+### 6.4 Submit to Google Search Console (Manual Step)
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  return [
-    {
-      url: 'https://hunnimoon.app',
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 1,
-    },
-    {
-      url: 'https://hunnimoon.app/pricing',
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: 'https://hunnimoon.app/tools',
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.7,
-    },
-    // Add other public pages
-  ]
-}
-```
+After deployment to production:
 
-### 6.4 Submit to Google Search Console
+1. Go to [search.google.com/search-console](https://search.google.com/search-console)
+2. Add property: `hunnimoon.app`
+3. Verify ownership using one of these methods:
 
-- Go to search.google.com/search-console
-- Add property: `hunnimoon.app`
-- Verify ownership (DNS or HTML file)
-- Submit sitemap: `https://hunnimoon.app/sitemap.xml`
+   - DNS verification (recommended for root domain)
+   - HTML file upload
+   - HTML meta tag
+
+4. Submit sitemap: `https://hunnimoon.app/sitemap.xml`
+5. Monitor indexing status and search performance
 
 ---
 
@@ -396,9 +389,17 @@ curl -X GET https://hunnimoon.app/api/cron/check-trials \
 ## Critical Files Modified
 
 1. [`lib/trial-helpers.ts`](lib/trial-helpers.ts) - Reset trial duration to 7 days
-2. [`app/robots.txt`](app/robots.txt) - Add robots.txt (new file)
-3. [`app/sitemap.ts`](app/sitemap.ts) - Add sitemap (new file)
+2. [`app/robots.ts`](app/robots.ts) - Add robots file (new file) ✅
+3. [`app/sitemap.ts`](app/sitemap.ts) - Add sitemap (new file) ✅
 4. [`app/layout.tsx`](app/layout.tsx) - Enhanced metadata & Vercel Analytics component added ✅
+5. [`next.config.js`](next.config.js) - Sentry integration added ✅
+6. [`instrumentation.ts`](instrumentation.ts) - Sentry instrumentation (new file) ✅
+7. [`instrumentation-client.ts`](instrumentation-client.ts) - Sentry client config with navigation tracking (new file) ✅
+8. [`sentry.server.config.ts`](sentry.server.config.ts) - Sentry server config (new file) ✅
+9. [`sentry.edge.config.ts`](sentry.edge.config.ts) - Sentry edge config (new file) ✅
+10. [`app/global-error.tsx`](app/global-error.tsx) - Global error handler for React errors (new file) ✅
+11. [`ENV_VARIABLES_TO_ADD.md`](ENV_VARIABLES_TO_ADD.md) - Added Sentry environment variables ✅
+12. [`.gitignore`](.gitignore) - Added Sentry exclusions ✅
 
 ---
 

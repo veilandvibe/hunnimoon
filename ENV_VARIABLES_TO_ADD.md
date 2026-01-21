@@ -23,6 +23,18 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 # For production deployment: NEXT_PUBLIC_APP_URL=https://hunnimoon.app
 
 # ==============================================
+# SENTRY ERROR MONITORING
+# ==============================================
+
+# Sentry DSN (get from Sentry Dashboard → Project Settings → Client Keys)
+NEXT_PUBLIC_SENTRY_DSN=https://your-sentry-dsn@sentry.io/your-project-id
+
+# Sentry Auth Token (for uploading source maps during build)
+# Get from: https://sentry.io/settings/account/api/auth-tokens/
+# Required permissions: project:releases, org:read
+SENTRY_AUTH_TOKEN=your-sentry-auth-token
+
+# ==============================================
 # EXISTING VARIABLES (verify these are set)
 # ==============================================
 
