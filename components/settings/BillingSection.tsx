@@ -82,12 +82,12 @@ export default function BillingSection({ user }: BillingSectionProps) {
   const handleApplyPromoCode = async () => {
     setLoading(true)
     try {
-      // TEMP: Changed to yearly for testing
+      // Always route to monthly plan for promo codes
       const response = await fetch('/api/stripe/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          plan: 'yearly',
+          plan: 'monthly',
           userId: user.id,
           userEmail: user.email,
           allowPromoCode: true, // Enable promo code field
