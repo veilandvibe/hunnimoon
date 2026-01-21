@@ -129,12 +129,25 @@ export async function POST(request: NextRequest) {
               $: {
                 where: { id: userId }
               }
+            },
+            weddings: {
+              $: {
+                where: {
+                  user_id: userId
+                }
+              }
             }
           })
           
           const user = userQuery.$users?.[0]
+          const wedding = userQuery.weddings?.[0]
+          
           if (user && user.email) {
-            console.log(`[Webhook] Sending subscription success email to ${user.email}`)
+            // Get first name from wedding data or email
+            const firstName = wedding?.partner1_name?.split(' ')[0] || user.email.split('@')[0]
+            const isEtsyUser = user.acq_source === 'etsy'
+            
+            console.log(`[Webhook] Sending subscription success email to ${user.email} (firstName: ${firstName}, isEtsyUser: ${isEtsyUser})`)
             
             // Call email API
             const emailResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'https://hunnimoon.app'}/api/emails/send-subscription-success`, {
@@ -142,14 +155,17 @@ export async function POST(request: NextRequest) {
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 email: user.email,
-                subscriptionPlan: subscriptionPlan,
+                firstName: firstName,
+                planType: subscriptionPlan,
+                isEtsyUser: isEtsyUser,
               }),
             })
 
             if (emailResponse.ok) {
               console.log(`[Webhook] Subscription success email sent to ${user.email}`)
             } else {
-              console.error(`[Webhook] Failed to send email: ${await emailResponse.text()}`)
+              const errorText = await emailResponse.text()
+              console.error(`[Webhook] Failed to send email: ${errorText}`)
             }
           }
         } catch (emailError) {
