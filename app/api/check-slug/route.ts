@@ -40,8 +40,8 @@ export async function GET(request: NextRequest) {
       throw new Error('Invalid query result')
     }
     
-    // InstantDB Admin returns { weddings: [...] } directly, not { data: { weddings: [...] } }
-    const weddings = result.weddings || (result.data && result.data.weddings)
+    // InstantDB Admin returns { weddings: [...] } directly
+    const weddings = result.weddings
     const exists = weddings && weddings.length > 0
     
     return NextResponse.json({ exists })
