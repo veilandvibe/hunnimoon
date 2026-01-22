@@ -39,9 +39,31 @@ export function getUserTrialStatus(user: UserBillingData | null): TrialStatus {
   const startDate = new Date(user.trial_start_date)
   const endDate = new Date(startDate.getTime() + TRIAL_DURATION_MS)
 
-  const now = new Date()
-  const msRemaining = endDate.getTime() - now.getTime()
-  const daysRemaining = Math.ceil(msRemaining / (1000 * 60 * 60 * 24))
+  // 🧪 TEST MODE: Calculate days based on test day override
+  let daysRemaining: number
+  if (typeof window !== 'undefined') {
+    const testDay = localStorage.getItem('__test_trial_day')
+    if (testDay) {
+      const currentDay = parseInt(testDay, 10)
+      if (!isNaN(currentDay)) {
+        // If we're on day X, there are (7 - X + 1) days remaining
+        // Day 1 = 7 days remaining, Day 7 = 1 day remaining, Day 8 = 0 days remaining
+        daysRemaining = Math.max(0, 7 - currentDay + 1)
+      } else {
+        const now = new Date()
+        const msRemaining = endDate.getTime() - now.getTime()
+        daysRemaining = Math.ceil(msRemaining / (1000 * 60 * 60 * 24))
+      }
+    } else {
+      const now = new Date()
+      const msRemaining = endDate.getTime() - now.getTime()
+      daysRemaining = Math.ceil(msRemaining / (1000 * 60 * 60 * 24))
+    }
+  } else {
+    const now = new Date()
+    const msRemaining = endDate.getTime() - now.getTime()
+    daysRemaining = Math.ceil(msRemaining / (1000 * 60 * 60 * 24))
+  }
 
   const isActive = user.billing_status === 'trial' && daysRemaining > 0
   const isExpired = daysRemaining <= 0 && user.billing_status === 'trial'
@@ -74,13 +96,43 @@ export function getUserAcqSource(user: UserBillingData | null): string | null {
  * Check if user came from Etsy
  */
 export function isEtsyUser(user: UserBillingData | null): boolean {
+  // 🧪 TEST MODE: Check for test override
+  if (typeof window !== 'undefined') {
+    const testType = localStorage.getItem('__test_user_type')
+    if (testType === 'etsy') return true
+    if (testType === 'regular' || testType === 'lifetime') return false
+  }
+  
   return user?.acq_source === 'etsy'
+}
+
+/**
+ * Check if user has lifetime access
+ */
+export function isLifetimeUser(user: UserBillingData | null): boolean {
+  // 🧪 TEST MODE: Check for test override
+  if (typeof window !== 'undefined') {
+    const testType = localStorage.getItem('__test_user_type')
+    if (testType === 'lifetime') return true
+    if (testType === 'regular' || testType === 'etsy') return false
+  }
+  
+  return user?.acq_source === 'lifetime'
 }
 
 /**
  * Get the trial day number (1-7)
  */
 export function getTrialDayNumber(user: UserBillingData | null): number {
+  // 🧪 TEST MODE: Check for manual day override
+  if (typeof window !== 'undefined') {
+    const testDay = localStorage.getItem('__test_trial_day')
+    if (testDay) {
+      const day = parseInt(testDay, 10)
+      if (!isNaN(day)) return day
+    }
+  }
+  
   const status = getUserTrialStatus(user)
   if (!status.isActive || !status.startDate) return 0
   

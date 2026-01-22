@@ -72,7 +72,7 @@ export default function LoginPage() {
   return (
     <>
       <PublicHeader />
-      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-b from-pink-gradient-from to-pink-gradient-to pt-24">
+      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-b from-pink-gradient-from to-pink-gradient-to">
       <div className="w-full max-w-md space-y-6">
         {/* Logo */}
         <div className="text-center">

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { X, Clock } from 'lucide-react'
 import Button from '@/components/ui/Button'
-import { UserBillingData, shouldShowTrialWarning, getUserTrialStatus, isEtsyUser } from '@/lib/trial-helpers'
+import { UserBillingData, shouldShowTrialWarning, getUserTrialStatus, isEtsyUser, isLifetimeUser } from '@/lib/trial-helpers'
 import { hasModalBeenShownThisSession, markModalAsShown } from '@/lib/modal-manager'
 
 interface TrialBannerProps {
@@ -17,6 +17,7 @@ export default function TrialBanner({ user, onUpgradeClick }: TrialBannerProps) 
   const showWarning = shouldShowTrialWarning(user)
   const trialStatus = getUserTrialStatus(user)
   const isEtsy = isEtsyUser(user)
+  const isLifetime = isLifetimeUser(user)
 
   if (!showWarning || isDismissed || !trialStatus.isActive) return null
 
@@ -50,7 +51,7 @@ export default function TrialBanner({ user, onUpgradeClick }: TrialBannerProps) 
             size="sm"
             className="whitespace-nowrap"
           >
-            {isEtsy ? 'Apply Code' : 'Upgrade Now'}
+            {isEtsy ? 'Apply Code' : isLifetime ? 'Activate Access' : 'Upgrade Now'}
           </Button>
           <button
             onClick={handleDismiss}

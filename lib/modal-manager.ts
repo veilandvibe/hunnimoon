@@ -7,6 +7,9 @@ export type ModalKey =
   | 'etsy_welcome_shown'
   | 'etsy_trial_expiring_shown'
   | 'etsy_trial_expired_shown'
+  | 'lifetime_welcome_shown'
+  | 'lifetime_trial_expiring_shown'
+  | 'lifetime_trial_expired_shown'
   | 'upgrade_modal_shown'
 
 /**
@@ -55,6 +58,9 @@ export function resetModalTracking(key?: ModalKey): void {
       'etsy_welcome_shown',
       'etsy_trial_expiring_shown',
       'etsy_trial_expired_shown',
+      'lifetime_welcome_shown',
+      'lifetime_trial_expiring_shown',
+      'lifetime_trial_expired_shown',
       'upgrade_modal_shown',
     ]
     keys.forEach(k => {
@@ -73,6 +79,7 @@ export function clearSessionModals(): void {
   const sessionKeys: ModalKey[] = [
     'upgrade_modal_shown',
     'etsy_trial_expired_shown',
+    'lifetime_trial_expired_shown',
   ]
   
   sessionKeys.forEach(key => sessionStorage.removeItem(key))

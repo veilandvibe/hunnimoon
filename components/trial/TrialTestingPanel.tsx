@@ -6,7 +6,7 @@ import Button from '@/components/ui/Button'
 import { resetModalTracking } from '@/lib/modal-manager'
 import { FlaskConical, X } from 'lucide-react'
 import db from '@/lib/instant'
-import { isEtsyUser, getUserTrialStatus, UserBillingData } from '@/lib/trial-helpers'
+import { isEtsyUser, isLifetimeUser, getUserTrialStatus, UserBillingData } from '@/lib/trial-helpers'
 
 /**
  * 🧪 TESTING COMPONENT - REMOVE BEFORE PRODUCTION!
@@ -64,25 +64,30 @@ export default function TrialTestingPanel() {
     return localStorage.getItem('__test_trial_day')
   }
   
-  const toggleEtsyUser = () => {
+  const cycleUserType = () => {
     if (typeof window === 'undefined') return
-    const currentValue = localStorage.getItem('__test_etsy_user')
-    if (currentValue === 'true') {
-      localStorage.setItem('__test_etsy_user', 'false')
-      console.log('🧪 Test mode: Now testing as REGULAR user')
-    } else {
-      localStorage.setItem('__test_etsy_user', 'true')
+    const currentType = localStorage.getItem('__test_user_type') || 'regular'
+    
+    if (currentType === 'regular') {
+      localStorage.setItem('__test_user_type', 'etsy')
       console.log('🧪 Test mode: Now testing as ETSY user')
+    } else if (currentType === 'etsy') {
+      localStorage.setItem('__test_user_type', 'lifetime')
+      console.log('🧪 Test mode: Now testing as LIFETIME user')
+    } else {
+      localStorage.setItem('__test_user_type', 'regular')
+      console.log('🧪 Test mode: Now testing as REGULAR user')
     }
     router.refresh()
     window.location.reload()
   }
   
-  const getTestEtsyStatus = () => {
+  const getTestUserType = (): 'regular' | 'etsy' | 'lifetime' | null => {
     if (typeof window === 'undefined') return null
-    const value = localStorage.getItem('__test_etsy_user')
-    if (value === 'true') return true
-    if (value === 'false') return false
+    const value = localStorage.getItem('__test_user_type')
+    if (value === 'etsy' || value === 'lifetime' || value === 'regular') {
+      return value
+    }
     return null
   }
 
@@ -99,8 +104,19 @@ export default function TrialTestingPanel() {
   }
   
   const isEtsy = userData ? isEtsyUser(userData) : false
-  const testEtsyOverride = getTestEtsyStatus()
-  const effectiveEtsyStatus = testEtsyOverride !== null ? testEtsyOverride : isEtsy
+  const isLifetime = userData ? isLifetimeUser(userData) : false
+  const testUserTypeOverride = getTestUserType()
+  
+  // Determine effective user type
+  let effectiveUserType: 'regular' | 'etsy' | 'lifetime' = 'regular'
+  if (testUserTypeOverride) {
+    effectiveUserType = testUserTypeOverride
+  } else if (isEtsy) {
+    effectiveUserType = 'etsy'
+  } else if (isLifetime) {
+    effectiveUserType = 'lifetime'
+  }
+  
   const trialStatus = userData ? getUserTrialStatus(userData) : null
 
   return (
@@ -123,15 +139,21 @@ export default function TrialTestingPanel() {
         <div className="text-xs space-y-1">
           <div className="flex justify-between">
             <span className="text-gray-600">User Type:</span>
-            <span className={`font-semibold ${effectiveEtsyStatus ? 'text-orange-600' : 'text-blue-600'}`}>
-              {effectiveEtsyStatus ? '🛍️ ETSY' : '👤 REGULAR'}
-              {testEtsyOverride !== null && ' (override)'}
+            <span className={`font-semibold ${
+              effectiveUserType === 'etsy' ? 'text-orange-600' : 
+              effectiveUserType === 'lifetime' ? 'text-purple-600' : 
+              'text-blue-600'
+            }`}>
+              {effectiveUserType === 'etsy' ? '🛍️ ETSY' : 
+               effectiveUserType === 'lifetime' ? '✨ LIFETIME' : 
+               '👤 REGULAR'}
+              {testUserTypeOverride && ' (override)'}
             </span>
           </div>
           <div className="flex justify-between">
             <span className="text-gray-600">Billing Status:</span>
             <span className="font-semibold text-gray-900">
-              {userData?.billing_status || 'N/A'}
+              {userData?.billing_status || 'trial'}
             </span>
           </div>
           {trialStatus && (
@@ -179,7 +201,7 @@ export default function TrialTestingPanel() {
           fullWidth
           className="border-orange-300 hover:bg-orange-50"
         >
-          Day 5 {effectiveEtsyStatus ? '(Etsy modal!)' : '(Banner starts)'}
+          Day 5 {effectiveUserType !== 'regular' ? '(Modal!)' : '(Banner starts)'}
         </Button>
         
         <Button
@@ -215,12 +237,14 @@ export default function TrialTestingPanel() {
 
       <div className="space-y-2 pt-3 border-t border-gray-200">
         <Button
-          onClick={toggleEtsyUser}
+          onClick={cycleUserType}
           size="sm"
-          variant={effectiveEtsyStatus ? 'primary' : 'outline'}
+          variant={effectiveUserType !== 'regular' ? 'primary' : 'outline'}
           fullWidth
         >
-          {effectiveEtsyStatus ? '🛍️ Switch to Regular' : '👤 Switch to Etsy'}
+          {effectiveUserType === 'regular' ? '👤 → 🛍️ Switch to Etsy' : 
+           effectiveUserType === 'etsy' ? '🛍️ → ✨ Switch to Lifetime' : 
+           '✨ → 👤 Switch to Regular'}
         </Button>
         
         <Button

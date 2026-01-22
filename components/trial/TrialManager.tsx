@@ -9,9 +9,13 @@ import UpgradeModal from './UpgradeModal'
 import EtsyWelcomeModal from '@/components/etsy/EtsyWelcomeModal'
 import EtsyTrialExpiringModal from '@/components/etsy/EtsyTrialExpiringModal'
 import EtsyTrialExpiredModal from '@/components/etsy/EtsyTrialExpiredModal'
+import LifetimeWelcomeModal from '@/components/lifetime/LifetimeWelcomeModal'
+import LifetimeTrialExpiringModal from '@/components/lifetime/LifetimeTrialExpiringModal'
+import LifetimeTrialExpiredModal from '@/components/lifetime/LifetimeTrialExpiredModal'
 import { 
   getUserTrialStatus, 
   isEtsyUser, 
+  isLifetimeUser,
   getTrialDayNumber,
   UserBillingData 
 } from '@/lib/trial-helpers'
@@ -47,6 +51,9 @@ export default function TrialManager() {
   const [etsyWelcomeOpen, setEtsyWelcomeOpen] = useState(false)
   const [etsyExpiringOpen, setEtsyExpiringOpen] = useState(false)
   const [etsyExpiredOpen, setEtsyExpiredOpen] = useState(false)
+  const [lifetimeWelcomeOpen, setLifetimeWelcomeOpen] = useState(false)
+  const [lifetimeExpiringOpen, setLifetimeExpiringOpen] = useState(false)
+  const [lifetimeExpiredOpen, setLifetimeExpiredOpen] = useState(false)
   const [checkoutLoading, setCheckoutLoading] = useState(false)
 
   // Check if we should show Etsy welcome modal - wait for onboarding to complete
@@ -87,12 +94,50 @@ export default function TrialManager() {
     }
   }, [userData, onboardingCompleted])
 
+  // Check if we should show Lifetime welcome modal - wait for onboarding to complete
+  useEffect(() => {
+    if (!userData) return
+
+    // Show Lifetime welcome if they're a Lifetime user, on trial, and haven't seen it
+    if (isLifetimeUser(userData) && 
+        userData.billing_status === 'trial' && 
+        !hasModalBeenShown('lifetime_welcome_shown')) {
+      
+      // If onboarding not complete, wait for it
+      if (!onboardingCompleted) {
+        // Check again later
+        const checkInterval = setInterval(() => {
+          const completed = localStorage.getItem('onboardingCompleted') === 'true'
+          if (completed) {
+            clearInterval(checkInterval)
+            // Small delay after onboarding finishes
+            setTimeout(() => {
+              setLifetimeWelcomeOpen(true)
+              markModalAsShown('lifetime_welcome_shown', true) // Persistent
+            }, 2000) // 2 seconds after onboarding closes
+          }
+        }, 1000)
+        
+        return () => clearInterval(checkInterval)
+      } else {
+        // Onboarding already complete, show after short delay
+        const timer = setTimeout(() => {
+          setLifetimeWelcomeOpen(true)
+          markModalAsShown('lifetime_welcome_shown', true) // Persistent
+        }, 2000)
+        
+        return () => clearTimeout(timer)
+      }
+    }
+  }, [userData, onboardingCompleted])
+
   // Check trial status and show appropriate modals
   useEffect(() => {
     if (!userData) return
 
     const trialStatus = getUserTrialStatus(userData)
     const isEtsy = isEtsyUser(userData)
+    const isLifetime = isLifetimeUser(userData)
     const dayNumber = getTrialDayNumber(userData)
 
     // Trial expired - show appropriate modal
@@ -102,6 +147,12 @@ export default function TrialManager() {
         if (!hasModalBeenShownThisSession('etsy_trial_expired_shown')) {
           setEtsyExpiredOpen(true)
           markModalAsShown('etsy_trial_expired_shown', false) // Session only
+        }
+      } else if (isLifetime) {
+        // Show Lifetime-specific expired modal
+        if (!hasModalBeenShownThisSession('lifetime_trial_expired_shown')) {
+          setLifetimeExpiredOpen(true)
+          markModalAsShown('lifetime_trial_expired_shown', false) // Session only
         }
       } else {
         // Show regular upgrade modal
@@ -117,6 +168,14 @@ export default function TrialManager() {
       if (!hasModalBeenShown('etsy_trial_expiring_shown')) {
         setEtsyExpiringOpen(true)
         markModalAsShown('etsy_trial_expiring_shown', true) // Only show once per trial
+      }
+    }
+
+    // Trial expiring soon (days 5-6 for Lifetime users, show warning modal at day 5)
+    if (isLifetime && trialStatus.isActive && dayNumber === 5) {
+      if (!hasModalBeenShown('lifetime_trial_expiring_shown')) {
+        setLifetimeExpiringOpen(true)
+        markModalAsShown('lifetime_trial_expiring_shown', true) // Only show once per trial
       }
     }
   }, [userData])
@@ -192,6 +251,7 @@ export default function TrialManager() {
   const showReadOnly = shouldShowReadOnlyMode(userData)
   const trialStatus = getUserTrialStatus(userData)
   const isEtsy = isEtsyUser(userData)
+  const isLifetime = isLifetimeUser(userData)
 
   return (
     <>
@@ -200,7 +260,7 @@ export default function TrialManager() {
         <TrialBanner 
           user={userData} 
           onUpgradeClick={() => {
-            if (isEtsy) {
+            if (isEtsy || isLifetime) {
               handleActivateCode()
             } else {
               setUpgradeModalOpen(true)
@@ -213,7 +273,7 @@ export default function TrialManager() {
       {showReadOnly && (
         <ReadOnlyBanner 
           onUpgradeClick={() => {
-            if (isEtsy) {
+            if (isEtsy || isLifetime) {
               handleActivateCode()
             } else {
               setUpgradeModalOpen(true)
@@ -222,8 +282,8 @@ export default function TrialManager() {
         />
       )}
 
-      {/* Regular Upgrade Modal (for non-Etsy users) */}
-      {!isEtsy && (
+      {/* Regular Upgrade Modal (for non-Etsy/Lifetime users) */}
+      {!isEtsy && !isLifetime && (
         <UpgradeModal
           isOpen={upgradeModalOpen}
           onClose={() => setUpgradeModalOpen(false)}
@@ -258,6 +318,35 @@ export default function TrialManager() {
         <EtsyTrialExpiredModal
           isOpen={etsyExpiredOpen}
           onClose={() => setEtsyExpiredOpen(false)}
+          onActivateCode={handleActivateCode}
+        />
+      )}
+
+      {/* Lifetime Welcome Modal (first time from Lifetime link) */}
+      {isLifetime && (
+        <LifetimeWelcomeModal
+          isOpen={lifetimeWelcomeOpen}
+          onClose={() => setLifetimeWelcomeOpen(false)}
+          onStartTrial={handleStartTrial}
+          onUpgrade={handleActivateCode}
+        />
+      )}
+
+      {/* Lifetime Trial Expiring Modal (2 days before end) */}
+      {isLifetime && (
+        <LifetimeTrialExpiringModal
+          isOpen={lifetimeExpiringOpen}
+          onClose={() => setLifetimeExpiringOpen(false)}
+          onActivateCode={handleActivateCode}
+          daysRemaining={trialStatus.daysRemaining}
+        />
+      )}
+
+      {/* Lifetime Trial Expired Modal (after trial ends) */}
+      {isLifetime && (
+        <LifetimeTrialExpiredModal
+          isOpen={lifetimeExpiredOpen}
+          onClose={() => setLifetimeExpiredOpen(false)}
           onActivateCode={handleActivateCode}
         />
       )}

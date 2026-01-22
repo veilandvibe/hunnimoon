@@ -9,6 +9,7 @@ import Testimonials from '@/components/marketing/Testimonials'
 import LandingFAQs from '@/components/marketing/LandingFAQs'
 import CTABlock from '@/components/marketing/CTABlock'
 import EtsyWelcomeModal from '@/components/etsy/EtsyWelcomeModal'
+import LifetimeWelcomeModal from '@/components/lifetime/LifetimeWelcomeModal'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 function EtsyModalHandler() {
@@ -59,6 +60,54 @@ function EtsyModalHandler() {
   )
 }
 
+function LifetimeModalHandler() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [showLifetimeModal, setShowLifetimeModal] = useState(false)
+
+  useEffect(() => {
+    // Check if user came from Lifetime link - check both URL params and localStorage
+    const urlSource = searchParams.get('src')
+    const storageSource = localStorage.getItem('acq_source')
+    const lifetimeModalShown = localStorage.getItem('lifetime_landing_modal_shown')
+    
+    // Determine if this is a Lifetime user (from URL or localStorage)
+    const isLifetimeUser = urlSource === 'lifetime' || storageSource === 'lifetime'
+    
+    // Show modal after 2.5 seconds if from Lifetime and haven't shown it before
+    if (isLifetimeUser && !lifetimeModalShown) {
+      const timer = setTimeout(() => {
+        setShowLifetimeModal(true)
+      }, 2500) // 2.5 second delay
+      
+      return () => clearTimeout(timer)
+    }
+  }, [searchParams])
+
+  const handleStartTrial = () => {
+    // Mark modal as shown so it doesn't appear again
+    localStorage.setItem('lifetime_landing_modal_shown', 'true')
+    setShowLifetimeModal(false)
+    // Redirect to signup
+    router.push('/login')
+  }
+
+  const handleCloseModal = () => {
+    // Mark as shown even if they just close it
+    localStorage.setItem('lifetime_landing_modal_shown', 'true')
+    setShowLifetimeModal(false)
+  }
+
+  return (
+    <LifetimeWelcomeModal
+      isOpen={showLifetimeModal}
+      onClose={handleCloseModal}
+      onStartTrial={handleStartTrial}
+      onUpgrade={handleStartTrial}
+    />
+  )
+}
+
 export default function LandingPage() {
   return (
     <div className="min-h-screen">
@@ -75,6 +124,11 @@ export default function LandingPage() {
       {/* Etsy Welcome Modal - shows after 2.5s for Etsy visitors */}
       <Suspense fallback={null}>
         <EtsyModalHandler />
+      </Suspense>
+
+      {/* Lifetime Welcome Modal - shows after 2.5s for Lifetime visitors */}
+      <Suspense fallback={null}>
+        <LifetimeModalHandler />
       </Suspense>
     </div>
   )

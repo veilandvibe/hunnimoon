@@ -220,7 +220,7 @@ export default function PricingPage() {
           {/* Yearly Card */}
           <div className="bg-white rounded-4xl p-8 shadow-card border-2 border-pink-primary/10 relative overflow-hidden">
             {/* Corner Banner */}
-            <div className="absolute top-0 right-0 bg-gradient-to-br from-pink-primary to-pink-primary/80 text-white text-xs font-bold px-20 py-2.5 transform rotate-45 translate-x-[52px] translate-y-4 shadow-lg whitespace-nowrap">
+            <div className="absolute top-0 right-0 bg-gradient-to-br from-pink-primary to-pink-primary/80 text-white text-xs font-bold flex items-center justify-center h-10 px-20 transform rotate-45 translate-x-[52px] translate-y-4 origin-center shadow-lg whitespace-nowrap">
               BEST VALUE
             </div>
             
