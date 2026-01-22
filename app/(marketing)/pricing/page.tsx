@@ -119,7 +119,7 @@ export default function PricingPage() {
             onSelectPlan={handleUpgrade}
             loading={checkoutLoading}
             showTrialCard={false}
-            showToggle={true}
+            showToggle={false}
           />
 
           {/* Feature List */}

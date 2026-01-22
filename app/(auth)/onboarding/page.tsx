@@ -404,7 +404,7 @@ export default function OnboardingPage() {
               min={new Date().toISOString().split('T')[0]}
             />
 
-            <div className="relative">
+            <div>
               <Input
                 label="Wedding Slug (for your RSVP URL)"
                 required
@@ -413,18 +413,21 @@ export default function OnboardingPage() {
                 placeholder="alex-and-jordan-2026"
               />
               {formData.wedding_slug && formData.wedding_slug.length >= 3 && (
-                <div className="absolute right-3 top-9 flex items-center gap-1">
+                <div className="flex items-center gap-1 mt-2 text-xs">
                   {checkingSlug ? (
-                    <Loader2 size={18} className="text-pink-primary/50 animate-spin" />
+                    <>
+                      <Loader2 size={16} className="text-pink-primary/50 animate-spin" />
+                      <span className="text-pink-primary/60">Checking availability...</span>
+                    </>
                   ) : slugAvailable === true ? (
                     <>
-                      <CheckCircle size={18} className="text-green-600" />
-                      <span className="text-xs text-green-600 font-medium">Available</span>
+                      <CheckCircle size={16} className="text-green-600" />
+                      <span className="text-green-600 font-medium">Available</span>
                     </>
                   ) : slugAvailable === false ? (
                     <>
-                      <X size={18} className="text-red-600" />
-                      <span className="text-xs text-red-600 font-medium">Taken</span>
+                      <X size={16} className="text-red-600" />
+                      <span className="text-red-600 font-medium">Taken</span>
                     </>
                   ) : null}
                 </div>

@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { init } from '@instantdb/admin';
 import { isAdminEmail, checkRateLimit } from '@/lib/admin-helpers';
 
+// Force this route to be dynamic (not statically rendered)
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+export const revalidate = 0;
+
 // Initialize InstantDB Admin
 const db = init({
   appId: process.env.NEXT_PUBLIC_INSTANT_APP_ID!,
