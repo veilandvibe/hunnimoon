@@ -27,13 +27,18 @@ export default function BillingSection({ user, autoOpenUpgrade = false, autoOpen
 
   // Auto-open upgrade modal or promo code flow based on props
   useEffect(() => {
+    // Wait for user data to be available
+    if (!user.id || !user.email) return
+    
     if (autoOpenPromo && !loading) {
+      console.log('[BillingSection] Auto-triggering promo code checkout for Etsy user')
       handleApplyPromoCode()
     } else if (autoOpenUpgrade && !loading) {
+      console.log('[BillingSection] Auto-opening upgrade modal')
       setUpgradeModalOpen(true)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoOpenPromo, autoOpenUpgrade])
+  }, [autoOpenPromo, autoOpenUpgrade, user.id, user.email])
 
   const handleManageSubscription = async () => {
     if (!user.stripe_customer_id) {
@@ -92,6 +97,7 @@ export default function BillingSection({ user, autoOpenUpgrade = false, autoOpen
   }
 
   const handleApplyPromoCode = async () => {
+    console.log('[BillingSection] handleApplyPromoCode called with user:', { id: user.id, email: user.email })
     setLoading(true)
     try {
       // Always route to monthly plan for promo codes
@@ -107,14 +113,16 @@ export default function BillingSection({ user, autoOpenUpgrade = false, autoOpen
       })
 
       const data = await response.json()
+      console.log('[BillingSection] Checkout response:', data)
       
       if (data.url) {
+        console.log('[BillingSection] Redirecting to Stripe checkout with promo field enabled')
         window.location.href = data.url
       } else {
         throw new Error(data.error || 'Failed to create checkout session')
       }
     } catch (error: any) {
-      console.error('Error creating checkout:', error)
+      console.error('[BillingSection] Error creating checkout:', error)
       alert(error.message || 'Failed to start checkout')
       setLoading(false)
     }

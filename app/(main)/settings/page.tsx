@@ -75,22 +75,26 @@ export default function SettingsPage() {
 
   // Check for URL parameters to auto-open upgrade flows
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    // Wait for user data to be loaded before processing URL params
+    if (typeof window !== 'undefined' && userData && user?.id) {
       const params = new URLSearchParams(window.location.search)
       const action = params.get('action')
       const promo = params.get('promo')
       
       if (action === 'upgrade') {
+        console.log('[Settings] Detected upgrade action, promo:', promo)
         if (promo === 'true') {
+          console.log('[Settings] Setting autoOpenPromo to true')
           setAutoOpenPromo(true)
         } else {
+          console.log('[Settings] Setting autoOpenUpgrade to true')
           setAutoOpenUpgrade(true)
         }
         // Clean up URL after detecting parameters
         window.history.replaceState({}, '', '/settings')
       }
     }
-  }, [])
+  }, [userData, user?.id])
 
   // Real-time slug availability check for manual edits
   useEffect(() => {
