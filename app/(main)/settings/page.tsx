@@ -23,6 +23,7 @@ export default function SettingsPage() {
   // Detect URL parameters for auto-opening upgrade flows
   const [autoOpenUpgrade, setAutoOpenUpgrade] = useState(false)
   const [autoOpenPromo, setAutoOpenPromo] = useState(false)
+  const [paramsProcessed, setParamsProcessed] = useState(false)
   
   // Query user data with billing fields and rsvpSettings
   const { data, isLoading: dataLoading, error } = db.useQuery(
@@ -75,8 +76,8 @@ export default function SettingsPage() {
 
   // Check for URL parameters to auto-open upgrade flows
   useEffect(() => {
-    // Wait for user data to be loaded before processing URL params
-    if (typeof window !== 'undefined' && userData && user?.id) {
+    // Only process params once, when user data is loaded
+    if (typeof window !== 'undefined' && userData && user?.id && !paramsProcessed) {
       const params = new URLSearchParams(window.location.search)
       const action = params.get('action')
       const promo = params.get('promo')
@@ -90,11 +91,13 @@ export default function SettingsPage() {
           console.log('[Settings] Setting autoOpenUpgrade to true')
           setAutoOpenUpgrade(true)
         }
+        // Mark params as processed to prevent re-triggering
+        setParamsProcessed(true)
         // Clean up URL after detecting parameters
         window.history.replaceState({}, '', '/settings')
       }
     }
-  }, [userData, user?.id])
+  }, [userData, user?.id, paramsProcessed])
 
   // Real-time slug availability check for manual edits
   useEffect(() => {
