@@ -21,24 +21,27 @@ interface BillingSectionProps {
 export default function BillingSection({ user, autoOpenUpgrade = false, autoOpenPromo = false }: BillingSectionProps) {
   const [loading, setLoading] = useState(false)
   const [upgradeModalOpen, setUpgradeModalOpen] = useState(false)
+  const [hasTriggered, setHasTriggered] = useState(false)
   
   const trialStatus = getUserTrialStatus(user)
   const billingStatusText = getBillingStatusText(user)
 
   // Auto-open upgrade modal or promo code flow based on props
   useEffect(() => {
-    // Wait for user data to be available
-    if (!user.id || !user.email) return
+    // Wait for user data to be available and only trigger once
+    if (!user.id || !user.email || hasTriggered) return
     
     if (autoOpenPromo && !loading) {
       console.log('[BillingSection] Auto-triggering promo code checkout for Etsy user')
+      setHasTriggered(true)
       handleApplyPromoCode()
     } else if (autoOpenUpgrade && !loading) {
       console.log('[BillingSection] Auto-opening upgrade modal')
+      setHasTriggered(true)
       setUpgradeModalOpen(true)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoOpenPromo, autoOpenUpgrade, user.id, user.email])
+  }, [autoOpenPromo, autoOpenUpgrade, user.id, user.email, hasTriggered])
 
   const handleManageSubscription = async () => {
     if (!user.stripe_customer_id) {
