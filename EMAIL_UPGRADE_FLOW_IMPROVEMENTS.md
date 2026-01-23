@@ -40,8 +40,11 @@ Updated all upgrade buttons in emails to link to `/settings` with action paramet
 1. User receives trial expiring/expired email
 2. Clicks "Upgrade to Pro" button
 3. Redirected to `/settings?action=upgrade`
-4. If not logged in, prompted to log in
-5. After login, automatically opens upgrade modal
+4. If not logged in:
+   - Redirected to `/login?redirect=%2Fsettings%3Faction%3Dupgrade`
+   - Enters email and verification code
+   - **After login, automatically redirected back to `/settings?action=upgrade`**
+5. Upgrade modal automatically opens
 6. User selects monthly or yearly plan
 7. Redirected to Stripe checkout (no promo code field)
 
@@ -49,8 +52,11 @@ Updated all upgrade buttons in emails to link to `/settings` with action paramet
 1. User receives trial expiring/expired email with Etsy messaging
 2. Clicks "Activate 3 Months Free" button
 3. Redirected to `/settings?action=upgrade&promo=true`
-4. If not logged in, prompted to log in
-5. After login, automatically opens Stripe checkout with promo code field visible
+4. If not logged in:
+   - Redirected to `/login?redirect=%2Fsettings%3Faction%3Dupgrade%26promo%3Dtrue`
+   - Enters email and verification code
+   - **After login, automatically redirected back to `/settings?action=upgrade&promo=true`**
+5. Stripe checkout automatically opens with promo code field visible
 6. User enters their Etsy promo code
 7. Gets 3 months free
 
@@ -59,8 +65,35 @@ Updated all upgrade buttons in emails to link to `/settings` with action paramet
 - ✅ Direct path from email to upgrade action
 - ✅ Etsy users automatically get promo code field
 - ✅ No manual navigation needed after login
+- ✅ **URL parameters preserved through login flow**
 - ✅ Clean, professional modal without trial-ending language
 - ✅ Better conversion rates
+
+## Authentication Flow Fix
+
+### Problem Solved
+Previously, when logged-out users clicked email upgrade buttons:
+- They were redirected to `/login`
+- URL parameters (`?action=upgrade&promo=true`) were lost
+- After login, they went to dashboard/onboarding (not settings)
+- They had to manually navigate to upgrade
+
+### Solution Implemented
+**Redirect Parameter Pattern:**
+- AuthProvider captures original destination before redirecting to login
+- Adds `?redirect=` parameter to login URL with encoded destination
+- Login page preserves redirect parameter through the authentication flow
+- After successful login, redirects to original destination with parameters intact
+
+**Files Modified:**
+- `components/providers/AuthProvider.tsx` - Captures and encodes destination URL
+- `app/(auth)/login/page.tsx` - Checks for redirect param and uses it after auth
+
+**Safety Features:**
+- ✅ Optional parameter - doesn't affect regular login flow
+- ✅ Backward compatible - existing behavior unchanged
+- ✅ URL-safe encoding - parameters preserved exactly
+- ✅ Console logging - easy debugging of redirect flow
 
 ## Testing
 

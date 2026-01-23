@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import db from '@/lib/instant'
 import Card from '@/components/ui/Card'
@@ -14,6 +14,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 export default function LoginPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [email, setEmail] = useState('')
   const [code, setCode] = useState('')
   const [sentEmail, setSentEmail] = useState(false)
@@ -21,6 +22,16 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [showTermsModal, setShowTermsModal] = useState(false)
   const [showPrivacyModal, setShowPrivacyModal] = useState(false)
+  const [redirectPath, setRedirectPath] = useState<string | null>(null)
+
+  // Capture redirect parameter on mount
+  useEffect(() => {
+    const redirect = searchParams.get('redirect')
+    if (redirect) {
+      console.log('[Login] Redirect parameter detected:', redirect)
+      setRedirectPath(redirect)
+    }
+  }, [searchParams])
 
   const handleOpenTermsModal = () => {
     // Remove focus from any active input to prevent validation tooltips
@@ -60,8 +71,15 @@ export default function LoginPage() {
 
     try {
       await db.auth.signInWithMagicCode({ email, code })
-      // Auth state will update automatically, redirect will happen in middleware
-      router.push('/onboarding')
+      
+      // If there's a redirect path, use it; otherwise use default
+      if (redirectPath) {
+        console.log('[Login] Redirecting to:', redirectPath)
+        router.push(redirectPath)
+      } else {
+        // Default behavior for regular login (AuthProvider will handle this)
+        router.push('/onboarding')
+      }
     } catch (err: any) {
       console.error('Error verifying code:', err)
       setError('Invalid code. Please check and try again.')

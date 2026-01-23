@@ -32,7 +32,9 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
     // If not authenticated and not on a public route, redirect to login
     if (!user && !isPublicRoute) {
-      router.push('/login')
+      // Preserve the current path and query params for redirect after login
+      const currentUrl = window.location.pathname + window.location.search
+      router.push(`/login?redirect=${encodeURIComponent(currentUrl)}`)
       return
     }
 
