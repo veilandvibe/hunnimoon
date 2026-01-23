@@ -20,10 +20,6 @@ export default function SettingsPage() {
   const { startOnboarding } = useTour()
   const { isReadOnly } = useReadOnly()
   
-  // Detect URL parameters for auto-opening upgrade flows
-  const [autoOpenUpgrade, setAutoOpenUpgrade] = useState(false)
-  const [autoOpenPromo, setAutoOpenPromo] = useState(false)
-  const [paramsProcessed, setParamsProcessed] = useState(false)
   
   // Query user data with billing fields and rsvpSettings
   const { data, isLoading: dataLoading, error } = db.useQuery(
@@ -73,31 +69,6 @@ export default function SettingsPage() {
       setSlugAvailable(true) // Current slug is always valid
     }
   }, [wedding])
-
-  // Check for URL parameters to auto-open upgrade flows
-  useEffect(() => {
-    // Only process params once, when user data is loaded
-    if (typeof window !== 'undefined' && userData && user?.id && !paramsProcessed) {
-      const params = new URLSearchParams(window.location.search)
-      const action = params.get('action')
-      const promo = params.get('promo')
-      
-      if (action === 'upgrade') {
-        console.log('[Settings] Detected upgrade action, promo:', promo)
-        if (promo === 'true') {
-          console.log('[Settings] Setting autoOpenPromo to true')
-          setAutoOpenPromo(true)
-        } else {
-          console.log('[Settings] Setting autoOpenUpgrade to true')
-          setAutoOpenUpgrade(true)
-        }
-        // Mark params as processed to prevent re-triggering
-        setParamsProcessed(true)
-        // Clean up URL after detecting parameters
-        window.history.replaceState({}, '', '/settings')
-      }
-    }
-  }, [userData, user?.id, paramsProcessed])
 
   // Real-time slug availability check for manual edits
   useEffect(() => {
@@ -390,8 +361,6 @@ export default function SettingsPage() {
             billing_status: userData.billing_status as 'trial' | 'active' | 'expired' | 'canceled' | null | undefined,
             subscription_plan: userData.subscription_plan as 'monthly' | 'yearly' | null | undefined,
           }}
-          autoOpenUpgrade={autoOpenUpgrade}
-          autoOpenPromo={autoOpenPromo}
         />
       )}
 

@@ -1,16 +1,21 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Check, Loader2 } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { Check, Loader2, Mail, Sparkles } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import PlanSelector from '@/components/billing/PlanSelector'
 import db from '@/lib/instant'
 
 export default function PricingPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { user, isLoading: authLoading } = db.useAuth()
   const [checkoutLoading, setCheckoutLoading] = useState(false)
+  
+  // Read URL parameters
+  const intent = searchParams.get('intent') // 'upgrade'
+  const hasPromo = searchParams.get('promo') === 'true' // Etsy promo
 
   // Query user billing data
   const { data, isLoading: dataLoading } = db.useQuery(
@@ -42,13 +47,25 @@ export default function PricingPage() {
     if (user) {
       router.push('/dashboard')
     } else {
-      router.push('/login')
+      // Preserve intent and promo params through login
+      const params = new URLSearchParams()
+      if (intent) params.set('intent', intent)
+      if (hasPromo) params.set('promo', 'true')
+      const queryString = params.toString()
+      const redirectUrl = queryString ? `/pricing?${queryString}` : '/pricing'
+      router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`)
     }
   }
 
   const handleUpgrade = async (plan: 'monthly' | 'yearly') => {
     if (!user?.id || !user?.email) {
-      router.push('/login')
+      // Not logged in - redirect to login with intent preserved
+      const params = new URLSearchParams()
+      if (intent) params.set('intent', intent)
+      if (hasPromo) params.set('promo', 'true')
+      const queryString = params.toString()
+      const redirectUrl = queryString ? `/pricing?${queryString}` : '/pricing'
+      router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`)
       return
     }
 
@@ -61,7 +78,7 @@ export default function PricingPage() {
           plan,
           userId: user.id,
           userEmail: user.email,
-          allowPromoCode: false,
+          allowPromoCode: hasPromo, // Enable promo field for Etsy users
         }),
       })
 
@@ -110,9 +127,32 @@ export default function PricingPage() {
               Upgrade to Hunnimoon Pro
             </h1>
             <p className="text-xl text-pink-primary/70 max-w-2xl mx-auto">
-              Choose your plan and continue planning your perfect wedding.
+              {hasPromo ? 'Claim your 3 months free and continue planning your perfect wedding.' : 'Choose your plan and continue planning your perfect wedding.'}
             </p>
           </div>
+
+          {/* Etsy Promo Banner */}
+          {hasPromo && (
+            <div className="bg-gradient-to-r from-pink-primary/10 to-pink-primary/5 border-2 border-pink-primary/20 rounded-3xl p-6 mb-8 max-w-3xl mx-auto">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-pink-primary rounded-2xl flex items-center justify-center flex-shrink-0">
+                  <Sparkles className="w-6 h-6 text-white" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-black text-pink-primary mb-2">
+                    🎉 Etsy Customer Exclusive!
+                  </h3>
+                  <p className="text-pink-primary/80 mb-3">
+                    You're eligible for <strong>3 months free</strong> as a Veil & Vibe customer! 
+                    After selecting your plan, you'll be able to enter your promo code at checkout.
+                  </p>
+                  <p className="text-sm text-pink-primary/70">
+                    💝 Find your code in the PDF from your Etsy purchase
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Plan Selector */}
           <PlanSelector
@@ -145,13 +185,45 @@ export default function PricingPage() {
   return (
     <div className="min-h-screen py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Upgrade Intent Banner (for logged-out users from email) */}
+        {intent === 'upgrade' && !user && (
+          <div className="bg-gradient-to-r from-pink-primary to-pink-primary/80 text-white rounded-3xl p-8 mb-12 max-w-4xl mx-auto shadow-xl">
+            <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
+              <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center flex-shrink-0">
+                <Mail className="w-8 h-8 text-white" />
+              </div>
+              <div className="flex-1">
+                <h2 className="text-2xl md:text-3xl font-black mb-2">
+                  {hasPromo ? '🎉 Ready to claim your 3 months free?' : 'Ready to upgrade to Hunnimoon Pro?'}
+                </h2>
+                <p className="text-white/90 text-lg mb-4">
+                  {hasPromo 
+                    ? 'Sign in to your account first, then select your plan to activate your Etsy promo code.'
+                    : 'Sign in to your account first, then choose your plan below.'}
+                </p>
+                <Button 
+                  onClick={handleStartTrial}
+                  variant="outline"
+                  size="lg"
+                  className="bg-white text-pink-primary hover:bg-white/90"
+                >
+                  <Mail size={20} />
+                  Sign In to Continue
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-black text-pink-primary mb-4">
-            Simple, Transparent Pricing
+            {intent === 'upgrade' ? 'Upgrade to Hunnimoon Pro' : 'Simple, Transparent Pricing'}
           </h1>
           <p className="text-xl text-pink-primary/70 max-w-2xl mx-auto">
-            Start with a 7-day free trial. No credit card required.
+            {intent === 'upgrade' 
+              ? (hasPromo ? 'Get 3 months free with your Etsy promo code.' : 'Choose your plan and unlock full access.')
+              : 'Start with a 7-day free trial. No credit card required.'}
           </p>
         </div>
 
@@ -174,7 +246,7 @@ export default function PricingPage() {
               fullWidth
               size="lg"
             >
-              Start Free Trial
+              {intent === 'upgrade' ? 'Sign In to Upgrade' : 'Start Free Trial'}
             </Button>
 
             <div className="mt-8 space-y-3">
@@ -204,7 +276,7 @@ export default function PricingPage() {
               fullWidth
               size="lg"
             >
-              Start Free Trial
+              {intent === 'upgrade' ? 'Sign In to Upgrade' : 'Start Free Trial'}
             </Button>
 
             <div className="mt-8 space-y-3">
@@ -241,7 +313,7 @@ export default function PricingPage() {
               fullWidth
               size="lg"
             >
-              Start Free Trial
+              {intent === 'upgrade' ? 'Sign In to Upgrade' : 'Start Free Trial'}
             </Button>
 
             <div className="mt-8 space-y-3">
