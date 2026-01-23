@@ -27,7 +27,7 @@ export const SubscriptionSuccessEmail = ({
   baseUrl = 'https://hunnimoon.app',
 }: SubscriptionSuccessEmailProps) => {
   const planName = planType === 'monthly' ? 'Monthly' : 'Yearly';
-  const planPrice = planType === 'monthly' ? '$9.99/month' : '$79.99/year';
+  const planPrice = planType === 'monthly' ? '$14.99/month' : '$119.99/year';
   const savings = planType === 'yearly' ? ' (33% savings!)' : '';
 
   return (

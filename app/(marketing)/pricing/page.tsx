@@ -192,7 +192,7 @@ export default function PricingPage() {
             <div className="mb-6">
               <h3 className="text-2xl font-black text-pink-primary mb-2">Pro Monthly</h3>
               <div className="flex items-baseline gap-2 mb-4">
-                <span className="text-5xl font-black text-pink-primary">$9.99</span>
+                <span className="text-5xl font-black text-pink-primary">$14.99</span>
                 <span className="text-pink-primary/60">/ month</span>
               </div>
               <p className="text-pink-primary/70 text-sm">Billed monthly • Cancel anytime</p>
@@ -227,11 +227,11 @@ export default function PricingPage() {
             <div className="mb-6 mt-2">
               <h3 className="text-2xl font-black text-pink-primary mb-2">Pro Yearly</h3>
               <div className="flex items-baseline gap-2 mb-4">
-                <span className="text-5xl font-black text-pink-primary">$79.99</span>
+                <span className="text-5xl font-black text-pink-primary">$119.99</span>
                 <span className="text-pink-primary/60">/ year</span>
               </div>
               <p className="text-pink-primary/70 text-sm">
-                <span className="line-through">$119.88</span> • <span className="font-bold text-pink-primary">Save 33%</span>
+                <span className="line-through">$179.88</span> • <span className="font-bold text-pink-primary">Save 33%</span>
               </p>
             </div>
 

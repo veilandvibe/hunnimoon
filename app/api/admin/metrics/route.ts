@@ -71,8 +71,8 @@ export async function GET(req: NextRequest) {
     const canceledUsers = users.filter((user: any) => user.billing_status === 'canceled');
 
     // MRR calculation
-    const monthlyMRR = monthlyUsers.length * 9.99;
-    const yearlyMRR = yearlyUsers.length * (79.99 / 12);
+    const monthlyMRR = monthlyUsers.length * 14.99;
+    const yearlyMRR = yearlyUsers.length * (119.99 / 12);
     const totalMRR = monthlyMRR + yearlyMRR;
 
     // Churn rate

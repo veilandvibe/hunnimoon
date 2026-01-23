@@ -89,7 +89,7 @@ export default function PlanSelector({
           <div className="mb-4">
             <h3 className="text-xl font-black text-pink-primary mb-2">Pro Monthly</h3>
             <div className="flex items-baseline gap-2 mb-2">
-              <span className="text-4xl font-black text-pink-primary">$9.99</span>
+              <span className="text-4xl font-black text-pink-primary">$14.99</span>
               <span className="text-pink-primary/60 text-sm">/ month</span>
             </div>
             <p className="text-pink-primary/70 text-xs">Billed monthly • Cancel anytime</p>
@@ -120,11 +120,11 @@ export default function PlanSelector({
           <div className="mb-4">
             <h3 className="text-xl font-black text-pink-primary mb-2">Pro Yearly</h3>
             <div className="flex items-baseline gap-2 mb-2">
-              <span className="text-4xl font-black text-pink-primary">$79.99</span>
+              <span className="text-4xl font-black text-pink-primary">$119.99</span>
               <span className="text-pink-primary/60 text-sm">/ year</span>
             </div>
             <p className="text-pink-primary/70 text-xs">
-              <span className="line-through">$119.88</span> • <span className="text-pink-primary font-bold text-sm">Save 33%</span>
+              <span className="line-through">$179.88</span> • <span className="text-pink-primary font-bold text-sm">Save 33%</span>
             </p>
           </div>
 
