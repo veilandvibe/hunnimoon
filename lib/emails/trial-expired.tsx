@@ -80,7 +80,7 @@ export const TrialExpiredEmail = ({
             </Section>
 
             <Section style={buttonContainer}>
-              <Button style={button} href={`${baseUrl}/pricing`}>
+              <Button style={button} href={`${baseUrl}/settings?action=upgrade&promo=true`}>
                 Activate 3 Months Free
               </Button>
             </Section>
@@ -113,18 +113,18 @@ export const TrialExpiredEmail = ({
             <Section style={pricingBox}>
               <div style={pricingOption}>
                 <Text style={pricingTitle}>Monthly Plan</Text>
-                <Text style={pricingPrice}>$9.99/month</Text>
+                <Text style={pricingPrice}>$14.99/month</Text>
                 <Text style={pricingDesc}>Cancel anytime</Text>
               </div>
               <div style={pricingOption}>
                 <Text style={pricingTitle}>Yearly Plan</Text>
-                <Text style={pricingPrice}>$79.99/year</Text>
+                <Text style={pricingPrice}>$119.99/year</Text>
                 <Text style={pricingDesc}>Save 33%</Text>
               </div>
             </Section>
 
             <Section style={buttonContainer}>
-              <Button style={button} href={`${baseUrl}/pricing`}>
+              <Button style={button} href={`${baseUrl}/settings?action=upgrade`}>
                 Upgrade to Pro
               </Button>
             </Section>

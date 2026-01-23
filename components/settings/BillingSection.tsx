@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { CreditCard, ExternalLink, Tag } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
@@ -14,14 +14,26 @@ interface BillingSectionProps {
     id: string
     email?: string
   }
+  autoOpenUpgrade?: boolean
+  autoOpenPromo?: boolean
 }
 
-export default function BillingSection({ user }: BillingSectionProps) {
+export default function BillingSection({ user, autoOpenUpgrade = false, autoOpenPromo = false }: BillingSectionProps) {
   const [loading, setLoading] = useState(false)
   const [upgradeModalOpen, setUpgradeModalOpen] = useState(false)
   
   const trialStatus = getUserTrialStatus(user)
   const billingStatusText = getBillingStatusText(user)
+
+  // Auto-open upgrade modal or promo code flow based on props
+  useEffect(() => {
+    if (autoOpenPromo && !loading) {
+      handleApplyPromoCode()
+    } else if (autoOpenUpgrade && !loading) {
+      setUpgradeModalOpen(true)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoOpenPromo, autoOpenUpgrade])
 
   const handleManageSubscription = async () => {
     if (!user.stripe_customer_id) {
