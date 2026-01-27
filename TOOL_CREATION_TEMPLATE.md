@@ -524,6 +524,9 @@ Before considering a tool complete:
 
 ---
 
+NEW ADDITION*
+make sure this is properly indexed and for Google seo search console.
+
 **Last Updated:** January 2026  
 **Reference Implementation:** `/tools/wedding-timeline-generator`  
 **Verified Hunnimoon Features:** Guests, Budget, Vendors, RSVPs only
