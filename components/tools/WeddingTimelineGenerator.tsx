@@ -203,7 +203,6 @@ export default function WeddingTimelineGenerator() {
     setIncludeFarewellBrunch(false)
     
     // Honeymoon
-    setIncludeHoneymoonBooked(false)
     setIncludeDepartHoneymoon(false)
     
     setTimeline([])
