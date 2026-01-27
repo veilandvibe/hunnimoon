@@ -246,7 +246,7 @@ export default function WeddingTimelineGenerator() {
                     type="checkbox"
                     checked={includeEngagementParty}
                     onChange={(e) => setIncludeEngagementParty(e.target.checked)}
-                    className="w-4 h-4 text-pink-primary rounded border-pink-primary/30"
+                    className="w-5 h-5 accent-pink-primary cursor-pointer"
                   />
                   <span className="text-sm text-pink-primary">Engagement party</span>
                 </label>
@@ -256,7 +256,7 @@ export default function WeddingTimelineGenerator() {
                     type="checkbox"
                     checked={includeBridalShower}
                     onChange={(e) => setIncludeBridalShower(e.target.checked)}
-                    className="w-4 h-4 text-pink-primary rounded border-pink-primary/30"
+                    className="w-5 h-5 accent-pink-primary cursor-pointer"
                   />
                   <span className="text-sm text-pink-primary">Bridal shower</span>
                 </label>
@@ -266,7 +266,7 @@ export default function WeddingTimelineGenerator() {
                     type="checkbox"
                     checked={includeBachelorParty}
                     onChange={(e) => setIncludeBachelorParty(e.target.checked)}
-                    className="w-4 h-4 text-pink-primary rounded border-pink-primary/30"
+                    className="w-5 h-5 accent-pink-primary cursor-pointer"
                   />
                   <span className="text-sm text-pink-primary">Bachelor / bachelorette party</span>
                 </label>
@@ -284,7 +284,7 @@ export default function WeddingTimelineGenerator() {
                     type="checkbox"
                     checked={includeSaveDates}
                     onChange={(e) => setIncludeSaveDates(e.target.checked)}
-                    className="w-4 h-4 text-pink-primary rounded border-pink-primary/30"
+                    className="w-5 h-5 accent-pink-primary cursor-pointer"
                   />
                   <span className="text-sm text-pink-primary">Save-the-dates sent</span>
                 </label>
@@ -294,7 +294,7 @@ export default function WeddingTimelineGenerator() {
                     type="checkbox"
                     checked={includeInvitations}
                     onChange={(e) => setIncludeInvitations(e.target.checked)}
-                    className="w-4 h-4 text-pink-primary rounded border-pink-primary/30"
+                    className="w-5 h-5 accent-pink-primary cursor-pointer"
                   />
                   <span className="text-sm text-pink-primary">Invitations sent</span>
                 </label>
@@ -312,7 +312,7 @@ export default function WeddingTimelineGenerator() {
                     type="checkbox"
                     checked={includeRehearsal}
                     onChange={(e) => setIncludeRehearsal(e.target.checked)}
-                    className="w-4 h-4 text-pink-primary rounded border-pink-primary/30"
+                    className="w-5 h-5 accent-pink-primary cursor-pointer"
                   />
                   <span className="text-sm text-pink-primary">Rehearsal</span>
                 </label>
@@ -322,7 +322,7 @@ export default function WeddingTimelineGenerator() {
                     type="checkbox"
                     checked={includeRehearsalDinner}
                     onChange={(e) => setIncludeRehearsalDinner(e.target.checked)}
-                    className="w-4 h-4 text-pink-primary rounded border-pink-primary/30"
+                    className="w-5 h-5 accent-pink-primary cursor-pointer"
                   />
                   <span className="text-sm text-pink-primary">Rehearsal dinner</span>
                 </label>
@@ -332,7 +332,7 @@ export default function WeddingTimelineGenerator() {
                     type="checkbox"
                     checked={includeVenueWalkthrough}
                     onChange={(e) => setIncludeVenueWalkthrough(e.target.checked)}
-                    className="w-4 h-4 text-pink-primary rounded border-pink-primary/30"
+                    className="w-5 h-5 accent-pink-primary cursor-pointer"
                   />
                   <span className="text-sm text-pink-primary">Final venue walk-through</span>
                 </label>
@@ -350,7 +350,7 @@ export default function WeddingTimelineGenerator() {
                     type="checkbox"
                     checked={includeGettingReady}
                     onChange={(e) => setIncludeGettingReady(e.target.checked)}
-                    className="w-4 h-4 text-pink-primary rounded border-pink-primary/30"
+                    className="w-5 h-5 accent-pink-primary cursor-pointer"
                   />
                   <span className="text-sm text-pink-primary">Getting ready</span>
                 </label>
@@ -360,7 +360,7 @@ export default function WeddingTimelineGenerator() {
                     type="checkbox"
                     checked={includeCeremony}
                     onChange={(e) => setIncludeCeremony(e.target.checked)}
-                    className="w-4 h-4 text-pink-primary rounded border-pink-primary/30"
+                    className="w-5 h-5 accent-pink-primary cursor-pointer"
                   />
                   <span className="text-sm text-pink-primary">Ceremony</span>
                 </label>
@@ -370,7 +370,7 @@ export default function WeddingTimelineGenerator() {
                     type="checkbox"
                     checked={includeReception}
                     onChange={(e) => setIncludeReception(e.target.checked)}
-                    className="w-4 h-4 text-pink-primary rounded border-pink-primary/30"
+                    className="w-5 h-5 accent-pink-primary cursor-pointer"
                   />
                   <span className="text-sm text-pink-primary">Reception</span>
                 </label>
@@ -388,7 +388,7 @@ export default function WeddingTimelineGenerator() {
                     type="checkbox"
                     checked={includeAfterParty}
                     onChange={(e) => setIncludeAfterParty(e.target.checked)}
-                    className="w-4 h-4 text-pink-primary rounded border-pink-primary/30"
+                    className="w-5 h-5 accent-pink-primary cursor-pointer"
                   />
                   <span className="text-sm text-pink-primary">After-party</span>
                 </label>
@@ -398,7 +398,7 @@ export default function WeddingTimelineGenerator() {
                     type="checkbox"
                     checked={includeFarewellBrunch}
                     onChange={(e) => setIncludeFarewellBrunch(e.target.checked)}
-                    className="w-4 h-4 text-pink-primary rounded border-pink-primary/30"
+                    className="w-5 h-5 accent-pink-primary cursor-pointer"
                   />
                   <span className="text-sm text-pink-primary">Farewell brunch</span>
                 </label>
@@ -416,7 +416,7 @@ export default function WeddingTimelineGenerator() {
                     type="checkbox"
                     checked={includeDepartHoneymoon}
                     onChange={(e) => setIncludeDepartHoneymoon(e.target.checked)}
-                    className="w-4 h-4 text-pink-primary rounded border-pink-primary/30"
+                    className="w-5 h-5 accent-pink-primary cursor-pointer"
                   />
                   <span className="text-sm text-pink-primary">Depart for honeymoon</span>
                 </label>

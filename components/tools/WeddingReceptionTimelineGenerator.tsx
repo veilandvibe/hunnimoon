@@ -272,7 +272,7 @@ export default function WeddingReceptionTimelineGenerator() {
             <select
               value={duration}
               onChange={(e) => setDuration(e.target.value)}
-              className="w-full px-4 pr-10 h-[48px] rounded-xl border-2 border-pink-primary/20 text-pink-primary text-base bg-white focus:outline-none focus:ring-2 focus:ring-pink-primary/20 transition-all duration-200 appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23D4477E%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:20px] bg-[right_12px_center] bg-no-repeat"
+              className="w-full px-4 pr-10 h-[48px] rounded-xl border-2 border-pink-primary/50 text-pink-primary text-base bg-white focus:outline-none focus:ring-2 focus:ring-pink-primary/20 transition-all duration-200 appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23D4477E%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:20px] bg-[right_12px_center] bg-no-repeat"
             >
               <option value="3">3 hours</option>
               <option value="4">4 hours</option>
@@ -337,7 +337,7 @@ export default function WeddingReceptionTimelineGenerator() {
                     type="checkbox"
                     checked={includeGrandEntrance}
                     onChange={(e) => setIncludeGrandEntrance(e.target.checked)}
-                    className="w-4 h-4 text-pink-primary rounded border-pink-primary/30"
+                    className="w-5 h-5 accent-pink-primary cursor-pointer"
                   />
                   <span className="text-sm text-pink-primary">Grand entrance</span>
                 </label>
@@ -347,7 +347,7 @@ export default function WeddingReceptionTimelineGenerator() {
                     type="checkbox"
                     checked={includeFirstDance}
                     onChange={(e) => setIncludeFirstDance(e.target.checked)}
-                    className="w-4 h-4 text-pink-primary rounded border-pink-primary/30"
+                    className="w-5 h-5 accent-pink-primary cursor-pointer"
                   />
                   <span className="text-sm text-pink-primary">First dance</span>
                 </label>
@@ -357,7 +357,7 @@ export default function WeddingReceptionTimelineGenerator() {
                     type="checkbox"
                     checked={includeWelcomeSpeech}
                     onChange={(e) => setIncludeWelcomeSpeech(e.target.checked)}
-                    className="w-4 h-4 text-pink-primary rounded border-pink-primary/30"
+                    className="w-5 h-5 accent-pink-primary cursor-pointer"
                   />
                   <span className="text-sm text-pink-primary">Welcome speech</span>
                 </label>
@@ -367,7 +367,7 @@ export default function WeddingReceptionTimelineGenerator() {
                     type="checkbox"
                     checked={includeToasts}
                     onChange={(e) => setIncludeToasts(e.target.checked)}
-                    className="w-4 h-4 text-pink-primary rounded border-pink-primary/30"
+                    className="w-5 h-5 accent-pink-primary cursor-pointer"
                   />
                   <span className="text-sm text-pink-primary">Toasts</span>
                 </label>
@@ -377,7 +377,7 @@ export default function WeddingReceptionTimelineGenerator() {
                     type="checkbox"
                     checked={includeDances}
                     onChange={(e) => setIncludeDances(e.target.checked)}
-                    className="w-4 h-4 text-pink-primary rounded border-pink-primary/30"
+                    className="w-5 h-5 accent-pink-primary cursor-pointer"
                   />
                   <span className="text-sm text-pink-primary">Parent dances</span>
                 </label>
@@ -395,7 +395,7 @@ export default function WeddingReceptionTimelineGenerator() {
                     type="checkbox"
                     checked={includeCakeCutting}
                     onChange={(e) => setIncludeCakeCutting(e.target.checked)}
-                    className="w-4 h-4 text-pink-primary rounded border-pink-primary/30"
+                    className="w-5 h-5 accent-pink-primary cursor-pointer"
                   />
                   <span className="text-sm text-pink-primary">Cake cutting</span>
                 </label>
@@ -405,7 +405,7 @@ export default function WeddingReceptionTimelineGenerator() {
                     type="checkbox"
                     checked={includeDessert}
                     onChange={(e) => setIncludeDessert(e.target.checked)}
-                    className="w-4 h-4 text-pink-primary rounded border-pink-primary/30"
+                    className="w-5 h-5 accent-pink-primary cursor-pointer"
                   />
                   <span className="text-sm text-pink-primary">Dessert table opens</span>
                 </label>
@@ -423,7 +423,7 @@ export default function WeddingReceptionTimelineGenerator() {
                     type="checkbox"
                     checked={includeAnniversaryDance}
                     onChange={(e) => setIncludeAnniversaryDance(e.target.checked)}
-                    className="w-4 h-4 text-pink-primary rounded border-pink-primary/30"
+                    className="w-5 h-5 accent-pink-primary cursor-pointer"
                   />
                   <span className="text-sm text-pink-primary">Anniversary dance</span>
                 </label>
@@ -433,7 +433,7 @@ export default function WeddingReceptionTimelineGenerator() {
                     type="checkbox"
                     checked={includeBouquetToss}
                     onChange={(e) => setIncludeBouquetToss(e.target.checked)}
-                    className="w-4 h-4 text-pink-primary rounded border-pink-primary/30"
+                    className="w-5 h-5 accent-pink-primary cursor-pointer"
                   />
                   <span className="text-sm text-pink-primary">Bouquet toss</span>
                 </label>
@@ -443,7 +443,7 @@ export default function WeddingReceptionTimelineGenerator() {
                     type="checkbox"
                     checked={includeGarterToss}
                     onChange={(e) => setIncludeGarterToss(e.target.checked)}
-                    className="w-4 h-4 text-pink-primary rounded border-pink-primary/30"
+                    className="w-5 h-5 accent-pink-primary cursor-pointer"
                   />
                   <span className="text-sm text-pink-primary">Garter toss</span>
                 </label>
@@ -453,7 +453,7 @@ export default function WeddingReceptionTimelineGenerator() {
                     type="checkbox"
                     checked={includeSendoff}
                     onChange={(e) => setIncludeSendoff(e.target.checked)}
-                    className="w-4 h-4 text-pink-primary rounded border-pink-primary/30"
+                    className="w-5 h-5 accent-pink-primary cursor-pointer"
                   />
                   <span className="text-sm text-pink-primary">Send-off</span>
                 </label>

@@ -24,7 +24,7 @@ export default function Checkbox({ checked, onChange, label, disabled }: Checkbo
           className={`w-5 h-5 rounded border-2 transition-all ${
             checked
               ? 'bg-pink-primary border-pink-primary'
-              : 'bg-white border-pink-primary/30'
+              : 'bg-white border-pink-primary/50'
           } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
           {checked && <Check size={16} className="text-white" />}
