@@ -18,6 +18,7 @@ export interface Tool {
   seoContent: ToolSEOContent
   component: string // Component name to render
   image?: string // Product image path
+  metaDescription?: string // SEO meta description (155-160 chars)
 }
 
 export type ToolCategory = Tool['category']
