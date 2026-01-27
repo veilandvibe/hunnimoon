@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import { Metadata } from 'next'
 import { getToolBySlug, getAllTools } from '@/lib/tools-data'
 import Breadcrumbs from '@/components/marketing/Breadcrumbs'
 import CTABlock from '@/components/marketing/CTABlock'
@@ -14,6 +15,27 @@ const toolComponents: Record<string, React.ComponentType> = {
   WeddingTimelineGenerator,
   WeddingDayTimelineGenerator,
   WeddingReceptionTimelineGenerator,
+}
+
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const tool = getToolBySlug(params.slug)
+  
+  if (!tool) {
+    return {
+      title: 'Tool Not Found',
+      description: 'The requested tool could not be found.'
+    }
+  }
+
+  return {
+    title: `${tool.h1} | Hunnimoon`,
+    description: tool.metaDescription || tool.description,
+    openGraph: {
+      title: tool.h1,
+      description: tool.metaDescription || tool.description,
+      type: 'website',
+    }
+  }
 }
 
 export default function ToolPage({ params }: { params: { slug: string } }) {
@@ -66,11 +88,11 @@ export default function ToolPage({ params }: { params: { slug: string } }) {
           </p>
           <div className="flex items-center justify-center gap-4">
             <div className="w-12 h-12 bg-pink-primary rounded-full flex items-center justify-center text-white font-bold">
-              S
+              R
             </div>
             <div className="text-left">
-              <p className="font-bold text-pink-primary">Sarah M.</p>
-              <p className="text-sm text-pink-primary/70">Married June 2024</p>
+              <p className="font-bold text-pink-primary">Rachel E.</p>
+              <p className="text-sm text-pink-primary/70">Bride 2025</p>
             </div>
           </div>
         </div>

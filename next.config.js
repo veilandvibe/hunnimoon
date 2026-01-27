@@ -8,7 +8,9 @@ const nextConfig = {
   },
 }
 
-module.exports = withSentryConfig(nextConfig, {
+// Disable Sentry in development to avoid SWC issues
+module.exports = process.env.NODE_ENV === 'production' 
+  ? withSentryConfig(nextConfig, {
   // For all available options, see:
   // https://github.com/getsentry/sentry-webpack-plugin#options
 
@@ -43,3 +45,4 @@ module.exports = withSentryConfig(nextConfig, {
     automaticVercelMonitors: true,
   },
 })
+  : nextConfig

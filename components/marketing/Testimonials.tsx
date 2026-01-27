@@ -9,9 +9,9 @@ export default function Testimonials() {
   const testimonials = [
     {
       quote: "We had so many moving parts to track. Hunnimoon made it simple to see what we needed to do each month. Nothing fell through the cracks.",
-      author: "Sarah M.",
-      role: "Married June 2024",
-      initial: "S"
+      author: "Rachel E.",
+      role: "Bride 2025",
+      initial: "R"
     },
     {
       quote: "I was drowning in spreadsheets before Hunnimoon. Now everything is in one place and I can actually enjoy planning instead of stressing about it.",
