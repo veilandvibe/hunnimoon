@@ -15,14 +15,14 @@ export default function WeddingReceptionTimelineGenerator() {
   const [dinnerStyle, setDinnerStyle] = useState<DinnerStyle>('plated')
   
   // Formal moments
-  const [includeGrandEntrance, setIncludeGrandEntrance] = useState(true)
-  const [includeFirstDance, setIncludeFirstDance] = useState(true)
-  const [includeWelcomeSpeech, setIncludeWelcomeSpeech] = useState(true)
-  const [includeToasts, setIncludeToasts] = useState(true)
-  const [includeDances, setIncludeDances] = useState(true)
+  const [includeGrandEntrance, setIncludeGrandEntrance] = useState(false)
+  const [includeFirstDance, setIncludeFirstDance] = useState(false)
+  const [includeWelcomeSpeech, setIncludeWelcomeSpeech] = useState(false)
+  const [includeToasts, setIncludeToasts] = useState(false)
+  const [includeDances, setIncludeDances] = useState(false)
   
   // Food moments
-  const [includeCakeCutting, setIncludeCakeCutting] = useState(true)
+  const [includeCakeCutting, setIncludeCakeCutting] = useState(false)
   const [includeDessert, setIncludeDessert] = useState(false)
   
   // Fun traditions
@@ -225,14 +225,14 @@ export default function WeddingReceptionTimelineGenerator() {
     setDinnerStyle('plated')
     
     // Formal moments
-    setIncludeGrandEntrance(true)
-    setIncludeFirstDance(true)
-    setIncludeWelcomeSpeech(true)
-    setIncludeToasts(true)
-    setIncludeDances(true)
+    setIncludeGrandEntrance(false)
+    setIncludeFirstDance(false)
+    setIncludeWelcomeSpeech(false)
+    setIncludeToasts(false)
+    setIncludeDances(false)
     
     // Food moments
-    setIncludeCakeCutting(true)
+    setIncludeCakeCutting(false)
     setIncludeDessert(false)
     
     // Fun traditions
@@ -477,11 +477,8 @@ export default function WeddingReceptionTimelineGenerator() {
       {/* Results */}
       {timeline.length > 0 && (
         <div className="bg-white rounded-2xl border-2 border-pink-primary/10 p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-bold text-pink-primary">
-              Your Reception Timeline
-            </h3>
-            <div className="flex gap-2">
+          <div className="flex flex-col gap-4 mb-6">
+            <div className="flex gap-2 justify-center">
               <Button
                 onClick={handleCopyTimeline}
                 variant="outline"
@@ -499,6 +496,9 @@ export default function WeddingReceptionTimelineGenerator() {
                 Download
               </Button>
             </div>
+            <h3 className="text-xl font-bold text-pink-primary text-center">
+              Your Reception Timeline
+            </h3>
           </div>
           
           <div className="space-y-2">

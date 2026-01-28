@@ -222,6 +222,7 @@ export default function WeddingTimelineGenerator() {
             value={weddingDate}
             onChange={(e) => setWeddingDate(e.target.value)}
             className="h-[48px]"
+            placeholder="Select your wedding date"
           />
           <p className="text-xs text-pink-primary/60 mt-1">
             We'll use this to place events at the right time before and after your wedding
@@ -440,11 +441,8 @@ export default function WeddingTimelineGenerator() {
       {/* Results */}
       {timeline.length > 0 && (
         <div className="bg-white rounded-2xl border-2 border-pink-primary/10 p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-bold text-pink-primary">
-              Your Wedding Timeline
-            </h3>
-            <div className="flex gap-2">
+          <div className="flex flex-col gap-4 mb-6">
+            <div className="flex gap-2 justify-center">
               <Button
                 onClick={handleCopyTimeline}
                 variant="outline"
@@ -462,6 +460,9 @@ export default function WeddingTimelineGenerator() {
                 Download
               </Button>
             </div>
+            <h3 className="text-xl font-bold text-pink-primary text-center">
+              Your Wedding Timeline
+            </h3>
           </div>
           
           <div className="space-y-6">
