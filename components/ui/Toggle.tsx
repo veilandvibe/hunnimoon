@@ -21,7 +21,7 @@ export default function Toggle({ checked, onChange, label, disabled }: TogglePro
           className="sr-only"
         />
         <motion.div
-          className={`w-11 h-6 rounded-full transition-colors ${
+          className={`relative w-11 h-6 rounded-full transition-colors ${
             checked ? 'bg-pink-primary' : 'bg-gray-300'
           } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
           animate={{ backgroundColor: checked ? '#C82777' : '#D1D5DB' }}

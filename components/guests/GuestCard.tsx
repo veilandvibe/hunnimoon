@@ -4,7 +4,7 @@ import Card from '../ui/Card'
 import Badge from '../ui/Badge'
 import Button from '../ui/Button'
 import { Guest } from '@/lib/dummyData'
-import { Mail, Phone, Edit, Trash2, Users, Eye } from 'lucide-react'
+import { Mail, Phone, Edit, Trash2, Users, Eye, Check } from 'lucide-react'
 import { getSideLabel } from '@/lib/sideLabels'
 
 interface GuestCardProps {
@@ -54,16 +54,26 @@ export default function GuestCard({
       {/* Overlay checkbox - desktop only */}
       {(isHovered || isSelectMode) && onToggleSelect && (
         <div className="hidden md:block absolute top-3 right-3 z-10">
-          <input
-            type="checkbox"
-            checked={isSelected}
-            onChange={(e) => {
-              e.stopPropagation()
-              onToggleSelect(guest.id)
-            }}
-            onClick={(e) => e.stopPropagation()}
-            className="w-5 h-5 rounded border-2 border-pink-primary/30 text-pink-primary focus:ring-pink-primary cursor-pointer bg-white shadow-md"
-          />
+          <label className="cursor-pointer" onClick={(e) => e.stopPropagation()}>
+            <input
+              type="checkbox"
+              checked={isSelected}
+              onChange={(e) => {
+                e.stopPropagation()
+                onToggleSelect(guest.id)
+              }}
+              className="sr-only"
+            />
+            <div
+              className={`w-5 h-5 rounded border-2 transition-all shadow-sm flex items-center justify-center ${
+                isSelected
+                  ? 'bg-pink-primary border-pink-primary'
+                  : 'bg-white border-pink-primary/30'
+              }`}
+            >
+              {isSelected && <Check size={16} className="text-white" strokeWidth={3} />}
+            </div>
+          </label>
         </div>
       )}
       
