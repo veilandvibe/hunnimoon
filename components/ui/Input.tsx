@@ -23,7 +23,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               ? 'border-red-500 focus:border-red-600'
               : 'border-pink-primary/50 focus:border-pink-primary'
           } focus:outline-none focus:ring-2 focus:ring-pink-primary/20 text-pink-primary placeholder:text-pink-primary/40 ${
-            type === 'date' ? '[&::-webkit-date-and-time-value]:text-pink-primary [&::-webkit-datetime-edit-fields-wrapper]:text-pink-primary [&::-webkit-datetime-edit]:text-pink-primary [&::-webkit-datetime-edit-text]:text-pink-primary [&::-webkit-calendar-picker-indicator]:cursor-pointer' : ''
+            type === 'date' ? '[&::-webkit-date-and-time-value]:text-pink-primary [&::-webkit-datetime-edit-fields-wrapper]:text-pink-primary [&::-webkit-datetime-edit]:text-pink-primary [&::-webkit-datetime-edit-text]:text-pink-primary [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-100' : ''
           } ${className}`}
           {...props}
         />

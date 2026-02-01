@@ -217,12 +217,20 @@ export default function WeddingTimelineGenerator() {
           <label className="block text-sm font-medium text-pink-primary mb-2">
             Wedding Date
           </label>
-          <Input
-            type="date"
-            value={weddingDate}
-            onChange={(e) => setWeddingDate(e.target.value)}
-            className="h-[48px]"
-          />
+          <div className="relative">
+            <Input
+              type="date"
+              value={weddingDate}
+              onChange={(e) => setWeddingDate(e.target.value)}
+              className="h-[48px]"
+              placeholder="Select your wedding date"
+            />
+            {!weddingDate && (
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-pink-primary/40 pointer-events-none text-base sm:hidden">
+                Select date
+              </span>
+            )}
+          </div>
           <p className="text-xs text-pink-primary/60 mt-1">
             We'll use this to place events at the right time before and after your wedding
           </p>
