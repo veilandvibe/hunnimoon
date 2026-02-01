@@ -5,6 +5,7 @@ export interface ParsedGuest {
   email?: string
   phone?: string
   side?: 'Bride' | 'Groom' | 'Both' | 'Unknown'
+  rawSide?: string // Preserve the original side text from CSV
   household?: string
   validationErrors: string[]
   validationWarnings: string[]
@@ -14,6 +15,7 @@ export interface ParseResult {
   guests: ParsedGuest[]
   success: boolean
   error?: string
+  uniqueSides?: string[] // List of unique side values found in the CSV
 }
 
 // Email validation regex
@@ -225,6 +227,7 @@ function parseDelimitedText(text: string, delimiter: string): ParsedGuest[] {
       email: email.trim(),
       phone: phone.trim(),
       side: sideRaw ? normalizeSide(sideRaw) : 'Unknown',
+      rawSide: sideRaw.trim(), // Preserve original side text
       household: household.trim(),
       validationErrors,
       validationWarnings
@@ -287,9 +290,23 @@ export function parseGuestText(text: string): ParseResult {
       }
     }
     
+    // Extract unique side values (excluding empty, 'Both', and 'Unknown')
+    const uniqueSides = Array.from(
+      new Set(
+        guests
+          .map(g => g.rawSide)
+          .filter(side => {
+            if (!side || side.trim() === '') return false
+            const normalized = side.toLowerCase().trim()
+            return normalized !== 'both' && normalized !== 'unknown'
+          })
+      )
+    )
+    
     return {
       guests,
-      success: true
+      success: true,
+      uniqueSides
     }
   } catch (error) {
     console.error('Parse error:', error)

@@ -14,6 +14,10 @@ interface GuestImportModalProps {
   onImport: (guests: ParsedGuest[]) => Promise<void>
   existingHouseholds: string[]
   onDownloadTemplate?: () => void
+  wedding?: {
+    partner1_name?: string
+    partner2_name?: string
+  }
 }
 
 type TabType = 'upload' | 'paste'
@@ -23,13 +27,30 @@ export default function GuestImportModal({
   onClose,
   onImport,
   existingHouseholds,
-  onDownloadTemplate
+  onDownloadTemplate,
+  wedding
 }: GuestImportModalProps) {
   const [parsedGuests, setParsedGuests] = useState<ParsedGuest[]>([])
   const [isImporting, setIsImporting] = useState(false)
   const [parseError, setParseError] = useState<string | null>(null)
   const [pastedText, setPastedText] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
+  
+  // Side mapping state
+  const [showMappingDialog, setShowMappingDialog] = useState(false)
+  const [tempParsedGuests, setTempParsedGuests] = useState<ParsedGuest[]>([])
+  const [uniqueSides, setUniqueSides] = useState<string[]>([])
+  const [sideMapping, setSideMapping] = useState<Record<string, 'partner1' | 'partner2'>>({})
+  
+  // Initialize mapping when sides are detected
+  const initializeSideMapping = (sides: string[]) => {
+    const initialMapping: Record<string, 'partner1' | 'partner2'> = {}
+    sides.forEach((side, index) => {
+      // Default: first unique side -> partner1, second -> partner2
+      initialMapping[side] = index === 0 ? 'partner1' : 'partner2'
+    })
+    return initialMapping
+  }
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -39,7 +60,19 @@ export default function GuestImportModal({
     const result = await parseGuestFile(file)
 
     if (result.success) {
-      setParsedGuests(result.guests)
+      // Check if we have unique sides that need mapping
+      const sides = result.uniqueSides || []
+      
+      if (sides.length > 0 && wedding?.partner1_name && wedding?.partner2_name) {
+        // Show mapping dialog first
+        setTempParsedGuests(result.guests)
+        setUniqueSides(sides)
+        setSideMapping(initializeSideMapping(sides))
+        setShowMappingDialog(true)
+      } else {
+        // No mapping needed, show preview directly
+        setParsedGuests(result.guests)
+      }
     } else {
       setParseError(result.error || 'Failed to parse file')
       setParsedGuests([])
@@ -51,7 +84,19 @@ export default function GuestImportModal({
     const result = parseGuestText(pastedText)
 
     if (result.success) {
-      setParsedGuests(result.guests)
+      // Check if we have unique sides that need mapping
+      const sides = result.uniqueSides || []
+      
+      if (sides.length > 0 && wedding?.partner1_name && wedding?.partner2_name) {
+        // Show mapping dialog first
+        setTempParsedGuests(result.guests)
+        setUniqueSides(sides)
+        setSideMapping(initializeSideMapping(sides))
+        setShowMappingDialog(true)
+      } else {
+        // No mapping needed, show preview directly
+        setParsedGuests(result.guests)
+      }
     } else {
       setParseError(result.error || 'Failed to parse text')
       setParsedGuests([])
@@ -84,6 +129,41 @@ export default function GuestImportModal({
     })
     setParsedGuests(nonBlankGuests)
   }
+  
+  const handleConfirmMapping = () => {
+    // Apply the mapping to all guests
+    const mappedGuests = tempParsedGuests.map(guest => {
+      if (!guest.rawSide) return guest
+      
+      const mapping = sideMapping[guest.rawSide]
+      let newSide: 'Bride' | 'Groom' | 'Both' | 'Unknown' = guest.side || 'Unknown'
+      
+      if (mapping === 'partner1') {
+        newSide = 'Bride' // Internal representation for partner 1
+      } else if (mapping === 'partner2') {
+        newSide = 'Groom' // Internal representation for partner 2
+      }
+      
+      return {
+        ...guest,
+        side: newSide
+      }
+    })
+    
+    setParsedGuests(mappedGuests)
+    setShowMappingDialog(false)
+    setTempParsedGuests([])
+    setUniqueSides([])
+    setSideMapping({})
+  }
+  
+  const handleCancelMapping = () => {
+    setShowMappingDialog(false)
+    setTempParsedGuests([])
+    setUniqueSides([])
+    setSideMapping({})
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
 
   const handleImport = async () => {
     // Filter out guests with critical errors
@@ -113,6 +193,10 @@ export default function GuestImportModal({
   const handleClose = () => {
     setParsedGuests([])
     setParseError(null)
+    setShowMappingDialog(false)
+    setTempParsedGuests([])
+    setUniqueSides([])
+    setSideMapping({})
     if (fileInputRef.current) fileInputRef.current.value = ''
     onClose()
   }
@@ -132,8 +216,87 @@ export default function GuestImportModal({
   return (
     <Modal isOpen={isOpen} onClose={handleClose} size="2xl" title="Import Guests">
       <div className="space-y-6">
-        {/* 3-Step Instructions */}
-        {parsedGuests.length === 0 && (
+        {/* Show mapping dialog as separate step */}
+        {showMappingDialog ? (
+          <>
+            {/* Side Mapping Dialog - Show as separate step */}
+            {wedding && uniqueSides.length > 0 && (
+              <div className="space-y-6">
+                <div className="text-center">
+                  <h3 className="text-2xl font-bold text-pink-primary mb-3">
+                    Map Guest Sides
+                  </h3>
+                  <p className="text-pink-primary/70">
+                    We found {uniqueSides.length} side{uniqueSides.length > 1 ? 's' : ''} in your file. Please tell us which partner each refers to:
+                  </p>
+                </div>
+                
+                <div className="space-y-4 max-w-lg mx-auto">
+                  {uniqueSides.map((side) => (
+                    <div key={side} className="bg-pink-light/30 rounded-xl p-4">
+                      <label className="block">
+                        <span className="text-sm font-bold text-pink-primary mb-2 block">
+                          "{side}" refers to:
+                        </span>
+                        <select
+                          value={sideMapping[side] || 'partner1'}
+                          onChange={(e) => setSideMapping({
+                            ...sideMapping,
+                            [side]: e.target.value as 'partner1' | 'partner2'
+                          })}
+                          className="w-full px-4 py-3 rounded-lg border-2 border-pink-primary/20 focus:border-pink-primary focus:outline-none focus:ring-2 focus:ring-pink-primary/20 text-pink-primary bg-white font-medium"
+                        >
+                          <option value="partner1">{wedding.partner1_name}</option>
+                          <option value="partner2">{wedding.partner2_name}</option>
+                        </select>
+                      </label>
+                    </div>
+                  ))}
+                  
+                  {/* Check for duplicate mappings */}
+                  {(() => {
+                    const mappedValues = Object.values(sideMapping)
+                    const hasDuplicates = uniqueSides.length > 1 && 
+                      mappedValues.length === uniqueSides.length &&
+                      new Set(mappedValues).size < mappedValues.length
+                    
+                    return hasDuplicates ? (
+                      <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-3 text-sm text-yellow-700">
+                        <AlertTriangle className="inline mr-2" size={16} />
+                        Multiple sides can't refer to the same partner. Please select different partners.
+                      </div>
+                    ) : null
+                  })()}
+                  
+                  <div className="flex gap-3 pt-4">
+                    <Button 
+                      onClick={handleConfirmMapping}
+                      className="flex-1"
+                      disabled={(() => {
+                        const mappedValues = Object.values(sideMapping)
+                        return uniqueSides.length > 1 && 
+                          mappedValues.length === uniqueSides.length &&
+                          new Set(mappedValues).size < mappedValues.length
+                      })()}
+                    >
+                      Continue to Preview
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      onClick={handleCancelMapping}
+                      className="flex-1"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            {/* 3-Step Instructions */}
+            {parsedGuests.length === 0 && (
           <div className="space-y-6">
             {/* Step 1: Download Template */}
             <div className="space-y-3">
@@ -171,11 +334,11 @@ export default function GuestImportModal({
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-pink-primary">•</span>
-                    <span>Side: Bride, Groom, Both, or Unknown</span>
+                    <span>Side: You can use any name (e.g., "Bride", "Groom", partner names, or anything else). We'll ask you to map them after upload.</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-pink-primary">•</span>
-                    <span>Household ID: Same name for family members</span>
+                    <span>Household ID: Use the same name for family members (e.g., "Johnson Family")</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-pink-primary">•</span>
@@ -380,10 +543,21 @@ export default function GuestImportModal({
                               onChange={(e) => handleCellEdit(index, 'side', e.target.value)}
                               className="w-full px-2 py-1 rounded border border-pink-primary/20 focus:outline-none focus:ring-1 focus:ring-pink-primary text-pink-primary bg-white"
                             >
-                              <option value="Bride">Bride</option>
-                              <option value="Groom">Groom</option>
-                              <option value="Both">Both</option>
-                              <option value="Unknown">Unknown</option>
+                              {wedding ? (
+                                <>
+                                  <option value="Bride">{wedding.partner1_name}'s Side</option>
+                                  <option value="Groom">{wedding.partner2_name}'s Side</option>
+                                  <option value="Both">Both Sides</option>
+                                  <option value="Unknown">Unknown</option>
+                                </>
+                              ) : (
+                                <>
+                                  <option value="Bride">Bride</option>
+                                  <option value="Groom">Groom</option>
+                                  <option value="Both">Both</option>
+                                  <option value="Unknown">Unknown</option>
+                                </>
+                              )}
                             </select>
                           </td>
 
@@ -451,6 +625,8 @@ export default function GuestImportModal({
             Cancel
           </Button>
         </div>
+          </>
+        )}
       </div>
     </Modal>
   )

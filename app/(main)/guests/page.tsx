@@ -258,8 +258,8 @@ export default function GuestsPage() {
     }
 
     try {
-      // Batch imports in chunks of 50 to avoid InstantDB transaction size limits
-      const BATCH_SIZE = 50
+      // Batch imports in smaller chunks to avoid timeout
+      const BATCH_SIZE = 25 // Reduced from 50
       const totalBatches = Math.ceil(importedGuests.length / BATCH_SIZE)
       
       for (let i = 0; i < totalBatches; i++) {
@@ -298,12 +298,17 @@ export default function GuestsPage() {
             .link({ wedding: wedding.id })
         })
 
-        // Execute batch transaction
-        await db.transact(transactions)
+        // Execute batch transaction with retry logic
+        try {
+          await db.transact(transactions)
+        } catch (batchError) {
+          console.error(`Error in batch ${i + 1}:`, batchError)
+          throw new Error(`Failed to import batch ${i + 1} of ${totalBatches}. Please try again.`)
+        }
         
-        // Small delay between batches to avoid overwhelming the server
+        // Longer delay between batches to avoid overwhelming the server
         if (i < totalBatches - 1) {
-          await new Promise(resolve => setTimeout(resolve, 100))
+          await new Promise(resolve => setTimeout(resolve, 300)) // Increased from 100ms
         }
       }
       
@@ -438,9 +443,9 @@ export default function GuestsPage() {
     // Create template CSV with example data
     const headers = ['Name', 'Email', 'Phone', 'Side', 'Household ID']
     const exampleRows = [
-      ['John Doe', 'john@example.com', '555-0101', 'Bride', ''],
+      ['John Doe', 'john@example.com', '555-0101', 'Bride', 'Johnson Family'],
       ['Jane Smith', 'jane@example.com', '555-0102', 'Groom', 'Smith Family'],
-      ['Bob Johnson', 'bob@example.com', '555-0103', 'Groom', '']
+      ['Bob Johnson', 'bob@example.com', '555-0103', 'Groom', 'Johnson Family']
     ]
     
     // Generate CSV string
@@ -812,6 +817,7 @@ export default function GuestsPage() {
         onImport={handleImportGuests}
         existingHouseholds={existingHouseholds}
         onDownloadTemplate={handleDownloadTemplate}
+        wedding={wedding}
       />
 
       {/* Delete Confirmation Dialog */}
