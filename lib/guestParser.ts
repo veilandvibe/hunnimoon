@@ -295,7 +295,7 @@ export function parseGuestText(text: string): ParseResult {
       new Set(
         guests
           .map(g => g.rawSide)
-          .filter(side => {
+          .filter((side): side is string => {
             if (!side || side.trim() === '') return false
             const normalized = side.toLowerCase().trim()
             return normalized !== 'both' && normalized !== 'unknown'
