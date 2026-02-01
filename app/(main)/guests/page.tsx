@@ -258,9 +258,11 @@ export default function GuestsPage() {
     }
 
     try {
-      // Batch imports in smaller chunks to avoid timeout
-      const BATCH_SIZE = 25 // Reduced from 50
+      // Use very small batches for production reliability
+      const BATCH_SIZE = 10 // Reduced to 10 for better reliability
+      const MAX_RETRIES = 2 // Retry failed batches
       const totalBatches = Math.ceil(importedGuests.length / BATCH_SIZE)
+      let successfulImports = 0
       
       for (let i = 0; i < totalBatches; i++) {
         const start = i * BATCH_SIZE
@@ -299,16 +301,36 @@ export default function GuestsPage() {
         })
 
         // Execute batch transaction with retry logic
-        try {
-          await db.transact(transactions)
-        } catch (batchError) {
-          console.error(`Error in batch ${i + 1}:`, batchError)
-          throw new Error(`Failed to import batch ${i + 1} of ${totalBatches}. Please try again.`)
+        let retryCount = 0
+        let batchSuccess = false
+        
+        while (retryCount <= MAX_RETRIES && !batchSuccess) {
+          try {
+            await db.transact(transactions)
+            successfulImports += batch.length
+            batchSuccess = true
+          } catch (batchError) {
+            retryCount++
+            console.error(`Error in batch ${i + 1} (attempt ${retryCount}):`, batchError)
+            
+            if (retryCount > MAX_RETRIES) {
+              // If all retries failed, show partial success message
+              if (successfulImports > 0) {
+                toast.error(`Imported ${successfulImports} of ${importedGuests.length} guests. Batch ${i + 1} failed after ${MAX_RETRIES} retries. Please try importing the remaining guests again.`)
+                return // Exit early with partial success
+              } else {
+                throw new Error(`Failed to import batch ${i + 1} of ${totalBatches} after ${MAX_RETRIES} retries. Please try again with a smaller number of guests.`)
+              }
+            }
+            
+            // Wait longer before retry
+            await new Promise(resolve => setTimeout(resolve, 1000))
+          }
         }
         
-        // Longer delay between batches to avoid overwhelming the server
+        // Longer delay between batches (500ms for production reliability)
         if (i < totalBatches - 1) {
-          await new Promise(resolve => setTimeout(resolve, 300)) // Increased from 100ms
+          await new Promise(resolve => setTimeout(resolve, 500))
         }
       }
       
