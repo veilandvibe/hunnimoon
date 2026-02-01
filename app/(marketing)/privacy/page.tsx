@@ -1,3 +1,13 @@
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Privacy Policy | Hunnimoon',
+  description: 'Learn how Hunnimoon collects, uses, and protects your personal information. Our commitment to your privacy and data security.',
+  alternates: {
+    canonical: '/privacy',
+  },
+}
+
 export default function PrivacyPolicyPage() {
   return (
     <div className="min-h-screen bg-white py-16">

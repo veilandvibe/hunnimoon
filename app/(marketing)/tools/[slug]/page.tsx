@@ -27,13 +27,20 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     }
   }
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://hunnimoon.app'
+  const canonicalUrl = `${baseUrl}/tools/${params.slug}`
+
   return {
     title: `${tool.h1} | Hunnimoon`,
     description: tool.metaDescription || tool.description,
+    alternates: {
+      canonical: `/tools/${params.slug}`,
+    },
     openGraph: {
       title: tool.h1,
       description: tool.metaDescription || tool.description,
       type: 'website',
+      url: canonicalUrl,
     }
   }
 }

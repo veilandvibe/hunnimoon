@@ -1,5 +1,27 @@
 import { Tool } from '@/types/tools'
 
+/**
+ * IMPORTANT: When adding new tools to this array, ensure the tool page will have proper SEO:
+ * 
+ * 1. Add the tool object with complete metadata including:
+ *    - slug: URL-friendly identifier (used in /tools/[slug])
+ *    - name: Display name for the tool
+ *    - h1: SEO-optimized H1 heading
+ *    - description: Short description for tool listing
+ *    - metaDescription: SEO meta description (appears in search results)
+ *    - seoContent: Long-form content with h2, content, and faqs
+ * 
+ * 2. The canonical URL is automatically generated from the slug in:
+ *    app/(marketing)/tools/[slug]/page.tsx - generateMetadata function
+ * 
+ * 3. Create the corresponding component in components/tools/ and add it to
+ *    the toolComponents map in app/(marketing)/tools/[slug]/page.tsx
+ * 
+ * Each tool will automatically get:
+ * - Proper canonical URL: /tools/[slug]
+ * - Static generation via generateStaticParams
+ * - Full SEO metadata in the HTML
+ */
 export const tools: Tool[] = [
   {
     slug: 'wedding-timeline-generator',

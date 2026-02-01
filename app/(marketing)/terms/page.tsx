@@ -1,3 +1,13 @@
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Terms of Service | Hunnimoon',
+  description: 'Read our Terms of Service to understand your rights and responsibilities when using Hunnimoon wedding planning platform.',
+  alternates: {
+    canonical: '/terms',
+  },
+}
+
 export default function TermsOfServicePage() {
   return (
     <div className="min-h-screen bg-white py-16">

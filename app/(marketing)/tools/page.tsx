@@ -1,6 +1,21 @@
 import Link from 'next/link'
+import { Metadata } from 'next'
 import { getAllTools } from '@/lib/tools-data'
 import Button from '@/components/ui/Button'
+
+export const metadata: Metadata = {
+  title: 'Free Wedding Planning Tools | Hunnimoon',
+  description: 'Free wedding planning tools to help you plan your wedding. No signup required, use them as much as you want.',
+  alternates: {
+    canonical: '/tools',
+  },
+  openGraph: {
+    title: 'Free Wedding Planning Tools | Hunnimoon',
+    description: 'Free wedding planning tools to help you plan your wedding. No signup required, use them as much as you want.',
+    type: 'website',
+    url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://hunnimoon.app'}/tools`,
+  }
+}
 
 export default function ToolsPage() {
   const tools = getAllTools()

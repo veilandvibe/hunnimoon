@@ -1,3 +1,13 @@
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Refund Policy | Hunnimoon',
+  description: 'Our refund policy for Hunnimoon subscriptions. Learn about our 7-day free trial and cancellation terms.',
+  alternates: {
+    canonical: '/refunds',
+  },
+}
+
 export default function RefundPolicyPage() {
   return (
     <div className="min-h-screen bg-white py-16">
