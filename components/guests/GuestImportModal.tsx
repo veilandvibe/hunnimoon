@@ -11,7 +11,7 @@ import { parseGuestFile, parseGuestText, validateGuest, ParsedGuest } from '@/li
 interface GuestImportModalProps {
   isOpen: boolean
   onClose: () => void
-  onImport: (guests: ParsedGuest[]) => Promise<void>
+  onImport: (guests: ParsedGuest[], onProgress?: (current: number, total: number) => void) => Promise<void>
   existingHouseholds: string[]
   onDownloadTemplate?: () => void
   wedding?: {
@@ -32,6 +32,7 @@ export default function GuestImportModal({
 }: GuestImportModalProps) {
   const [parsedGuests, setParsedGuests] = useState<ParsedGuest[]>([])
   const [isImporting, setIsImporting] = useState(false)
+  const [importProgress, setImportProgress] = useState({ current: 0, total: 0 })
   const [parseError, setParseError] = useState<string | null>(null)
   const [pastedText, setPastedText] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -175,11 +176,16 @@ export default function GuestImportModal({
     }
 
     setIsImporting(true)
+    setImportProgress({ current: 0, total: validGuests.length })
+    
     try {
-      await onImport(validGuests)
+      await onImport(validGuests, (current, total) => {
+        setImportProgress({ current, total })
+      })
       // Reset state
       setParsedGuests([])
       setParseError(null)
+      setImportProgress({ current: 0, total: 0 })
       if (fileInputRef.current) fileInputRef.current.value = ''
       onClose()
     } catch (error) {
@@ -187,6 +193,7 @@ export default function GuestImportModal({
       alert('Import failed: ' + (error instanceof Error ? error.message : 'Please check your connection and try again.'))
     } finally {
       setIsImporting(false)
+      setImportProgress({ current: 0, total: 0 })
     }
   }
 
@@ -613,17 +620,45 @@ export default function GuestImportModal({
         )}
 
         {/* Actions */}
-        <div className="flex gap-3 pt-4 border-t border-pink-primary/20">
-          <Button
-            onClick={handleImport}
-            disabled={parsedGuests.length === 0 || errorCount > 0 || isImporting}
-            className="flex-1"
-          >
-            {isImporting ? 'Importing... Please wait' : `Import ${parsedGuests.filter(g => g.validationErrors.length === 0).length} ${parsedGuests.filter(g => g.validationErrors.length === 0).length === 1 ? 'Guest' : 'Guests'}`}
-          </Button>
-          <Button variant="outline" onClick={handleClose} className="flex-1">
-            Cancel
-          </Button>
+        <div className="space-y-4 pt-4 border-t border-pink-primary/20">
+          {/* Progress Bar */}
+          {isImporting && importProgress.total > 0 && (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-sm text-pink-primary/70">
+                <span>Importing guests...</span>
+                <span className="font-medium">
+                  {importProgress.current} of {importProgress.total}
+                </span>
+              </div>
+              <div className="w-full bg-pink-primary/10 rounded-full h-3 overflow-hidden">
+                <div 
+                  className="bg-pink-primary h-full rounded-full transition-all duration-300 ease-out"
+                  style={{ 
+                    width: `${(importProgress.current / importProgress.total) * 100}%` 
+                  }}
+                />
+              </div>
+            </div>
+          )}
+          
+          {/* Action Buttons */}
+          <div className="flex gap-3">
+            <Button
+              onClick={handleImport}
+              disabled={parsedGuests.length === 0 || errorCount > 0 || isImporting}
+              className="flex-1"
+            >
+              {isImporting ? 'Importing...' : `Import ${parsedGuests.filter(g => g.validationErrors.length === 0).length} ${parsedGuests.filter(g => g.validationErrors.length === 0).length === 1 ? 'Guest' : 'Guests'}`}
+            </Button>
+            <Button 
+              variant="outline" 
+              onClick={handleClose} 
+              className="flex-1"
+              disabled={isImporting}
+            >
+              Cancel
+            </Button>
+          </div>
         </div>
           </>
         )}

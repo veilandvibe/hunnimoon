@@ -251,7 +251,7 @@ export default function GuestsPage() {
     }
   }
 
-  const handleImportGuests = async (importedGuests: ParsedGuest[]) => {
+  const handleImportGuests = async (importedGuests: ParsedGuest[], onProgress?: (current: number, total: number) => void) => {
     if (!wedding?.id) {
       toast.error('Wedding not found. Please refresh the page.')
       return
@@ -309,6 +309,11 @@ export default function GuestsPage() {
             await db.transact(transactions)
             successfulImports += batch.length
             batchSuccess = true
+            
+            // Update progress
+            if (onProgress) {
+              onProgress(successfulImports, importedGuests.length)
+            }
           } catch (batchError) {
             retryCount++
             console.error(`Error in batch ${i + 1} (attempt ${retryCount}):`, batchError)
