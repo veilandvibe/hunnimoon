@@ -401,6 +401,22 @@ export default function GuestsPage() {
     }
   }
 
+  const handleBulkChangeRSVPStatus = async (rsvp_status: 'Pending' | 'Yes' | 'No') => {
+    const count = selectedGuestIds.size
+    try {
+      const updateTransactions = Array.from(selectedGuestIds).map(id =>
+        db.tx.guests[id].update({ rsvp_status })
+      )
+      await db.transact(updateTransactions)
+      const statusLabel = rsvp_status === 'Pending' ? 'Pending' : rsvp_status === 'Yes' ? 'Attending' : 'Not Attending'
+      toast.success(`${count} guest${count !== 1 ? 's' : ''} updated to ${statusLabel}`)
+      cancelSelection()
+    } catch (error) {
+      console.error('Error updating guests:', error)
+      toast.error('Failed to update guests. Please try again.')
+    }
+  }
+
   const handleExportGuests = () => {
     if (!wedding) return
 
@@ -704,6 +720,7 @@ export default function GuestsPage() {
             onMarkInvited={() => handleBulkMarkInvited(true)}
             onMarkNotInvited={() => handleBulkMarkInvited(false)}
             onChangeSide={handleBulkChangeSide}
+            onChangeRSVPStatus={handleBulkChangeRSVPStatus}
             onCancel={cancelSelection}
             wedding={wedding}
             isReadOnly={isReadOnly}

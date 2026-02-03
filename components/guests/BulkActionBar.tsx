@@ -13,6 +13,7 @@ interface BulkActionBarProps {
   onMarkInvited: () => void
   onMarkNotInvited: () => void
   onChangeSide: (side: 'Bride' | 'Groom' | 'Both' | 'Unknown') => void
+  onChangeRSVPStatus: (status: 'Pending' | 'Yes' | 'No') => void
   onCancel: () => void
   wedding?: any
   isReadOnly?: boolean
@@ -26,12 +27,14 @@ export default function BulkActionBar({
   onMarkInvited,
   onMarkNotInvited,
   onChangeSide,
+  onChangeRSVPStatus,
   onCancel,
   wedding,
   isReadOnly = false
 }: BulkActionBarProps) {
   const [showSideMenu, setShowSideMenu] = useState(false)
   const [showInviteMenu, setShowInviteMenu] = useState(false)
+  const [showRSVPMenu, setShowRSVPMenu] = useState(false)
   
   return (
     <div className="bg-white/90 backdrop-blur-lg border-2 border-pink-primary/20 rounded-2xl p-3 mb-4 animate-in slide-in-from-top duration-200 shadow-sm">
@@ -82,8 +85,8 @@ export default function BulkActionBar({
           <span className="text-xs md:ml-1">Delete</span>
         </Button>
         
-        {/* Mark Invited Dropdown - fixed width for desktop */}
-        <div className="relative flex-1 md:flex-none">
+        {/* Mark Invited Dropdown - Desktop Only */}
+        <div className="relative hidden md:flex md:flex-none">
           <Button
             onClick={() => setShowInviteMenu(!showInviteMenu)}
             variant="outline"
@@ -119,6 +122,58 @@ export default function BulkActionBar({
                   className="w-full text-left px-3 py-2 text-sm text-pink-primary hover:bg-pink-light transition-colors rounded-b-xl"
                 >
                   ✗ Mark as Not Invited
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+        
+        {/* RSVP Status Dropdown - fixed width for desktop */}
+        <div className="relative flex-1 md:flex-none">
+          <Button
+            onClick={() => setShowRSVPMenu(!showRSVPMenu)}
+            variant="outline"
+            size="sm"
+            className="w-full md:w-[140px] px-2 py-2 h-9 whitespace-nowrap"
+            disabled={isReadOnly}
+            title={isReadOnly ? 'Upgrade to edit guests' : undefined}
+          >
+            <span className="text-xs">RSVP Status ▼</span>
+          </Button>
+          
+          {showRSVPMenu && (
+            <>
+              <div 
+                className="fixed inset-0 z-10" 
+                onClick={() => setShowRSVPMenu(false)}
+              />
+              <div className="absolute left-0 mt-2 w-full bg-white border-2 border-pink-primary/20 rounded-xl shadow-lg z-20">
+                <button
+                  onClick={() => {
+                    onChangeRSVPStatus('Pending')
+                    setShowRSVPMenu(false)
+                  }}
+                  className="w-full text-left px-3 py-2 text-sm text-pink-primary hover:bg-pink-light transition-colors rounded-t-xl"
+                >
+                  ⏳ Pending
+                </button>
+                <button
+                  onClick={() => {
+                    onChangeRSVPStatus('Yes')
+                    setShowRSVPMenu(false)
+                  }}
+                  className="w-full text-left px-3 py-2 text-sm text-pink-primary hover:bg-pink-light transition-colors"
+                >
+                  ✓ Yes
+                </button>
+                <button
+                  onClick={() => {
+                    onChangeRSVPStatus('No')
+                    setShowRSVPMenu(false)
+                  }}
+                  className="w-full text-left px-3 py-2 text-sm text-pink-primary hover:bg-pink-light transition-colors rounded-b-xl"
+                >
+                  ✗ No
                 </button>
               </div>
             </>
