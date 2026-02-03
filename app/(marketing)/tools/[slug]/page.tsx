@@ -41,7 +41,21 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       description: tool.metaDescription || tool.description,
       type: 'website',
       url: canonicalUrl,
-    }
+      images: [
+        {
+          url: '/Social Preview.png',
+          width: 1200,
+          height: 630,
+          alt: 'Hunnimoon Wedding Planning',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: tool.h1,
+      description: tool.metaDescription || tool.description,
+      images: ['/Social Preview.png'],
+    },
   }
 }
 

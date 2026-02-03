@@ -6,6 +6,26 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/privacy',
   },
+  openGraph: {
+    title: 'Privacy Policy | Hunnimoon',
+    description: 'Learn how Hunnimoon collects, uses, and protects your personal information. Our commitment to your privacy and data security.',
+    type: 'website',
+    url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://hunnimoon.app'}/privacy`,
+    images: [
+      {
+        url: '/Social Preview.png',
+        width: 1200,
+        height: 630,
+        alt: 'Hunnimoon Wedding Planning',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Privacy Policy | Hunnimoon',
+    description: 'Learn how Hunnimoon collects, uses, and protects your personal information. Our commitment to your privacy and data security.',
+    images: ['/Social Preview.png'],
+  },
 }
 
 export default function PrivacyPolicyPage() {

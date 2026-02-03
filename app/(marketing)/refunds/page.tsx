@@ -6,6 +6,26 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/refunds',
   },
+  openGraph: {
+    title: 'Refund Policy | Hunnimoon',
+    description: 'Our refund policy for Hunnimoon subscriptions. Learn about our 7-day free trial and cancellation terms.',
+    type: 'website',
+    url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://hunnimoon.app'}/refunds`,
+    images: [
+      {
+        url: '/Social Preview.png',
+        width: 1200,
+        height: 630,
+        alt: 'Hunnimoon Wedding Planning',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Refund Policy | Hunnimoon',
+    description: 'Our refund policy for Hunnimoon subscriptions. Learn about our 7-day free trial and cancellation terms.',
+    images: ['/Social Preview.png'],
+  },
 }
 
 export default function RefundPolicyPage() {

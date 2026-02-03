@@ -14,7 +14,21 @@ export const metadata: Metadata = {
     description: 'Free wedding planning tools to help you plan your wedding. No signup required, use them as much as you want.',
     type: 'website',
     url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://hunnimoon.app'}/tools`,
-  }
+    images: [
+      {
+        url: '/Social Preview.png',
+        width: 1200,
+        height: 630,
+        alt: 'Hunnimoon Wedding Planning',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Free Wedding Planning Tools | Hunnimoon',
+    description: 'Free wedding planning tools to help you plan your wedding. No signup required, use them as much as you want.',
+    images: ['/Social Preview.png'],
+  },
 }
 
 export default function ToolsPage() {
