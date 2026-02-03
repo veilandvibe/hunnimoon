@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Home, Users, ClipboardCheck, DollarSign, Briefcase, Settings, Menu, HelpCircle, LogOut, Shield } from 'lucide-react'
+import { Home, Users, ClipboardCheck, DollarSign, Briefcase, Settings, Menu, HelpCircle, LogOut, Shield, MessageSquare } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useSidebar } from './SidebarContext'
 import { useTour } from '@/components/providers/TourContext'
@@ -135,16 +135,20 @@ export default function Sidebar() {
           </Link>
         )}
 
-        {/* Sign Out Button */}
-        <button
-          onClick={handleSignOut}
+        {/* Feedback Link */}
+        <Link
+          href="/feedback"
           className={`group ${!isAdmin ? 'mt-auto' : ''}`}
-          title={!isExpanded ? 'Sign Out' : undefined}
+          title={!isExpanded ? 'Feedback' : undefined}
         >
           <motion.div
-            className="flex items-center gap-3 px-3 py-3 rounded-xl text-pink-primary hover:bg-pink-primary/10 transition-colors"
+            className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-colors ${
+              pathname === '/feedback' || pathname?.startsWith('/feedback/')
+                ? 'bg-pink-primary text-white'
+                : 'text-pink-primary hover:bg-pink-primary/10'
+            }`}
           >
-            <LogOut size={20} strokeWidth={2} className="flex-shrink-0" />
+            <MessageSquare size={20} strokeWidth={2} className="flex-shrink-0" />
             <AnimatePresence mode="wait">
               {isExpanded && (
                 <motion.span
@@ -154,12 +158,12 @@ export default function Sidebar() {
                   transition={{ duration: 0.2 }}
                   className="font-medium text-sm whitespace-nowrap overflow-hidden"
                 >
-                  Sign Out
+                  Feedback
                 </motion.span>
               )}
             </AnimatePresence>
           </motion.div>
-        </button>
+        </Link>
 
         {/* Help Button */}
         <button
@@ -181,6 +185,32 @@ export default function Sidebar() {
                   className="font-medium text-sm whitespace-nowrap overflow-hidden"
                 >
                   Help
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        </button>
+
+        {/* Sign Out Button */}
+        <button
+          onClick={handleSignOut}
+          className="group"
+          title={!isExpanded ? 'Sign Out' : undefined}
+        >
+          <motion.div
+            className="flex items-center gap-3 px-3 py-3 rounded-xl text-pink-primary hover:bg-pink-primary/10 transition-colors"
+          >
+            <LogOut size={20} strokeWidth={2} className="flex-shrink-0" />
+            <AnimatePresence mode="wait">
+              {isExpanded && (
+                <motion.span
+                  initial={{ opacity: 0, width: 0 }}
+                  animate={{ opacity: 1, width: 'auto' }}
+                  exit={{ opacity: 0, width: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="font-medium text-sm whitespace-nowrap overflow-hidden"
+                >
+                  Sign Out
                 </motion.span>
               )}
             </AnimatePresence>
