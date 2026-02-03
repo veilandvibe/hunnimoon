@@ -69,6 +69,15 @@ export default function PricingPage() {
       return
     }
 
+    // Track Meta Pixel InitiateCheckout event
+    if (typeof window !== 'undefined' && window.fbq) {
+      const value = plan === 'yearly' ? 119.99 : 14.99;
+      window.fbq('track', 'InitiateCheckout', {
+        currency: 'USD',
+        value: value,
+      });
+    }
+
     setCheckoutLoading(true)
     try {
       const response = await fetch('/api/stripe/create-checkout', {

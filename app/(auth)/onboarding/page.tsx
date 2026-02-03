@@ -332,6 +332,12 @@ export default function OnboardingPage() {
         localStorage.removeItem('acq_source')
       }
 
+      // Track Meta Pixel conversion events
+      if (typeof window !== 'undefined' && window.fbq) {
+        window.fbq('track', 'CompleteRegistration');
+        window.fbq('track', 'StartTrial');
+      }
+
       // ONLY redirect on successful creation
       router.push('/dashboard')
     } catch (err: any) {

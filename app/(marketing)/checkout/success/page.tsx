@@ -13,6 +13,14 @@ export default function CheckoutSuccessPage() {
   const sessionId = searchParams.get('session_id')
 
   useEffect(() => {
+    // Track Meta Pixel Purchase conversion
+    if (typeof window !== 'undefined' && window.fbq && sessionId) {
+      window.fbq('track', 'Purchase', {
+        currency: 'USD',
+        value: 0, // Value will be set by Stripe's server-side events
+      });
+    }
+
     // Countdown timer
     const timer = setInterval(() => {
       setCountdown((prev) => {
@@ -26,7 +34,7 @@ export default function CheckoutSuccessPage() {
     }, 1000)
 
     return () => clearInterval(timer)
-  }, [router])
+  }, [router, sessionId])
 
   if (!sessionId) {
     return (
