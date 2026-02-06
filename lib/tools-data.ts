@@ -464,6 +464,146 @@ export const tools: Tool[] = [
         }
       ]
     }
+  },
+  {
+    slug: 'wedding-ceremony-vows-writer',
+    name: 'Wedding Ceremony Vows Writer',
+    h1: 'Wedding Ceremony Vows Writer',
+    description: 'The wedding ceremony vows writer supports couples as they write personal vows for their wedding ceremony. It gives structure without taking over your words.',
+    category: 'planning',
+    component: 'WeddingVowsWriter',
+    image: '/images/tools/wedding-vows-writer.svg',
+    metaDescription: 'A wedding ceremony vows writer helps couples write clear, personal vows without pressure or overthinking.',
+    seoContent: {
+      h2: 'A simple way to write wedding vows that actually sound like you',
+      content: `
+        <p>Writing vows sounds romantic until you sit down to do it. Then it gets quiet. The wedding ceremony vows writer exists for this exact moment. It helps you shape your thoughts when your brain goes blank, but your feelings are very loud.</p>
+        
+        <p>This isn't about fancy language or perfect lines. It's about saying something real in front of people you love. And yes, that can feel like a lot.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Why vows feel harder than people admit</h2>
+        
+        <p>Here's the thing. Most people have never written vows before. You're expected to be heartfelt, calm, and poetic all at once.</p>
+        
+        <p>You also know this part of the ceremony matters. People listen closely. Phones come out. The pressure creeps in.</p>
+        
+        <p>This sounds obvious, but loving someone and explaining that love are two different skills. One comes naturally. The other takes a bit of help.</p>
+        
+        <p>That's where a wedding ceremony vows writer can help steady things. It doesn't replace your voice. It just gives it a place to land.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">What a vows tool actually helps with</h2>
+        
+        <p>Most couples think a vows tool will write everything for them. That's not really the point.</p>
+        
+        <p>A good wedding ceremony vows writer helps you organize your thoughts. It nudges you with questions. It reminds you of moments you might forget.</p>
+        
+        <p>You still choose the words. You still decide what feels right.</p>
+        
+        <p>It's like talking it out with a friend who knows when to pause and listen.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Starting without the panic</h2>
+        
+        <p>Blank pages are intimidating. Especially when the topic is your relationship.</p>
+        
+        <p>The wedding ceremony vows writer breaks the start into smaller pieces. One idea at a time.</p>
+        
+        <p>You might begin with how you met. Or what surprised you about them. Or what you promise to keep doing.</p>
+        
+        <p>No rush. No perfect order. Just words showing up slowly.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Keeping your vows personal, not generic</h2>
+        
+        <p>A common fear is sounding like everyone else. That's fair.</p>
+        
+        <p>This is where the wedding ceremony vows writer works best. It asks about your specific story.</p>
+        
+        <p>Inside jokes. Hard years. Quiet habits you love.</p>
+        
+        <p>If you answer honestly, the result won't feel copied. It'll feel familiar. In a good way.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">How long is too long</h2>
+        
+        <p>This question comes up a lot.</p>
+        
+        <p>There's no rule, but there is comfort. Most vows land well around one to two minutes when spoken.</p>
+        
+        <p>The wedding ceremony vows writer helps you trim without losing meaning. You can see where you repeat yourself. It happens to everyone.</p>
+        
+        <p>Short doesn't mean shallow. It just means clear.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">A quick personal note</h2>
+        
+        <p>I once helped a friend write vows the night before their wedding. We sat on the floor. Snacks everywhere.</p>
+        
+        <p>They kept saying they weren't good with words. But once they talked out loud, the words showed up.</p>
+        
+        <p>A wedding ceremony vows writer works the same way. It listens first. Then it shapes.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Practicing without overthinking</h2>
+        
+        <p>After writing, reading your vows out loud matters.</p>
+        
+        <p>You hear what flows and what trips you up. That's normal.</p>
+        
+        <p>The wedding ceremony vows writer makes edits easier because your structure is already there.</p>
+        
+        <p>Read them to yourself. Then maybe once to your partner if that feels right.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Fitting vow writing into the rest of planning</h2>
+        
+        <p>Vows don't exist in a bubble. You're planning a whole wedding.</p>
+        
+        <p>Some couples use Hunnimoon to manage their guest list, RSVPs, vendors, and budget tracking. Writing vows fits into that same calm planning mindset.</p>
+        
+        <p>You don't need everything done at once. Just a little progress.</p>
+        
+        <p>The wedding ceremony vows writer can be one of the quieter, nicer parts of planning.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">When the tool is enough</h2>
+        
+        <p>Not everyone needs extra help beyond this.</p>
+        
+        <p>For many couples, a wedding ceremony vows writer is all it takes to get unstuck.</p>
+        
+        <p>You write. You tweak. You stop when it feels like you.</p>
+        
+        <p>And that's usually the moment you're ready.</p>
+      `,
+      faqs: [
+        {
+          question: 'What is a wedding ceremony vows writer used for',
+          answer: 'It helps couples write personal vows without starting from scratch. The tool guides ideas but keeps your own words front and center.'
+        },
+        {
+          question: 'Can a vows tool make my vows sound fake',
+          answer: 'Not if you answer honestly. The tool reflects what you put into it, so your voice still comes through.'
+        },
+        {
+          question: 'How early should we write our vows',
+          answer: 'Many couples start a few weeks before the wedding. That gives you time to write, pause, and edit without stress.'
+        },
+        {
+          question: 'Do both partners need to use the same tool',
+          answer: 'It helps with balance, but it\'s not required. Some couples prefer different writing styles, and that\'s okay.'
+        },
+        {
+          question: 'How long should vows written with a tool be',
+          answer: 'Most couples aim for one to two minutes when spoken. The tool helps you see what to keep and what to cut.'
+        },
+        {
+          question: 'Can we work on vows while planning other things in Hunnimoon',
+          answer: 'Yes. Many couples use Hunnimoon for guest list management, RSVP management, vendor organization, and budget tracking alongside vow writing.'
+        },
+        {
+          question: 'Does Hunnimoon write vows for us',
+          answer: 'No. Hunnimoon supports planning tasks, while the vows writer helps you shape your own words. You stay in control.'
+        },
+        {
+          question: 'Is a vows tool helpful if we\'re already good with words',
+          answer: 'It can still help organize thoughts and avoid rambling. Even confident writers like structure.'
+        }
+      ]
+    }
   }
 ]
 
