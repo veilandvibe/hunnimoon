@@ -17,6 +17,15 @@ interface VowGenerationRequest {
 
 export async function POST(req: NextRequest) {
   try {
+    // Runtime check for API key
+    if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'dummy-key-for-build') {
+      console.error('OPENAI_API_KEY is not configured')
+      return NextResponse.json(
+        { error: 'Service temporarily unavailable. Please try again later.' },
+        { status: 503 }
+      )
+    }
+
     // Rate limiting - 5 requests per minute per IP
     const identifier = req.ip || req.headers.get('x-forwarded-for') || 'unknown'
     if (!checkRateLimit(identifier, 5)) {
