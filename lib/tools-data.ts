@@ -198,137 +198,149 @@ export const tools: Tool[] = [
   {
     slug: 'wedding-day-timeline-generator',
     name: 'Wedding Day Timeline Generator',
-    h1: 'Wedding Day Timeline Generator',
-    description: 'Use this wedding day timeline generator to create a detailed hour-by-hour schedule for your big day. From getting ready to the final send-off, plan every moment so nothing gets missed.',
+    h1: 'Wedding day timeline generator',
+    description: 'A wedding day timeline generator lays out how your wedding day unfolds hour by hour. It helps you see the full picture without guessing what comes next.',
     category: 'timeline',
     component: 'WeddingDayTimelineGenerator',
     image: '/images/tools/wedding-day-timeline-generator.svg',
-    metaDescription: 'Wedding day timeline generator creates a detailed hour-by-hour schedule from getting ready to send-off so nothing gets missed.',
+    metaDescription: 'A wedding day timeline generator helps you plan your wedding day flow from morning to night without stress.',
     seoContent: {
-      h2: 'How to Use a Wedding Day Timeline Generator for a Stress-Free Day',
+      h2: 'How to map out your wedding day so it actually feels calm',
       content: `
-        <p>Your wedding day moves fast. Hair and makeup, photos, ceremony, cocktail hour, and reception all packed into a few hours. Without a clear timeline, things run late, vendors get confused, and you miss important moments.</p>
-
-        <p>A wedding day timeline generator fixes this. Maps out your entire day hour by hour so everyone knows where to be and when. Your photographer knows when to show up for getting-ready shots. Your DJ knows when to cue your entrance. Nothing gets skipped because it's all written down.</p>
-
-        <p>Most couples wing it and hope everything works out.</p>
-
-        <p>That's how you end up rushing through photos or cutting cocktail hour short. A timeline keeps your day on track without feeling rigid or stressful.</p>
-
-        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Why You Need an Hour-by-Hour Timeline</h2>
-
-        <p>Your vendors all need to coordinate with each other. If your photographer doesn't know when the ceremony starts, they might miss key shots. If your caterer starts serving dinner too early, guests are still on the dance floor.</p>
-
-        <p>A timeline syncs everyone up. When you share it with your vendors ahead of time, they can plan their work around your schedule. Cuts down on confusion and makes the day run smoother.</p>
-
-        <p>You also need buffer time built in. Things always take longer than you think (trust me). Makeup runs over, photos take extra time, or guests show up late. A good timeline accounts for these delays so you don't feel rushed.</p>
-
-        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">What Happens When You Skip the Planning</h2>
-
-        <p>Without a timeline, your vendors make their own schedule. Your photographer might want to start portraits right after the ceremony, but your venue needs time to flip the space. These conflicts create stress on a day when you want to stay calm.</p>
-
-        <p>You also risk missing photos. Don't schedule time for family portraits? You'll try to squeeze them in somewhere. Then you're scrambling to round up relatives while your cocktail hour starts without you.</p>
-
-        <p>Late starts throw everything off. Ceremony runs 20 minutes behind and suddenly your cocktail hour gets cut short, dinner service gets delayed, and your reception timeline falls apart. One delay creates a domino effect.</p>
-
-        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">How the Wedding Day Timeline Generator Works</h2>
-
-        <p>Start by entering your ceremony time. This is your anchor point. Everything else gets scheduled around when you walk down the aisle.</p>
-
-        <p>Next, add your reception start time. Ceremony and reception at different locations? The tool accounts for travel time. Same place? It factors in the venue flip.</p>
-
-        <p>The generator builds in standard times for each event. Hair and makeup usually takes about 3 hours. Family photos take about an hour. Cocktail hour is one hour. These estimates give you a realistic schedule.</p>
-
-        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">What to Include in Your Timeline</h2>
-
-        <p>Getting ready should start at least 3 hours before your ceremony. This gives you time for hair, makeup, getting dressed, and a few candid photos. Don't cut this short or you'll feel rushed from the start.</p>
-
-        <p>Schedule a first look if you want one. Happens about an hour before the ceremony and gives you a private moment. Also lets you knock out most of your couple portraits before guests arrive.</p>
-
-        <p>Family photos need at least an hour. You're wrangling multiple groups, and people always take longer to gather than you expect. Skip this time and you'll miss important family shots.</p>
-
-        <p>Cocktail hour gives you breathing room. While guests enjoy drinks and appetizers, you finish photos. This also gives the venue staff time to set up your reception space.</p>
-
-        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Common Mistakes That Throw Off Your Timeline</h2>
-
-        <p>Starting hair and makeup too late is the biggest mistake.</p>
-
-        <p>You think 2 hours is enough, but it's not. When makeup runs over, everything after it gets delayed. Build in extra time at the start of your day.</p>
-
-        <p>Skipping the first look means cramming all your photos into cocktail hour. That's not enough time for couples, wedding party, and family shots. You either rush through photos or show up late to your own reception.</p>
-
-        <p>Not sharing your timeline with vendors creates confusion. Your DJ doesn't know when to start playing music. Your caterer doesn't know when to serve dinner. Send everyone a copy of your timeline at least 2 weeks before the wedding.</p>
-
-        <p>Forgetting about travel time between venues causes problems. It takes longer than you think to get everyone from the ceremony site to the reception. Add at least 30 minutes for travel, even if the venues are close.</p>
-
-        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">How to Share Your Timeline with Your Team</h2>
-
-        <p>Once you generate your timeline, send it to every vendor. Your photographer, videographer, DJ, florist, and caterer all need a copy. They should know the exact time for every event.</p>
-
-        <p>Give your wedding party a simplified version. They don't need every detail, but they should know when to arrive for photos and when key events happen. Keeps everyone on the same page.</p>
-
-        <p>Print a copy for your day-of coordinator or point person. They'll use it to keep your day on track. If something runs late, they can adjust the schedule without bothering you.</p>
-
-        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">When Your Timeline Needs to Flex</h2>
-
-        <p>Your timeline is a guide. Not a rule.</p>
-
-        <p>If photos are taking longer because the lighting is perfect, take the extra time. You can shorten cocktail hour or skip a few formal shots later.</p>
-
-        <p>Weather can throw things off. Have an outdoor ceremony and it rains? You need a backup plan. Build flexibility into your timeline so you can shift things around if needed.</p>
-
-        <p>Some events can be cut if you're running behind. Bouquet and garter toss are nice but optional. Cake cutting can happen earlier or later. Focus on the moments that matter most to you.</p>
-
-        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Using a Full Planning Tool for Your Wedding</h2>
-
-        <p>A day-of timeline generator helps, but it doesn't handle everything. You still need to manage your budget, track RSVPs, and organize vendor contacts. That's where a tool like Hunnimoon comes in.</p>
-
-        <p>Hunnimoon keeps your budget, guest list, and vendor info all in one place. When you update your schedule, you can share it directly with vendors. Your partner can access everything too, so you're both always in sync.</p>
-
-        <p>Instead of juggling spreadsheets and notes, everything updates automatically. You can see what's done and what's left without digging through old emails. Try it free for 7 days and see if it makes planning easier.</p>
-
-        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Tips for Staying on Schedule</h2>
-
-        <p>Assign someone to watch the clock. This can be your coordinator, a bridesmaid, or a family member. Their job is to gently remind you when it's time to move to the next event.</p>
-
-        <p>Don't overbook your day. Try to cram too much in and something will get cut. Focus on the photos and moments that matter most and let go of the rest.</p>
-
-        <p>Start on time. Ceremony scheduled for 3 PM? Start at 3 PM. Guests arrived on time, and they shouldn't wait because you're running late. Respect their time and your timeline stays intact.</p>
-
-        <p>Communicate with your vendors the week before. Confirm all the times with everyone. If someone's schedule changed, you have time to adjust your timeline before the wedding.</p>
+        <p>Using a wedding day timeline generator can change how your whole wedding day feels. Not in a flashy way. More in a quiet relief kind of way. You stop wondering what should be happening next and start focusing on what is actually happening.</p>
+        
+        <p>This sounds obvious, but the wedding day is long. Longer than people expect. It starts early. Earlier than the ceremony. And it ends late. Having a clear flow from morning to night helps you breathe.</p>
+        
+        <p>You do not need to be a type A planner. You just need a way to see the day laid out in front of you. Even roughly.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Why the wedding day feels more stressful than couples expect</h2>
+        
+        <p>Most couples plan for months. Sometimes years. Then the day arrives and it still feels fast. Almost slippery.</p>
+        
+        <p>There are people asking questions. Vendors arriving. Family members hovering. Everyone means well. But it is a lot.</p>
+        
+        <p>Here's the thing. Stress usually comes from not knowing what is next. Not from being busy.</p>
+        
+        <p>When the day has a clear flow, your brain can relax a little. You are not constantly checking the time or wondering if you forgot something.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Starting the day from the moment you wake up</h2>
+        
+        <p>The wedding day does not start at the ceremony. It starts when your alarm goes off.</p>
+        
+        <p>That morning matters. A lot.</p>
+        
+        <p>When will you eat. When will hair and makeup begin. When do you want quiet time. These details shape how grounded you feel.</p>
+        
+        <p>A wedding day timeline helps you see the morning clearly. Not minute by minute. Just enough to avoid rushing.</p>
+        
+        <p>I once forgot to eat breakfast at a friend's wedding because no one planned it. She laughed about it later. She was starving by noon.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Building in breathing room on purpose</h2>
+        
+        <p>This is where many couples go wrong. They pack everything too tightly.</p>
+        
+        <p>Photos run late. Someone cannot find their shoes. Traffic happens.</p>
+        
+        <p>If there is no breathing room, stress snowballs fast.</p>
+        
+        <p>Spacing things out is not lazy. It is smart.</p>
+        
+        <p>A simple structure lets you add small buffers without overthinking it.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Helping other people know what is happening</h2>
+        
+        <p>You are not the only one who benefits from clarity.</p>
+        
+        <p>Your vendors do better work when they know the flow of the day. Your family relaxes when they are not guessing.</p>
+        
+        <p>This is especially true if you are juggling multiple vendors.</p>
+        
+        <p>Vendor organization makes this easier. Everything lives in one place. Names. Notes. Details.</p>
+        
+        <p>Less explaining. Fewer repeat questions.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Keeping the focus on moments that matter</h2>
+        
+        <p>Weddings are made of moments. Small ones.</p>
+        
+        <p>A quiet coffee in the morning. A deep breath before walking in. A few minutes alone after the ceremony.</p>
+        
+        <p>When the day is loosely mapped out, you can protect those moments.</p>
+        
+        <p>You are not pulled away constantly. You can be present.</p>
+        
+        <p>That matters more than sticking to exact times.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Making sure guests are not left guessing</h2>
+        
+        <p>Your guests feel the flow too. Even if they do not see it.</p>
+        
+        <p>If transitions are messy, people get confused. They wander. They ask questions.</p>
+        
+        <p>Guest list management helps you think through who needs to be where and when. Especially for family and close friends.</p>
+        
+        <p>It keeps things feeling smooth from the outside.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Staying realistic with money and time</h2>
+        
+        <p>Time and money are tied together on a wedding day.</p>
+        
+        <p>Extra hours often cost extra fees. Rushing can lead to mistakes.</p>
+        
+        <p>Budget tracking helps you see how the day setup connects to spending.</p>
+        
+        <p>You can make small adjustments early instead of expensive fixes later.</p>
+        
+        <p>It keeps expectations grounded.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Letting the plan support you, not control you</h2>
+        
+        <p>The goal is not perfection.</p>
+        
+        <p>The goal is support.</p>
+        
+        <p>A timeline is a guide. Not a boss.</p>
+        
+        <p>If something shifts, that is okay. You are not failing.</p>
+        
+        <p>You gave yourself a framework. That is the win.</p>
+        
+        <p>And if you are using Hunnimoon, tools like RSVP management help keep guest responses clear so the day feels predictable in a good way.</p>
+        
+        <p>When the structure is there, you can let go a little. And enjoy the day you worked so hard to create.</p>
       `,
       faqs: [
         {
-          question: 'What time should I start getting ready on my wedding day?',
-          answer: 'Start hair and makeup at least 3 hours before your ceremony. If your ceremony is at 3 PM, begin getting ready by noon. This gives you time for hair, makeup, getting dressed, and a few photos without feeling rushed.'
+          question: 'What is a wedding day timeline generator used for',
+          answer: 'It is used to map out how your wedding day flows from morning to night. It helps you see the order of events so the day feels less chaotic.'
         },
         {
-          question: 'How much time should I budget for wedding photos?',
-          answer: 'Plan for at least 1 hour of family and couple portraits. If you skip the first look, you need even more time. Most photographers recommend 90 minutes to 2 hours for all formal photos on your wedding day.'
+          question: 'Do I need one if my wedding is small',
+          answer: 'Yes, even small weddings have moving parts. A simple structure helps you avoid rushing and forgetting basic things like meals or travel time.'
         },
         {
-          question: 'Do I need a first look if I want to stick to tradition?',
-          answer: 'No, a first look is optional. Some couples prefer to see each other for the first time at the ceremony. Just know that skipping it means all your photos happen during cocktail hour, which feels more rushed.'
+          question: 'How detailed should the plan be',
+          answer: 'It should be clear but not rigid. Focus on the big blocks of the day instead of exact minutes.'
         },
         {
-          question: 'How long does a typical wedding ceremony last?',
-          answer: 'Most ceremonies last 20 to 30 minutes. If you have a religious ceremony with full mass, plan for 45 minutes to an hour. Shorter ceremonies give you more time for photos and reception events.'
+          question: 'When should I start planning the wedding day flow',
+          answer: 'Once your ceremony time and vendors are set, you can start. You can always adjust later.'
         },
         {
-          question: 'What if my wedding day timeline gets off track?',
-          answer: 'Stay calm and adjust. Skip optional events like bouquet toss or cut cocktail hour short. Your day-of coordinator can help shift things around. The important part is enjoying your day, not sticking to every minute.'
+          question: 'Can this help with vendor coordination',
+          answer: 'Yes, knowing the order of the day helps vendors do their jobs better. It also reduces back and forth questions.'
         },
         {
-          question: 'Should I share my timeline with all my vendors?',
-          answer: 'Yes, send your timeline to every vendor at least two weeks before your wedding. They need to know when to set up, when key events happen, and when to break down. This keeps everyone coordinated.'
+          question: 'How does Hunnimoon fit into planning the wedding day',
+          answer: 'Hunnimoon helps you organize guest details, vendors, and RSVPs in one place. That makes it easier to think through how the day unfolds.'
         },
         {
-          question: 'How does Hunnimoon help with wedding day planning?',
-          answer: 'Hunnimoon keeps your timeline, vendor contacts, and schedule all in one place. You can share updates with your team instantly, and your partner can access everything too. Try it free for 7 days to see how it works.'
+          question: 'Does Hunnimoon help with guest-related planning',
+          answer: 'Yes, guest list management and RSVP management help you know who is attending. That clarity supports smoother planning.'
         },
         {
-          question: 'What happens during cocktail hour?',
-          answer: 'Cocktail hour gives guests drinks and appetizers while you finish photos. It also gives your venue time to flip the ceremony space into the reception setup. Most cocktail hours last one hour.'
+          question: 'Can Hunnimoon help me stay within budget on the wedding day',
+          answer: 'Budget tracking in Hunnimoon helps you connect time decisions with costs. It keeps spending realistic as plans evolve.'
         }
       ]
     }
