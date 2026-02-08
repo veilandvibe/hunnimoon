@@ -74,8 +74,8 @@ export default function WeddingHashtagsGenerator() {
     }
 
     // Check if nicknames are different from first names
-    const hasA_Nick = normA_Nick && normA_Nick !== normA_First
-    const hasB_Nick = normB_Nick && normB_Nick !== normB_First
+    const hasA_Nick = !!(normA_Nick && normA_Nick !== normA_First)
+    const hasB_Nick = !!(normB_Nick && normB_Nick !== normB_First)
 
     // Pattern pool with conditional logic
     const patterns: Array<{ template: string; condition: boolean }> = [
