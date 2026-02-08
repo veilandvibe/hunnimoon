@@ -10,6 +10,8 @@ import WeddingTimelineGenerator from '@/components/tools/WeddingTimelineGenerato
 import WeddingDayTimelineGenerator from '@/components/tools/WeddingDayTimelineGenerator'
 import WeddingReceptionTimelineGenerator from '@/components/tools/WeddingReceptionTimelineGenerator'
 import WeddingVowsWriter from '@/components/tools/WeddingVowsWriter'
+import WeddingHashtagsGenerator from '@/components/tools/WeddingHashtagsGenerator'
+import WeddingDecorChecklist from '@/components/tools/WeddingDecorChecklist'
 
 // Map component names to actual components
 const toolComponents: Record<string, React.ComponentType> = {
@@ -17,6 +19,8 @@ const toolComponents: Record<string, React.ComponentType> = {
   WeddingDayTimelineGenerator,
   WeddingReceptionTimelineGenerator,
   WeddingVowsWriter,
+  WeddingHashtagsGenerator,
+  WeddingDecorChecklist,
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {

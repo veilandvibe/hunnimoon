@@ -616,6 +616,290 @@ export const tools: Tool[] = [
         }
       ]
     }
+  },
+  {
+    slug: 'wedding-hashtags-free-generator',
+    name: 'Wedding Hashtags Free Generator',
+    h1: 'Wedding hashtags free generator',
+    description: 'The wedding hashtags free generator helps couples create simple hashtags that fit their names and wedding vibe.',
+    category: 'planning',
+    component: 'WeddingHashtagsGenerator',
+    metaDescription: 'A wedding hashtags free generator helps couples create clear hashtags without overthinking names or spelling.',
+    seoContent: {
+      h2: 'A simple way to come up with wedding hashtags without overthinking it',
+      content: `
+        <p>Using a wedding hashtags free generator sounds like a small thing, but it can save you way more time than you expect. Hashtags are fun, but coming up with one from scratch can feel weirdly stressful. You want it to sound cute. You want it to make sense. And you do not want something embarrassing printed on a sign.</p>
+        
+        <p>This sounds obvious, but most couples do not care about hashtags until the moment they need one. Then suddenly it feels urgent. You are tired. Your brain is full. A generator just gives you a starting point.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Why wedding hashtags feel harder than they should</h2>
+        
+        <p>Wedding hashtags look easy when you see other people's weddings online. They are short. They are clever. They rhyme. Or at least they pretend to.</p>
+        
+        <p>Here's the thing. It is harder to be clever about your own name. You overthink it. You second guess every option. You worry about how it sounds out loud.</p>
+        
+        <p>Most couples also try to do this late at night. Or between errands. Or while juggling guest list updates and vendor emails. Not ideal conditions for creativity.</p>
+        
+        <p>A wedding hashtags free generator removes that pressure. It does not promise magic. It just gives you options.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">What a wedding hashtag actually needs to do</h2>
+        
+        <p>A wedding hashtag is not a brand. It does not need to be perfect. It just needs to work.</p>
+        
+        <p>It should be easy to spell. Easy to remember. And easy to type on a phone.</p>
+        
+        <p>If people have to ask you how to spell it, that is already a problem. If it autocorrects into something else, also a problem.</p>
+        
+        <p>This is why generators focus on structure more than jokes. They usually combine names, initials, or a shared last name. Simple beats clever most of the time.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">How a free generator actually comes up with ideas</h2>
+        
+        <p>A wedding hashtags free generator does not guess your personality. It works with patterns.</p>
+        
+        <p>It looks at your names. Sometimes your wedding year. Sometimes your future last name.</p>
+        
+        <p>Then it mixes those pieces in common formats. Think name plus forever. Name plus tied the knot. Name plus wedding year.</p>
+        
+        <p>It is not romantic. But it is practical. And practical is what most couples need at this stage.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Common mistakes couples make with hashtags</h2>
+        
+        <p>Long hashtags are the biggest issue. They look fine written down, but nobody wants to type them.</p>
+        
+        <p>Another mistake is inside jokes. They make sense to you, but not to your guests.</p>
+        
+        <p>Also watch out for weird word breaks. Names can combine into unfortunate phrases if you are not careful.</p>
+        
+        <p>A generator helps catch these issues early. It gives you neutral options that are less risky.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">When you should stop brainstorming and just pick one</h2>
+        
+        <p>This part is underrated. At some point, you need to stop tweaking.</p>
+        
+        <p>If the hashtag is readable and clear, it is good enough. Guests are not scoring it.</p>
+        
+        <p>I once watched a friend debate one hashtag for a week. In the end, guests shortened it anyway.</p>
+        
+        <p>The goal is shared photos, not creative validation. A generator helps you move on faster.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">How hashtags fit into the rest of wedding planning</h2>
+        
+        <p>Hashtags touch more things than people expect. Signs. Invites. Social posts.</p>
+        
+        <p>If you change it late, you create extra work. That is where stress sneaks in.</p>
+        
+        <p>When you already track guest list details or RSVP responses, it helps to lock small decisions early.</p>
+        
+        <p>Tools like Hunnimoon keep planning details organized, so small choices do not spiral into bigger ones.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">What makes a free tool better than paid ones here</h2>
+        
+        <p>Paid hashtag tools often promise uniqueness. That sounds nice, but it rarely matters.</p>
+        
+        <p>Most hashtags are only used within your guest circle. You are not competing with strangers.</p>
+        
+        <p>A wedding hashtags free generator gives you the same structural ideas without pressure.</p>
+        
+        <p>It lets you focus energy on things that actually affect your budget or vendors.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Using a generator without losing the personal touch</h2>
+        
+        <p>A generator gives you a base. You can still tweak it.</p>
+        
+        <p>Maybe you remove a word. Maybe you swap the order. That is fine.</p>
+        
+        <p>The key is not starting from zero. That blank space is the hardest part.</p>
+        
+        <p>Once you choose a hashtag, write it down somewhere safe. Planning tools like Hunnimoon help keep details like this from getting lost.</p>
+      `,
+      faqs: [
+        {
+          question: 'What is a wedding hashtags free generator',
+          answer: 'It is a simple tool that creates hashtag ideas using names and basic details. It focuses on clear formats that guests can easily use. It does not try to be overly clever.'
+        },
+        {
+          question: 'Are generated wedding hashtags unique',
+          answer: 'Most are not technically unique. But that usually does not matter since they are used within your own guest group. What matters more is clarity.'
+        },
+        {
+          question: 'Can I edit the hashtag after using a generator',
+          answer: 'Yes. The generator gives you a starting point. Small edits are normal and expected.'
+        },
+        {
+          question: 'How many times should I use my wedding hashtag',
+          answer: 'You only need to use it where guests will see it. Overusing it can feel forced. Simple placement works best.'
+        },
+        {
+          question: 'Do guests actually use wedding hashtags',
+          answer: 'Some do, some do not. Clear hashtags get used more often. Long or confusing ones get ignored.'
+        },
+        {
+          question: 'When should I decide on a wedding hashtag',
+          answer: 'Earlier is better, especially before printing anything. Changing it later creates extra work.'
+        },
+        {
+          question: 'Does Hunnimoon include wedding hashtag tools',
+          answer: 'Hunnimoon focuses on planning basics like guest list management and RSVP management. Hashtags are usually handled separately.'
+        },
+        {
+          question: 'Can I store my wedding hashtag in Hunnimoon',
+          answer: 'Many couples keep notes like hashtags alongside vendor organization or budget tracking details. It helps keep everything in one place.'
+        }
+      ]
+    }
+  },
+  {
+    slug: 'wedding-decor-checklist',
+    name: 'Wedding Decor Checklist',
+    h1: 'Wedding decor checklist',
+    description: 'A wedding decor checklist is a simple way to organize visual details for your ceremony and reception. It helps you see what you need without holding everything in your head.',
+    category: 'planning',
+    component: 'WeddingDecorChecklist',
+    metaDescription: 'A wedding decor checklist helps you plan visual details without forgetting the small things.',
+    seoContent: {
+      h2: 'How to think through your wedding decor without missing the small stuff',
+      content: `
+        <p>Here's the thing about a wedding decor checklist. It sounds formal. Almost stiff. But really, it's just a way to remember what you care about so you are not scrambling later.</p>
+        
+        <p>When couples talk about decor, they usually mean vibes. Colors. Flowers. Lighting. All the pretty things. A wedding decor checklist helps turn those fuzzy ideas into something you can actually plan.</p>
+        
+        <p>This is not about being perfect. It's about not forgetting the basics while you're busy dreaming. That's it.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Why decor feels overwhelming so fast</h2>
+        
+        <p>Decor feels easy at first. You pick a color or two. You save some photos. You feel done.</p>
+        
+        <p>Then reality shows up. Tables need linens. Signs need stands. Flowers need somewhere to go. Suddenly there are details everywhere.</p>
+        
+        <p>This sounds obvious, but decor touches almost every part of the day. Ceremony. Cocktail hour. Reception. Even small spaces matter.</p>
+        
+        <p>A wedding decor checklist gives your brain a place to put those thoughts. So they stop popping up at midnight.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Start with the feeling, not the items</h2>
+        
+        <p>Before listing anything, pause. Ask yourself how you want the day to feel.</p>
+        
+        <p>Warm and relaxed. Clean and simple. Colorful and loud. There's no wrong answer.</p>
+        
+        <p>When you know the feeling, the decor choices get easier. You stop adding things just because you saw them online.</p>
+        
+        <p>A wedding decor checklist works best when it follows a mood. Not trends.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Breaking decor into zones</h2>
+        
+        <p>Trying to plan decor all at once is a trap. It's too much.</p>
+        
+        <p>Instead, think in zones. Ceremony space. Reception tables. Entry areas. Bar. Dance floor.</p>
+        
+        <p>Each zone needs a few clear decisions. Not dozens.</p>
+        
+        <p>This is where a wedding decor checklist really helps. You can focus on one zone and ignore the rest for now.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">The pieces people forget most often</h2>
+        
+        <p>Some decor items are easy to miss. Until it's too late.</p>
+        
+        <p>Signage is a big one. Welcome signs. Table numbers. Direction signs.</p>
+        
+        <p>Lighting is another. Candles, string lights, uplighting. They change everything.</p>
+        
+        <p>And don't forget practical decor. Card tables. Gift tables. Memory tables. They still need to look intentional.</p>
+        
+        <p>A wedding decor checklist keeps these quiet details from disappearing.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Decor and budget are always connected</h2>
+        
+        <p>Decor feels visual. Budget feels mathy. They are deeply linked.</p>
+        
+        <p>Every extra item costs something. Rent. Buy. Set up. Tear down.</p>
+        
+        <p>This is where tracking your decor choices alongside budget tracking really matters. It keeps surprises smaller.</p>
+        
+        <p>You might decide fewer centerpieces means better lighting. That's a good trade.</p>
+        
+        <p>A wedding decor checklist helps you see those tradeoffs clearly.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Working with vendors without confusion</h2>
+        
+        <p>Florists. Rental companies. Stylists. They all need clear information.</p>
+        
+        <p>If you are vague, they guess. Guessing costs money.</p>
+        
+        <p>When you organize decor by category, vendor organization gets easier. You know who is responsible for what.</p>
+        
+        <p>This avoids overlap. It also avoids gaps.</p>
+        
+        <p>A wedding decor checklist acts like a shared language. Even if you never show it to anyone.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">A quick real life moment</h2>
+        
+        <p>I once helped a friend set up her reception space the morning of her wedding.</p>
+        
+        <p>Everything looked great. Until we realized there were no stands for the table numbers.</p>
+        
+        <p>We taped them to wine bottles. It worked. Barely.</p>
+        
+        <p>That moment is why I believe in writing things down. A wedding decor checklist would have saved us twenty stressed minutes.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Keeping decor choices flexible</h2>
+        
+        <p>Plans change. Vendors change. Weather changes.</p>
+        
+        <p>Your decor plan should bend a little. Not snap.</p>
+        
+        <p>When your wedding decor checklist is simple, it's easier to adjust. You can swap items without rebuilding everything.</p>
+        
+        <p>This matters more than having every detail locked early.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">How tools like Hunnimoon fit into decor planning</h2>
+        
+        <p>Decor planning does not live alone. It touches guests, money, and people.</p>
+        
+        <p>When you manage your guest list, you know how many tables need decor. That matters.</p>
+        
+        <p>Budget tracking helps you decide where decor matters most to you.</p>
+        
+        <p>Vendor organization keeps communication clear when decor details shift.</p>
+        
+        <p>Even RSVP management plays a role as numbers settle.</p>
+        
+        <p>A wedding decor checklist works best when it connects to the rest of your planning. Not when it floats by itself.</p>
+      `,
+      faqs: [
+        {
+          question: 'What is a wedding decor checklist used for',
+          answer: 'It helps you think through decor details by area so nothing important is forgotten. It keeps ideas from living only in your head.'
+        },
+        {
+          question: 'When should I start thinking about wedding decor',
+          answer: 'As soon as you have a general idea of your wedding style. You don\'t need decisions yet. Just direction.'
+        },
+        {
+          question: 'How detailed should my decor planning be',
+          answer: 'Detailed enough to avoid confusion. Simple enough to change later. If it feels heavy, it\'s probably too much.'
+        },
+        {
+          question: 'Does decor planning affect the wedding budget a lot',
+          answer: 'Yes, often more than couples expect. Small items add up fast. That\'s why tracking choices early helps.'
+        },
+        {
+          question: 'Can I plan decor without hiring a stylist',
+          answer: 'Absolutely. Many couples do. Writing things down clearly makes self planning easier.'
+        },
+        {
+          question: 'How does Hunnimoon help with decor planning',
+          answer: 'Hunnimoon helps you organize guest counts, vendors, and budget. That information shapes decor decisions naturally.'
+        },
+        {
+          question: 'Does Hunnimoon replace a wedding decor checklist',
+          answer: 'No, but it supports it. When your guest list and budget are clear, your decor plan makes more sense.'
+        },
+        {
+          question: 'Why connect decor planning with RSVP management in Hunnimoon',
+          answer: 'Final guest numbers affect tables, seating areas, and decor quantity. RSVP management helps lock those numbers in.'
+        }
+      ]
+    }
   }
 ]
 
