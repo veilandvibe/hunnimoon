@@ -900,6 +900,145 @@ export const tools: Tool[] = [
         }
       ]
     }
+  },
+  {
+    slug: 'alcohol-wedding-calculator',
+    name: 'Alcohol wedding calculator',
+    h1: 'Alcohol wedding calculator',
+    description: 'An alcohol wedding calculator helps you estimate how much beer, wine, and spirits to buy based on your guest list. It takes some of the guesswork out of bar planning so you do not overspend or run out.',
+    category: 'budget',
+    component: 'WeddingAlcoholCalculator',
+    metaDescription: 'An alcohol wedding calculator helps estimate how much beer, wine, and spirits you need based on guest count and time.',
+    seoContent: {
+      h2: 'How to figure out how much alcohol you actually need for a wedding',
+      content: `
+        <p>Planning drinks sounds simple until it suddenly is not. An alcohol wedding calculator exists for a reason. Most couples have no idea how much to buy. They either panic buy everything or underbuy and hope for the best.</p>
+        
+        <p>This part of wedding planning feels small. It is not. Alcohol is expensive. It also shows up fast on your budget. Getting the numbers roughly right matters more than people admit.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Why alcohol planning feels harder than it should</h2>
+        
+        <p>Here is the thing. Weddings are not normal parties. The crowd is mixed. Drinking habits vary a lot. Your college friends drink differently than your aunt.</p>
+        
+        <p>You also have pressure. No one wants to run out of drinks. That fear pushes couples to overbuy. Then you are stuck with leftovers or wasted money.</p>
+        
+        <p>An alcohol wedding calculator gives you a starting point. Not a promise. Just a reasonable estimate so you are not guessing in the dark.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">What an alcohol calculator actually does</h2>
+        
+        <p>An alcohol wedding calculator uses a few simple inputs. Guest count. Event length. Type of drinks served.</p>
+        
+        <p>It assumes an average drinking pace. Usually one drink per person per hour. Sometimes a little less after dinner.</p>
+        
+        <p>This sounds obvious. But most people never stop to do the math. They buy based on vibes. Vibes are expensive.</p>
+        
+        <p>The calculator turns vague ideas into numbers. Not perfect numbers. Useful ones.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Guest count matters more than you think</h2>
+        
+        <p>Your guest list drives everything. Every estimate starts there. Even being off by ten people can change totals.</p>
+        
+        <p>This is why keeping your guest list updated matters. Not in your head. Somewhere real.</p>
+        
+        <p>If you use guest list management in a planning tool like Hunnimoon, it helps keep numbers honest. Especially once RSVPs come in.</p>
+        
+        <p>An alcohol wedding calculator only works if the guest count is real. Hopeful numbers lead to wrong results.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Beer, wine, and spirits ratios explained simply</h2>
+        
+        <p>Most weddings follow a rough split. About half beer. About a third wine. The rest spirits.</p>
+        
+        <p>This is not a rule. It is a pattern. Outdoor weddings lean heavier on beer. Formal dinners lean more wine.</p>
+        
+        <p>An alcohol wedding calculator usually starts with this ratio. You can adjust it if you know your crowd.</p>
+        
+        <p>If your friends love cocktails, plan more spirits. If your family prefers wine, shift it there. The calculator is flexible.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">How event length changes everything</h2>
+        
+        <p>A four hour reception is not the same as a six hour one. Those extra hours add up fast.</p>
+        
+        <p>People drink more early. Then it slows down. Dessert changes things. Dancing does too.</p>
+        
+        <p>An alcohol wedding calculator factors time in. Longer events mean more drinks overall.</p>
+        
+        <p>This is where couples often undercount. They forget pre dinner drinks. Or the after party crowd.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">A quick personal lesson from a real wedding</h2>
+        
+        <p>At my cousin's wedding, they skipped using an alcohol wedding calculator. They guessed instead.</p>
+        
+        <p>They ran out of wine halfway through dinner. Beer was gone by dancing.</p>
+        
+        <p>Someone did an emergency store run in formal wear. It was funny later. Not then.</p>
+        
+        <p>No one blamed them. But it was stressful. That is what planning tools help avoid.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Budget reality and alcohol decisions</h2>
+        
+        <p>Alcohol hits the budget harder than expected. It is easy to underestimate.</p>
+        
+        <p>Using an alcohol wedding calculator helps you see the cost early. Not after buying.</p>
+        
+        <p>This is where budget tracking becomes useful. You can adjust drink choices instead of cutting something else later.</p>
+        
+        <p>Fewer spirits. More beer. Smaller bar menu. Small tweaks save real money.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">What calculators cannot predict</h2>
+        
+        <p>No alcohol wedding calculator can predict everything. Weather changes behavior. So does mood.</p>
+        
+        <p>Some guests will not drink at all. Others will drink more than average.</p>
+        
+        <p>Calculators assume balance. Real life is messy.</p>
+        
+        <p>That is okay. The goal is close enough. Not perfect.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">How this fits into the rest of planning</h2>
+        
+        <p>Alcohol planning does not live alone. It connects to vendors. To budget. To guest count.</p>
+        
+        <p>Keeping vendor organization clean helps if you are coordinating bartenders or delivery.</p>
+        
+        <p>RSVP management helps refine numbers closer to the date. That matters for final alcohol totals.</p>
+        
+        <p>An alcohol wedding calculator works best when the rest of your planning data is accurate too.</p>
+      `,
+      faqs: [
+        {
+          question: 'How accurate is an alcohol wedding calculator',
+          answer: 'It is an estimate, not a guarantee. It works well when your guest count and event length are accurate. Most couples land close enough to avoid stress.'
+        },
+        {
+          question: 'Do I need to include guests who do not drink',
+          answer: 'Yes. Calculators assume some guests will not drink. That balance is built into the averages. You do not need to remove them manually.'
+        },
+        {
+          question: 'What if my wedding is dry or beer and wine only',
+          answer: 'An alcohol wedding calculator can be adjusted. You can remove spirits entirely or change ratios. The math still helps.'
+        },
+        {
+          question: 'Is it better to overbuy alcohol',
+          answer: 'Slightly over is safer than under. But overbuying too much wastes money. A calculator helps find the middle ground.'
+        },
+        {
+          question: 'When should I finalize alcohol numbers',
+          answer: 'After most RSVPs are in. Final guest counts make a big difference. Last minute tweaks are normal.'
+        },
+        {
+          question: 'Can Hunnimoon help with guest numbers for alcohol planning',
+          answer: 'Yes. Guest list management and RSVP management keep counts updated. That makes alcohol estimates more reliable.'
+        },
+        {
+          question: 'Does Hunnimoon track alcohol costs',
+          answer: 'It can help through budget tracking. You can see how alcohol fits into your overall numbers.'
+        },
+        {
+          question: 'Can I organize alcohol vendors in Hunnimoon',
+          answer: 'Vendor organization helps keep details in one place. That includes bartenders and alcohol suppliers.'
+        }
+      ]
+    }
   }
 ]
 
