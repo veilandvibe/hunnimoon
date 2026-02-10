@@ -44,7 +44,7 @@ export default function RSVPManagerPage() {
   )
 
   const guests = data?.guests || []
-  const rsvpSettings = wedding?.rsvpSettings
+  const rsvpSettings = data?.rsvpSettings?.[0]
   
   // Local state for form settings
   const [passwordProtected, setPasswordProtected] = useState(false)
@@ -57,7 +57,7 @@ export default function RSVPManagerPage() {
   const [showAccommodationQuestion, setShowAccommodationQuestion] = useState(false)
   const [showNotesField, setShowNotesField] = useState(true)
   const [mealOptions, setMealOptions] = useState('Chicken, Fish, Vegetarian, Vegan')
-  const [customMessage, setCustomMessage] = useState('Thank you for RSVPing! We can\'t wait to celebrate with you. Please arrive 15 minutes early.')
+  const [customMessage, setCustomMessage] = useState('Thank you! We can\'t wait to celebrate with you. Please arrive 15 minutes early.')
 
   // Sync local state with rsvpSettings when data loads
   useEffect(() => {
@@ -72,7 +72,7 @@ export default function RSVPManagerPage() {
       setShowAccommodationQuestion(rsvpSettings.show_accommodation_question ?? false)
       setShowNotesField(rsvpSettings.show_notes_field ?? true)
       setMealOptions(rsvpSettings.meal_options ?? 'Chicken, Fish, Vegetarian, Vegan')
-      setCustomMessage(rsvpSettings.custom_message ?? 'Thank you for RSVPing! We can\'t wait to celebrate with you. Please arrive 15 minutes early.')
+      setCustomMessage(rsvpSettings.custom_message ?? 'Thank you! We can\'t wait to celebrate with you. Please arrive 15 minutes early.')
     }
   }, [rsvpSettings])
   
@@ -557,7 +557,7 @@ export default function RSVPManagerPage() {
                 value={customMessage}
                 onChange={(e) => setCustomMessage(e.target.value)}
                 rows={3}
-                placeholder="Thank you for RSVPing! We can't wait to celebrate with you."
+                placeholder="Thank you! We can't wait to celebrate with you."
                 disabled={isReadOnly}
               />
             </div>
