@@ -77,7 +77,7 @@ export default function BudgetPage() {
     setDeleteConfirm({
       isOpen: true,
       itemId,
-      itemName: item?.category_name || 'this budget item'
+      itemName: String(item?.category_name || 'this budget item')
     })
   }
 
