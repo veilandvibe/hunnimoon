@@ -1039,6 +1039,164 @@ export const tools: Tool[] = [
         }
       ]
     }
+  },
+  {
+    slug: 'last-minute-wedding-checklist',
+    name: 'Last Minute Wedding Checklist',
+    h1: 'Last minute wedding checklist',
+    description: 'A last minute wedding checklist helps you catch the things that usually slip through right before the big day. It\'s about staying calm, not perfect, when time is tight.',
+    category: 'planning',
+    component: 'LastMinuteWeddingChecklist',
+    image: '/images/tools/last-minute-wedding-checklist.svg',
+    metaDescription: 'A last minute wedding checklist helps you focus on final details like guests, vendors, and budgets without adding extra pressure.',
+    seoContent: {
+      h2: 'What to actually focus on when your wedding is right around the corner',
+      content: `
+        <p>A last minute wedding checklist exists for one reason. Panic. Not the dramatic kind. The quiet kind that shows up late at night when you realize the wedding is very close.</p>
+
+        <p>This is the stage where most big decisions are already made. The venue is booked. The vendors are locked in. Now it's about the small things that feel small until they're not.</p>
+
+        <p>This isn't about being perfect. It's about being ready enough.</p>
+
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">What "last minute" really means</h2>
+
+        <p>This sounds obvious, but last minute doesn't mean the night before. It usually starts one to two weeks out.</p>
+
+        <p>You're not planning the wedding anymore. You're double checking it.</p>
+
+        <p>This is when details move from your head into real life. Names. Numbers. Payments. Timing between people.</p>
+
+        <p>If something is missing now, it will feel bigger later.</p>
+
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Guest count reality check</h2>
+
+        <p>At this point, your guest list should feel mostly settled. Mostly is fine.</p>
+
+        <p>There will always be a few people who don't respond clearly. That's normal.</p>
+
+        <p>This is the moment to look at your guest list management and confirm final numbers. Not guesses. Real counts.</p>
+
+        <p>Catering and rentals depend on this. So does your stress level.</p>
+
+        <p>If you're unsure, round up slightly. It's safer.</p>
+
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">RSVPs you still haven't heard back on</h2>
+
+        <p>There's always a handful.</p>
+
+        <p>The people who read the message and never reply. Or said maybe three weeks ago.</p>
+
+        <p>This is when RSVP management matters. You're not being rude. You're being practical.</p>
+
+        <p>Send a short, kind follow up. One sentence is enough.</p>
+
+        <p>You're allowed to close the loop.</p>
+
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Vendor confirmations and loose ends</h2>
+
+        <p>Here's the thing. Vendors are human. Details can slip.</p>
+
+        <p>This is the time to confirm arrival times, final balances, and contact numbers.</p>
+
+        <p>Vendor organization helps here. Having everything in one place saves mental energy.</p>
+
+        <p>You don't need long emails. Short confirmations work best.</p>
+
+        <p>I once forgot to confirm delivery time for flowers at a friend's wedding. They arrived early. It worked out. But my heart rate still remembers.</p>
+
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Money checks you don't want to skip</h2>
+
+        <p>Last minute costs pop up. They always do.</p>
+
+        <p>Extra tips. Small add ons. A payment you thought was already done.</p>
+
+        <p>This is where budget tracking earns its keep.</p>
+
+        <p>Look at what's been paid and what's still pending. Then stop looking.</p>
+
+        <p>You don't need surprises right now.</p>
+
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Personal items people forget</h2>
+
+        <p>This part gets overlooked because it's not glamorous.</p>
+
+        <p>Your shoes. Your outfit pieces. Jewelry. Documents.</p>
+
+        <p>Pack them earlier than you think. Then check once more.</p>
+
+        <p>If something is being brought by someone else, confirm it. Gently.</p>
+
+        <p>This reduces morning stress more than you expect.</p>
+
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">People coordination, not perfection</h2>
+
+        <p>You don't need to control everyone.</p>
+
+        <p>You do need a few key people who know what's happening.</p>
+
+        <p>Share essential info with them. Arrival windows. Contact numbers.</p>
+
+        <p>This isn't about micro managing. It's about not answering questions while getting ready.</p>
+
+        <p>Trust goes a long way here.</p>
+
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">The mental side of the final days</h2>
+
+        <p>This part matters more than most lists.</p>
+
+        <p>You might feel calm one minute and overwhelmed the next.</p>
+
+        <p>That's normal.</p>
+
+        <p>Stop adding new ideas now. There's no room for them.</p>
+
+        <p>Rest when you can. Eat real food. Drink water.</p>
+
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">How Hunnimoon fits into the final stretch</h2>
+
+        <p>This is where tools should feel supportive, not noisy.</p>
+
+        <p>Hunnimoon helps keep guest list management, RSVP management, vendor organization, and budget tracking in one place.</p>
+
+        <p>That means fewer tabs open in your brain.</p>
+
+        <p>You still make the decisions. It just helps you see them clearly.</p>
+      `,
+      faqs: [
+        {
+          question: 'What is a last minute wedding checklist actually for',
+          answer: 'It\'s for catching small but important details close to the wedding. It helps reduce stress by making sure nothing obvious is missed. It\'s not about changing big plans.'
+        },
+        {
+          question: 'How close to the wedding should I start reviewing last minute details',
+          answer: 'Usually one to two weeks before the wedding. That\'s when confirmations and final numbers matter most. Earlier is fine if it helps you relax.'
+        },
+        {
+          question: 'What should I prioritize first at the last minute',
+          answer: 'Guest counts, RSVPs, and vendor confirmations. These affect other decisions. Once those are solid, everything feels easier.'
+        },
+        {
+          question: 'Is it normal to feel overwhelmed this close to the wedding',
+          answer: 'Yes. Very normal. Even calm people feel it. The key is not adding new tasks right now.'
+        },
+        {
+          question: 'What if a guest still hasn\'t responded',
+          answer: 'Follow up politely and set a clear cutoff. You\'re allowed to make a decision if you don\'t hear back. Most vendors need final numbers.'
+        },
+        {
+          question: 'How can I avoid forgetting small personal items',
+          answer: 'Pack them earlier than you think and check once more later. If someone else is bringing something, confirm it. That alone prevents a lot of stress.'
+        },
+        {
+          question: 'Can Hunnimoon help with last minute wedding planning',
+          answer: 'Hunnimoon helps by keeping guest list management, RSVP management, vendor organization, and budget tracking in one place. That makes it easier to see what\'s done and what\'s not.'
+        },
+        {
+          question: 'Do I need a separate tool just for the final days',
+          answer: 'Not really. Using Hunnimoon during the final stretch works well since everything important is already there. Fewer tools usually means less stress.'
+        }
+      ]
+    }
   }
 ]
 
