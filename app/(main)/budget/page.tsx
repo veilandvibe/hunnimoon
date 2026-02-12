@@ -46,8 +46,8 @@ export default function BudgetPage() {
   // Calculate totals
   const activeItems = budgetItems.filter((item) => item.is_active)
   const totalBudget = wedding?.total_budget || 0
-  const allocated = activeItems.reduce((sum, item) => sum + (item.estimated_cost || 0), 0)
-  const actualSpent = activeItems.reduce((sum, item) => sum + (item.actual_cost || 0), 0)
+  const allocated = activeItems.reduce((sum, item) => sum + Number(item.estimated_cost || 0), 0)
+  const actualSpent = activeItems.reduce((sum, item) => sum + Number(item.actual_cost || 0), 0)
   const unallocated = totalBudget - allocated
   const percentSpent = totalBudget > 0 ? Math.round((actualSpent / totalBudget) * 100) : 0
   const isOverBudget = actualSpent > totalBudget
