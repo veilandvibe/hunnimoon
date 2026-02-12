@@ -63,9 +63,9 @@ export default function GuestsPage() {
   // Filter guests
   const filteredGuests = guests.filter((guest) => {
     const matchesSearch =
-      guest.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      guest.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      guest.phone?.includes(searchQuery)
+      String(guest.full_name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      String(guest.email || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      String(guest.phone || '').includes(searchQuery)
 
     const matchesStatus = filterStatus === 'All' || guest.rsvp_status === filterStatus
     

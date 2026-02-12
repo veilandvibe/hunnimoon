@@ -44,9 +44,9 @@ export default function VendorsPage() {
 
   // Filter vendors
   const filteredVendors = vendors.filter((vendor) =>
-    vendor.vendor_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    vendor.contact_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    vendor.email?.toLowerCase().includes(searchQuery.toLowerCase())
+    String(vendor.vendor_name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    String(vendor.contact_name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    String(vendor.email || '').toLowerCase().includes(searchQuery.toLowerCase())
   )
 
   const handleAddVendor = () => {
@@ -64,7 +64,7 @@ export default function VendorsPage() {
     setDeleteConfirm({
       isOpen: true,
       vendorId,
-      vendorName: vendor?.vendor_name || 'this vendor'
+      vendorName: String(vendor?.vendor_name || 'this vendor')
     })
   }
 

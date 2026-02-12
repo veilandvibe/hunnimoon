@@ -166,7 +166,7 @@ export default function RSVPPage() {
     
     if (value.length > 2) {
       const matches = weddingGuests.filter((guest: any) =>
-        guest.full_name.toLowerCase().includes(value.toLowerCase())
+        String(guest.full_name || '').toLowerCase().includes(value.toLowerCase())
       )
       setSuggestions(matches.slice(0, 5))
     } else {
