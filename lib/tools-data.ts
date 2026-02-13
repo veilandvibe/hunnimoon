@@ -1197,6 +1197,134 @@ export const tools: Tool[] = [
         }
       ]
     }
+  },
+  {
+    slug: 'wedding-venue-checklist',
+    name: 'Wedding Venue Checklist',
+    h1: 'Wedding Venue Checklist',
+    description: 'A wedding venue checklist keeps venue decisions grounded in real details instead of gut feelings alone. It helps couples compare spaces without second guessing later.',
+    category: 'planning',
+    component: 'WeddingVenueChecklist',
+    image: '/images/tools/wedding-venue-checklist.svg',
+    metaDescription: 'A wedding venue checklist helps couples compare spaces, costs, and rules before committing to a location.',
+    seoContent: {
+      h2: 'What couples forget to ask when choosing a wedding venue',
+      content: `
+        <p>A wedding venue checklist is not about being strict or organized for the sake of it. It's about giving yourself a pause. Venue choices happen fast. Sometimes too fast. One visit. One good feeling. Then a deposit.</p>
+        
+        <p>A wedding venue checklist helps slow that moment down. It gives you something solid to come back to when excitement takes over. Because venues don't just set the scene. They quietly control a lot of the day.</p>
+        
+        <p>Guest comfort. Budget pressure. Vendor limits. All of it ties back to where you choose to get married. So instead of chasing perfect, it helps to ask better questions.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Figure out the kind of wedding you want before touring</h2>
+        
+        <p>This part feels simple, but it's where many couples drift. You start touring before agreeing on the vibe. Then everything feels possible and confusing at the same time.</p>
+        
+        <p>Talk it out first. Indoor or outdoor. Relaxed or structured. Afternoon or evening.</p>
+        
+        <p>You don't need a vision board. You just need alignment. When you have that, some venues will immediately feel wrong. That's a good thing.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Your guest count is not flexible forever</h2>
+        
+        <p>Guest count shapes almost every venue decision. More than style. More than location.</p>
+        
+        <p>A space that feels perfect for 70 can feel tight at 95. Even if the venue says it fits.</p>
+        
+        <p>Ask what the space feels like at your number, not their maximum. If you're tracking guests already, this is where it becomes useful instead of theoretical.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Ask what you're actually paying for</h2>
+        
+        <p>Venue pricing can be misleading at first glance. A low base fee looks great until you zoom out.</p>
+        
+        <p>Ask what's included. Tables. Chairs. Staffing. Cleanup.</p>
+        
+        <p>If those things are extra, note it. It affects your budget tracking more than you expect.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Vendor rules matter earlier than you think</h2>
+        
+        <p>Some venues are open. Some are locked down.</p>
+        
+        <p>Ask if you can bring in your own vendors or if you're limited to a list. Ask about fees tied to outside vendors.</p>
+        
+        <p>This shapes flexibility. It also shapes cost. Keep these notes with your vendor organization so nothing gets missed later.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Walk the space like a guest would</h2>
+        
+        <p>This isn't about timing. It's about movement.</p>
+        
+        <p>Where do people arrive. Where do they sit. Where do they go after.</p>
+        
+        <p>If the flow feels awkward during a quiet tour, it won't magically improve with more people.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Weather plans deserve direct answers</h2>
+        
+        <p>Outdoor venues always come with optimism. And risk.</p>
+        
+        <p>Ask what happens if it rains. Ask where people go. Ask when that call is made.</p>
+        
+        <p>I once watched guests huddle under umbrellas because the backup space was still locked. The couple laughed it off. But the stress was real.</p>
+        
+        <p>A clear backup plan is peace of mind.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Accessibility is part of hospitality</h2>
+        
+        <p>This gets skipped more than it should.</p>
+        
+        <p>Think about grandparents. Think about mobility. Think about bathrooms and walking distance.</p>
+        
+        <p>A beautiful space should still feel welcoming. If it doesn't, that matters.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Location affects the entire experience</h2>
+        
+        <p>Remote venues can feel special. They can also add friction.</p>
+        
+        <p>Consider travel time. Parking. Where people stay.</p>
+        
+        <p>Sometimes convenience creates a better day than scenery alone.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Compare venues with notes, not memory</h2>
+        
+        <p>After a few tours, details blur. Everything starts to sound the same.</p>
+        
+        <p>Write things down right away. What felt good. What felt off.</p>
+        
+        <p>Keeping costs and vendor notes together helps remove some emotion. The right venue still feels good. It just also makes sense.</p>
+      `,
+      faqs: [
+        {
+          question: 'What is a wedding venue checklist',
+          answer: 'A wedding venue checklist is a way to remember important questions when viewing venues. It helps couples think beyond looks and focus on how the space actually works.'
+        },
+        {
+          question: 'When should couples start venue planning',
+          answer: 'Most couples start once they have a rough guest count and budget range. Venue availability often shapes everything else.'
+        },
+        {
+          question: 'How many venues should you look at',
+          answer: 'Three to five venues is common. Fewer can feel rushed. More can feel overwhelming.'
+        },
+        {
+          question: 'Should guest count be finalized before booking',
+          answer: 'It doesn\'t need to be perfect, but it should be realistic. Capacity limits are harder to adjust later.'
+        },
+        {
+          question: 'What venue details affect budget the most',
+          answer: 'What\'s included, vendor restrictions, and staffing requirements often add hidden costs. These matter more than base price alone.'
+        },
+        {
+          question: 'How does Hunnimoon help with venue decisions',
+          answer: 'Hunnimoon helps you track budgets and keep vendor details tied to each venue. This makes comparisons clearer over time.'
+        },
+        {
+          question: 'Can Hunnimoon help manage guests and RSVPs',
+          answer: 'Yes. Guest list management and RSVP management help you see how real numbers align with venue capacity.'
+        },
+        {
+          question: 'Is Hunnimoon useful after booking a venue',
+          answer: 'Yes. It helps keep vendor organization and budget tracking consistent as plans continue.'
+        }
+      ]
+    }
   }
 ]
 
