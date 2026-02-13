@@ -441,8 +441,19 @@ export default function LastMinuteWeddingChecklist() {
             type="date"
             value={weddingDate}
             onChange={(e) => setWeddingDate(e.target.value)}
+            placeholder="YYYY-MM-DD"
             className="w-full px-4 py-3 border-2 border-pink-primary/20 rounded-xl focus:border-pink-primary focus:outline-none text-pink-primary"
+            style={{
+              minHeight: '48px',
+              WebkitAppearance: 'none',
+              MozAppearance: 'none',
+              appearance: 'none',
+              colorScheme: 'light'
+            }}
           />
+          <p className="text-xs text-pink-primary/60 mt-1.5">
+            Tap to select your wedding date
+          </p>
         </div>
 
         {/* Wedding Type */}
