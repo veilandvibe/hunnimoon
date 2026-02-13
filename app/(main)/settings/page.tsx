@@ -6,7 +6,7 @@ import Card from '@/components/ui/Card'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import { useWedding } from '@/components/providers/WeddingProvider'
-import db from '@/lib/instant'
+import db, { RsvpSettings, InstantUser } from '@/lib/instant'
 import { Copy, Check, Calendar, User, LogOut, Loader2, HelpCircle, RotateCcw, X } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useTour } from '@/components/providers/TourContext'
@@ -41,8 +41,8 @@ export default function SettingsPage() {
     } : null
   )
   
-  const rsvpSettings = data?.rsvpSettings?.[0]
-  const userData = data?.$users?.[0]
+  const rsvpSettings = (data?.rsvpSettings as RsvpSettings[] | undefined)?.[0]
+  const userData = (data?.$users as InstantUser[] | undefined)?.[0]
   
   const [weddingDetails, setWeddingDetails] = useState({
     partner1_name: '',

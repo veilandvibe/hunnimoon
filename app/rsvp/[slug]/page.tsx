@@ -8,7 +8,7 @@ import Select from '@/components/ui/Select'
 import Textarea from '@/components/ui/Textarea'
 import Card from '@/components/ui/Card'
 import PasswordPrompt from '@/components/rsvp/PasswordPrompt'
-import db from '@/lib/instant'
+import db, { Wedding, Guest, RsvpSettings } from '@/lib/instant'
 import { Heart, Check, Loader2 } from 'lucide-react'
 import { id } from '@instantdb/react'
 import toast from 'react-hot-toast'
@@ -30,7 +30,7 @@ export default function RSVPPage() {
     },
   })
 
-  const wedding = data?.weddings?.[0]
+  const wedding = ((data?.weddings as (Wedding & { guests?: Guest[], rsvpSettings?: RsvpSettings })[] | undefined) || [])[0]
   const weddingGuests = wedding?.guests || []
   const rsvpSettings = wedding?.rsvpSettings
 

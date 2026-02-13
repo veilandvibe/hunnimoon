@@ -10,7 +10,7 @@ import Textarea from '@/components/ui/Textarea'
 import RSVPChart from '@/components/dashboard/RSVPChart'
 import LoadingSpinner from '@/components/ui/LoadingSpinner'
 import { useWedding } from '@/components/providers/WeddingProvider'
-import db from '@/lib/instant'
+import db, { Guest, RsvpSettings } from '@/lib/instant'
 import { id } from '@instantdb/react'
 import { Copy, Check, ExternalLink, Users, Settings, ClipboardCheck } from 'lucide-react'
 import toast from 'react-hot-toast'
@@ -43,8 +43,8 @@ export default function RSVPManagerPage() {
     } : null
   )
 
-  const guests = data?.guests || []
-  const rsvpSettings = data?.rsvpSettings?.[0]
+  const guests = (data?.guests as Guest[] | undefined) || []
+  const rsvpSettings = (data?.rsvpSettings as RsvpSettings[] | undefined)?.[0]
   
   // Local state for form settings
   const [passwordProtected, setPasswordProtected] = useState(false)

@@ -8,7 +8,7 @@ import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import ConfirmDialog from '@/components/ui/ConfirmDialog'
 import { useWedding } from '@/components/providers/WeddingProvider'
-import db from '@/lib/instant'
+import db, { BudgetItem } from '@/lib/instant'
 import { id } from '@instantdb/react'
 import toast from 'react-hot-toast'
 import { useReadOnly } from '@/lib/use-read-only'
@@ -31,7 +31,7 @@ export default function BudgetPage() {
     } : null
   )
   
-  const budgetItems = data?.budgetItems || []
+  const budgetItems = (data?.budgetItems as BudgetItem[] | undefined) || []
   
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<any | null>(null)

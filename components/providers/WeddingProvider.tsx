@@ -1,10 +1,10 @@
 'use client'
 
 import { createContext, useContext, ReactNode } from 'react'
-import db from '@/lib/instant'
+import db, { Wedding } from '@/lib/instant'
 
 interface WeddingContextType {
-  wedding: any | null
+  wedding: Wedding | null
   isLoading: boolean
 }
 
@@ -23,7 +23,7 @@ export function WeddingProvider({ children }: { children: ReactNode }) {
       }
     } : null
   )
-  const wedding = data?.weddings?.[0] || null
+  const wedding = ((data?.weddings as Wedding[] | undefined) || [])[0] || null
   
   return (
     <WeddingContext.Provider value={{ wedding, isLoading }}>

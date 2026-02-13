@@ -8,7 +8,7 @@ import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import LoadingSpinner from '@/components/ui/LoadingSpinner'
 import { useWedding } from '@/components/providers/WeddingProvider'
-import db from '@/lib/instant'
+import db, { Guest, BudgetItem } from '@/lib/instant'
 import { Users, ClipboardList } from 'lucide-react'
 import Link from 'next/link'
 
@@ -45,8 +45,8 @@ export default function DashboardPage() {
     )
   }
 
-  const guests = data?.guests || []
-  const budgetItems = data?.budgetItems?.filter((item: any) => item.is_active) || []
+  const guests = (data?.guests as Guest[] | undefined) || []
+  const budgetItems = ((data?.budgetItems as BudgetItem[] | undefined) || []).filter((item) => item.is_active)
 
   // Calculate metrics
   const totalGuests = guests.length
@@ -78,9 +78,9 @@ export default function DashboardPage() {
       {/* Countdown Timer */}
       <div data-tour="countdown">
         <CountdownTimer
-          weddingDate={wedding.wedding_date}
-          partner1Name={wedding.partner1_name}
-          partner2Name={wedding.partner2_name}
+          weddingDate={wedding.wedding_date || ''}
+          partner1Name={wedding.partner1_name || ''}
+          partner2Name={wedding.partner2_name || ''}
         />
       </div>
 

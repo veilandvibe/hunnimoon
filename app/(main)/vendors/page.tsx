@@ -8,7 +8,7 @@ import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import ConfirmDialog from '@/components/ui/ConfirmDialog'
 import { useWedding } from '@/components/providers/WeddingProvider'
-import db from '@/lib/instant'
+import db, { Vendor } from '@/lib/instant'
 import { id } from '@instantdb/react'
 import toast from 'react-hot-toast'
 import { useReadOnly } from '@/lib/use-read-only'
@@ -31,7 +31,7 @@ export default function VendorsPage() {
     } : null
   )
   
-  const vendors = data?.vendors || []
+  const vendors = (data?.vendors as Vendor[] | undefined) || []
   
   const [searchQuery, setSearchQuery] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)

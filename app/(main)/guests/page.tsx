@@ -12,7 +12,7 @@ import Select from '@/components/ui/Select'
 import ConfirmDialog from '@/components/ui/ConfirmDialog'
 import { RSVPStatus, Side } from '@/lib/dummyData'
 import { useWedding } from '@/components/providers/WeddingProvider'
-import db from '@/lib/instant'
+import db, { Guest } from '@/lib/instant'
 import { getSideLabel } from '@/lib/sideLabels'
 import { id } from '@instantdb/react'
 import { ParsedGuest } from '@/lib/guestParser'
@@ -37,7 +37,7 @@ export default function GuestsPage() {
     } : null
   )
   
-  const guests = data?.guests || []
+  const guests = (data?.guests as Guest[] | undefined) || []
   
   const [searchQuery, setSearchQuery] = useState('')
   const [filterStatus, setFilterStatus] = useState<RSVPStatus | 'All'>('All')
