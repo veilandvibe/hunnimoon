@@ -437,22 +437,29 @@ export default function LastMinuteWeddingChecklist() {
           <label className="block text-sm font-semibold text-pink-primary mb-2">
             Wedding Date <span className="text-red-500">*</span>
           </label>
-          <input
-            type="date"
-            value={weddingDate}
-            onChange={(e) => setWeddingDate(e.target.value)}
-            placeholder="YYYY-MM-DD"
-            className="w-full px-4 py-3 border-2 border-pink-primary/20 rounded-xl focus:border-pink-primary focus:outline-none text-pink-primary"
-            style={{
-              minHeight: '48px',
-              WebkitAppearance: 'none',
-              MozAppearance: 'none',
-              appearance: 'none',
-              colorScheme: 'light'
-            }}
-          />
-          <p className="text-xs text-pink-primary/60 mt-1.5">
-            Tap to select your wedding date
+          <div className="relative">
+            <input
+              type="date"
+              value={weddingDate}
+              onChange={(e) => setWeddingDate(e.target.value)}
+              placeholder="YYYY-MM-DD"
+              className="w-full px-4 py-3 border-2 border-pink-primary/20 rounded-xl focus:border-pink-primary focus:outline-none text-pink-primary"
+              style={{
+                minHeight: '48px',
+                WebkitAppearance: 'none',
+                MozAppearance: 'none',
+                appearance: 'none',
+                colorScheme: 'light'
+              }}
+            />
+            {!weddingDate && (
+              <div className="absolute inset-0 flex items-center px-4 pointer-events-none">
+                <span className="text-pink-primary/40 text-base">YYYY-MM-DD</span>
+              </div>
+            )}
+          </div>
+          <p className="text-sm text-pink-primary/70 mt-2 font-medium">
+            📅 Tap the field above to select your wedding date
           </p>
         </div>
 
