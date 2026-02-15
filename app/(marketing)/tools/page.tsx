@@ -53,12 +53,13 @@ export default function ToolsPage() {
             key={tool.slug}
             className="bg-white rounded-2xl p-6 border-2 border-pink-primary/10 hover:border-pink-primary/30 transition-all hover:shadow-lg"
           >
-            {/* Tool Icon/Image Placeholder */}
-            <div className="w-16 h-16 bg-pink-light rounded-xl flex items-center justify-center mb-4">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 8V12L15 15" stroke="#CB1F70" strokeWidth="2" strokeLinecap="round"/>
-                <circle cx="12" cy="12" r="9" stroke="#CB1F70" strokeWidth="2"/>
-              </svg>
+            {/* Tool Image */}
+            <div className="w-full aspect-[4/3] rounded-xl overflow-hidden mb-4">
+              <img 
+                src={tool.image} 
+                alt={tool.name}
+                className="w-full h-full object-cover"
+              />
             </div>
 
             {/* Category Badge */}

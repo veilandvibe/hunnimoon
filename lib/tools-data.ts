@@ -30,7 +30,7 @@ export const tools: Tool[] = [
     description: 'Wedding timeline generator tools show the general flow of wedding planning from getting engaged through the wedding day. They help couples understand timing without constantly second guessing.',
     category: 'timeline',
     component: 'WeddingTimelineGenerator',
-    image: '/images/tools/wedding-timeline-generator.svg',
+    image: '/Wedding Timeline Generator.png',
     metaDescription: 'Wedding timeline generator that shows the planning flow from engagement to the wedding day in a clear, realistic way.',
     seoContent: {
       h2: 'How to think through your wedding planning timeline without losing your mind',
@@ -202,7 +202,7 @@ export const tools: Tool[] = [
     description: 'A wedding day timeline generator lays out how your wedding day unfolds hour by hour. It helps you see the full picture without guessing what comes next.',
     category: 'timeline',
     component: 'WeddingDayTimelineGenerator',
-    image: '/images/tools/wedding-day-timeline-generator.svg',
+    image: '/Wedding Day Timeline Generator.png',
     metaDescription: 'A wedding day timeline generator helps you plan your wedding day flow from morning to night without stress.',
     seoContent: {
       h2: 'How to map out your wedding day so it actually feels calm',
@@ -352,7 +352,7 @@ export const tools: Tool[] = [
     description: 'Wedding Reception Timeline Generator helps you map out the flow of your reception so the night makes sense. It turns a rough idea of events into a clear order you can actually picture.',
     category: 'timeline',
     component: 'WeddingReceptionTimelineGenerator',
-    image: '/images/tools/wedding-reception-timeline-generator.svg',
+    image: '/Wedding Reception Timeline Generator.png',
     metaDescription: 'Wedding Reception Timeline Generator helps you plan the flow of your reception so dinner, speeches, and dancing feel natural.',
     seoContent: {
       h2: 'How to Build a Wedding Reception Timeline That Actually Works',
@@ -484,7 +484,7 @@ export const tools: Tool[] = [
     description: 'The wedding ceremony vows writer supports couples as they write personal vows for their wedding ceremony. It gives structure without taking over your words.',
     category: 'planning',
     component: 'WeddingVowsWriter',
-    image: '/images/tools/wedding-vows-writer.svg',
+    image: '/Wedding Ceremony Vows Writer.png',
     metaDescription: 'A wedding ceremony vows writer helps couples write clear, personal vows without pressure or overthinking.',
     seoContent: {
       h2: 'A simple way to write wedding vows that actually sound like you',
@@ -624,6 +624,7 @@ export const tools: Tool[] = [
     description: 'The wedding hashtags free generator helps couples create simple hashtags that fit their names and wedding vibe.',
     category: 'planning',
     component: 'WeddingHashtagsGenerator',
+    image: '/Wedding Hashtags Free Generator.png',
     metaDescription: 'A wedding hashtags free generator helps couples create clear hashtags without overthinking names or spelling.',
     seoContent: {
       h2: 'A simple way to come up with wedding hashtags without overthinking it',
@@ -755,6 +756,7 @@ export const tools: Tool[] = [
     description: 'A wedding decor checklist is a simple way to organize visual details for your ceremony and reception. It helps you see what you need without holding everything in your head.',
     category: 'planning',
     component: 'WeddingDecorChecklist',
+    image: '/Wedding Decor Checklist.png',
     metaDescription: 'A wedding decor checklist helps you plan visual details without forgetting the small things.',
     seoContent: {
       h2: 'How to think through your wedding decor without missing the small stuff',
@@ -903,11 +905,12 @@ export const tools: Tool[] = [
   },
   {
     slug: 'alcohol-wedding-calculator',
-    name: 'Alcohol wedding calculator',
+    name: 'Alcohol Wedding Calculator',
     h1: 'Alcohol wedding calculator',
     description: 'An alcohol wedding calculator helps you estimate how much beer, wine, and spirits to buy based on your guest list. It takes some of the guesswork out of bar planning so you do not overspend or run out.',
     category: 'budget',
     component: 'WeddingAlcoholCalculator',
+    image: '/Alcohol Wedding Calculator.png',
     metaDescription: 'An alcohol wedding calculator helps estimate how much beer, wine, and spirits you need based on guest count and time.',
     seoContent: {
       h2: 'How to figure out how much alcohol you actually need for a wedding',
@@ -1047,7 +1050,7 @@ export const tools: Tool[] = [
     description: 'A last minute wedding checklist helps you catch the things that usually slip through right before the big day. It\'s about staying calm, not perfect, when time is tight.',
     category: 'planning',
     component: 'LastMinuteWeddingChecklist',
-    image: '/images/tools/last-minute-wedding-checklist.svg',
+    image: '/Last Minute Wedding Checklist.png',
     metaDescription: 'A last minute wedding checklist helps you focus on final details like guests, vendors, and budgets without adding extra pressure.',
     seoContent: {
       h2: 'What to actually focus on when your wedding is right around the corner',
@@ -1205,7 +1208,7 @@ export const tools: Tool[] = [
     description: 'A wedding venue checklist keeps venue decisions grounded in real details instead of gut feelings alone. It helps couples compare spaces without second guessing later.',
     category: 'planning',
     component: 'WeddingVenueChecklist',
-    image: '/images/tools/wedding-venue-checklist.svg',
+    image: '/Wedding Venue Checklist.png',
     metaDescription: 'A wedding venue checklist helps couples compare spaces, costs, and rules before committing to a location.',
     seoContent: {
       h2: 'What couples forget to ask when choosing a wedding venue',
@@ -1333,6 +1336,7 @@ export const tools: Tool[] = [
     description: 'A bridal shower checklist helps keep shower planning organized from the first idea to the final clean-up. It\'s a simple way to track details, spending, and confirmations in one place.',
     category: 'planning',
     component: 'BridalShowerChecklist',
+    image: '/Bridal Shower Checklist.png',
     metaDescription: 'A bridal shower checklist helps hosts plan guests, food, spending, and supplies in one place without missing details.',
     seoContent: {
       h2: 'A calmer way to plan a bridal shower without missing things',
@@ -1584,7 +1588,7 @@ export const tools: Tool[] = [
     description: 'A bridal checklist helps a bride keep track of everything she needs to do, buy, schedule, and confirm before the wedding. It keeps all those small but important details in one place.',
     category: 'planning',
     component: 'BridalChecklist',
-    image: '/images/tools/bridal-checklist.svg',
+    image: '/Bridal Checklist.png',
     metaDescription: 'A bridal checklist helps brides track tasks, purchases, and appointments in one clear, organized list.',
     seoContent: {
       h2: 'How to keep your wedding to-dos in one simple place',
