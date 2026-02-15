@@ -1325,6 +1325,257 @@ export const tools: Tool[] = [
         }
       ]
     }
+  },
+  {
+    slug: 'bridal-shower-checklist',
+    name: 'Bridal Shower Checklist',
+    h1: 'Bridal Shower Checklist',
+    description: 'A bridal shower checklist helps keep shower planning organized from the first idea to the final clean-up. It\'s a simple way to track details, spending, and confirmations in one place.',
+    category: 'planning',
+    component: 'BridalShowerChecklist',
+    metaDescription: 'A bridal shower checklist helps hosts plan guests, food, spending, and supplies in one place without missing details.',
+    seoContent: {
+      h2: 'A calmer way to plan a bridal shower without missing things',
+      content: `
+        <p>A bridal shower checklist sounds like something you'd print and forget. I get it.</p>
+        
+        <p>But showers have a funny way of feeling easy until they're suddenly not.</p>
+        
+        <p>You're picking a date. Then someone can't make it. Then you're looking at venues. Then you're comparing food. Then you're asking, wait, who's bringing plates.</p>
+        
+        <p>That's the moment a bridal shower checklist starts earning its keep.</p>
+        
+        <p>Not because it's fancy. Because it catches the stuff you don't want to carry in your head.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Why showers get messy fast</h2>
+        
+        <p>A bridal shower is usually smaller than the wedding.</p>
+        
+        <p>So people assume it'll be simple.</p>
+        
+        <p>But a smaller event can actually be harder in one way. It often has fewer "systems."</p>
+        
+        <p>No one is assigned to anything. Everyone is vaguely helping. That's where things get dropped.</p>
+        
+        <p>This sounds obvious, but vague help creates vague outcomes.</p>
+        
+        <p>A bridal shower checklist turns vague into clear.</p>
+        
+        <p>Even if it's just for you.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Decide the basics before you buy anything</h2>
+        
+        <p>If you do nothing else, decide these early: date, time, location.</p>
+        
+        <p>Also, who is actually hosting.</p>
+        
+        <p>Hosting can mean planning. It can mean paying. It can mean both.</p>
+        
+        <p>It's worth saying out loud, even if it feels awkward.</p>
+        
+        <p>Because everything hangs on those basics.</p>
+        
+        <p>Space affects guest count.</p>
+        
+        <p>Guest count affects food.</p>
+        
+        <p>Food affects budget.</p>
+        
+        <p>A bridal shower checklist is where you write those decisions down so you stop revisiting them every day.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Guest list stuff can get sensitive</h2>
+        
+        <p>This part is more emotional than people expect.</p>
+        
+        <p>Who gets invited to a shower can feel personal. Sometimes it is personal.</p>
+        
+        <p>Start by checking what the bride wants.</p>
+        
+        <p>Then check what makes sense for the space and budget.</p>
+        
+        <p>If the couple is already organizing names somewhere, pull from that.</p>
+        
+        <p>Guest list management helps prevent accidental omissions and double invites.</p>
+        
+        <p>It also helps when multiple hosts are texting different people.</p>
+        
+        <p>A bridal shower checklist doesn't solve feelings, but it keeps details from becoming drama.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Budget is the quiet boss of everything</h2>
+        
+        <p>People love planning the "cute" parts first.</p>
+        
+        <p>I get it. Decorations are the fun part.</p>
+        
+        <p>But budget decides what's realistic.</p>
+        
+        <p>So set a rough number early, even if it's not perfect.</p>
+        
+        <p>Include food, drinks, space costs, supplies, and a little buffer.</p>
+        
+        <p>This sounds obvious, but "a little buffer" saves you later.</p>
+        
+        <p>Budget tracking makes it easier to see where money is going as you buy things in small chunks.</p>
+        
+        <p>Because it's never one big purchase. It's a hundred little ones.</p>
+        
+        <p>A bridal shower checklist can hold the list of buys, but the budget needs a place to live too.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Food planning should be realistic, not impressive</h2>
+        
+        <p>Food is where people spiral.</p>
+        
+        <p>What if it's not enough. What if it's too much. What if it looks plain.</p>
+        
+        <p>Here's the thing. Guests remember how they felt, not whether the fruit was cut into hearts.</p>
+        
+        <p>Pick a style that matches the event. Brunch. Snacks. Light lunch. Dessert table.</p>
+        
+        <p>Make it easy to serve.</p>
+        
+        <p>If you're ordering from someone, vendor organization helps keep messages, prices, and pickup times clear.</p>
+        
+        <p>Write down who is collecting food and when.</p>
+        
+        <p>That tiny detail is what people forget.</p>
+        
+        <p>A bridal shower checklist is great for this, because it's the kind of detail that disappears in group chats.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Decorations are optional, but coordination helps</h2>
+        
+        <p>You can throw a lovely shower with minimal décor.</p>
+        
+        <p>Truly.</p>
+        
+        <p>If you want a theme, keep it simple so it doesn't create extra shopping.</p>
+        
+        <p>Pick one main color direction.</p>
+        
+        <p>Pick one focal spot for photos if you care about that.</p>
+        
+        <p>Everything else can be basic.</p>
+        
+        <p>This sounds obvious, but "basic" is not the same as "bad."</p>
+        
+        <p>Basic can be calm.</p>
+        
+        <p>And calm is the goal.</p>
+        
+        <p>A bridal shower checklist helps you avoid buying five versions of the same thing because you forgot what you already ordered.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">RSVPs change the whole plan</h2>
+        
+        <p>You don't need an exact number the first week.</p>
+        
+        <p>But you do need a way to track responses.</p>
+        
+        <p>Because everything is based on attendance.</p>
+        
+        <p>Food amounts. Seating. Favors. Space.</p>
+        
+        <p>RSVP management keeps replies from getting lost in texts.</p>
+        
+        <p>And it makes follow-ups less awkward because you're not guessing who responded.</p>
+        
+        <p>You're looking at a list.</p>
+        
+        <p>A bridal shower checklist can remind you when to follow up, but tracking the replies cleanly is the real relief.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">The tiny items people forget until it hurts</h2>
+        
+        <p>Okay. The unglamorous part.</p>
+        
+        <p>Ice. Trash bags. Paper towels.</p>
+        
+        <p>Serving spoons. A lighter for candles. Tape.</p>
+        
+        <p>Extra cups. A phone charger. A pen for cards.</p>
+        
+        <p>I once showed up to help set up a shower where everything looked cute, but no one brought scissors.</p>
+        
+        <p>We used keys. It was fine. It was also ridiculous.</p>
+        
+        <p>That's what a bridal shower checklist prevents.</p>
+        
+        <p>Not big disasters. Little annoyances that steal your mood.</p>
+        
+        <p>Write down the boring stuff. It's the stuff that saves you.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Day-of flow without turning it into a production</h2>
+        
+        <p>You don't need a strict schedule.</p>
+        
+        <p>You just need a rough order so the day feels smooth.</p>
+        
+        <p>People arrive. Food comes out. Activities happen or they don't. Gifts happen if the bride wants that.</p>
+        
+        <p>Then clean-up.</p>
+        
+        <p>Assign two or three small roles so it's not all on one person.</p>
+        
+        <p>Who handles food setup.</p>
+        
+        <p>Who keeps an eye on drinks.</p>
+        
+        <p>Who is the point person if the venue calls.</p>
+        
+        <p>This sounds obvious, but role clarity is kindness.</p>
+        
+        <p>A bridal shower checklist works like a shared memory. You don't have to be the only one remembering.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Where Hunnimoon fits into the bigger picture</h2>
+        
+        <p>Even though a bridal shower is its own event, it overlaps with wedding planning a lot.</p>
+        
+        <p>Names overlap. Budgets overlap. Vendors overlap sometimes too.</p>
+        
+        <p>That's why it helps when the basics are already organized.</p>
+        
+        <p>Hunnimoon supports guest list management, so you can keep names and contact details tidy when multiple events are happening.</p>
+        
+        <p>Hunnimoon supports RSVP management, which helps when responses come in through different channels.</p>
+        
+        <p>Hunnimoon supports vendor organization, so the details with food or rentals don't get buried.</p>
+        
+        <p>And Hunnimoon supports budget tracking, which is helpful when "small event spending" starts adding up.</p>
+        
+        <p>A bridal shower checklist keeps shower details from slipping. The rest of your planning tools keep the overall process steadier.</p>
+      `,
+      faqs: [
+        {
+          question: 'What is a bridal shower checklist',
+          answer: 'It\'s a planning list that helps you track what needs to be decided, bought, and confirmed before the shower. It keeps details from living in scattered texts. It\'s mainly about staying organized, not being perfect.'
+        },
+        {
+          question: 'When should I start using a bridal shower checklist',
+          answer: 'As soon as the date and host are decided is ideal. Even a simple list early prevents rushed decisions later. You can always add more items as the plan takes shape.'
+        },
+        {
+          question: 'Who is supposed to plan the bridal shower',
+          answer: 'Usually a close friend or family member hosts, sometimes as a group. The bride can share preferences, but the host typically runs the planning. Clear roles help a lot.'
+        },
+        {
+          question: 'What should be included on a bridal shower checklist',
+          answer: 'Include the basics like date, location, guest list, food plan, and supplies. Add confirmations like pickup times or rental delivery windows. Don\'t forget the boring items like ice and trash bags.'
+        },
+        {
+          question: 'How do you track shower RSVPs without losing your mind',
+          answer: 'Keep responses in one place instead of relying on memory or scattered messages. RSVP management makes follow-up easier because you can see who hasn\'t replied. It also helps you plan food with more confidence.'
+        },
+        {
+          question: 'Can I use Hunnimoon to help with shower guest planning',
+          answer: 'Yes, Hunnimoon\'s guest list management helps keep names and contact details organized. That makes it easier when invites and updates are happening across multiple events. It also reduces accidental duplicates.'
+        },
+        {
+          question: 'Does Hunnimoon help with shower spending',
+          answer: 'It can, since Hunnimoon includes budget tracking. Shower costs can creep up through small purchases, so tracking them helps you stay grounded. It\'s especially useful when wedding expenses are happening at the same time.'
+        },
+        {
+          question: 'How can Hunnimoon help if multiple people are hosting',
+          answer: 'Hunnimoon supports vendor organization and RSVP management, which helps when details are shared across a group. It keeps information from getting lost in chats. That clarity makes planning feel less chaotic.'
+        }
+      ]
+    }
   }
 ]
 
