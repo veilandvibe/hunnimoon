@@ -16,6 +16,7 @@ import WeddingAlcoholCalculator from '@/components/tools/WeddingAlcoholCalculato
 import LastMinuteWeddingChecklist from '@/components/tools/LastMinuteWeddingChecklist'
 import WeddingVenueChecklist from '@/components/tools/WeddingVenueChecklist'
 import BridalShowerChecklist from '@/components/tools/BridalShowerChecklist'
+import BridalChecklist from '@/components/tools/BridalChecklist'
 
 // Map component names to actual components
 const toolComponents: Record<string, React.ComponentType> = {
@@ -29,6 +30,7 @@ const toolComponents: Record<string, React.ComponentType> = {
   LastMinuteWeddingChecklist,
   WeddingVenueChecklist,
   BridalShowerChecklist,
+  BridalChecklist,
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {

@@ -1576,6 +1576,218 @@ export const tools: Tool[] = [
         }
       ]
     }
+  },
+  {
+    slug: 'bridal-checklist',
+    name: 'Bridal Checklist',
+    h1: 'Bridal Checklist',
+    description: 'A bridal checklist helps a bride keep track of everything she needs to do, buy, schedule, and confirm before the wedding. It keeps all those small but important details in one place.',
+    category: 'planning',
+    component: 'BridalChecklist',
+    image: '/images/tools/bridal-checklist.svg',
+    metaDescription: 'A bridal checklist helps brides track tasks, purchases, and appointments in one clear, organized list.',
+    seoContent: {
+      h2: 'How to keep your wedding to-dos in one simple place',
+      content: `
+        <p>The bridal checklist sounds basic. It's just a list, right. But once you're actually planning a wedding, it becomes something else.</p>
+        
+        <p>It becomes the place your brain can rest.</p>
+        
+        <p>When you're engaged, people assume you're excited all the time. Sometimes you are. Sometimes you're just trying to remember if you booked your hair trial.</p>
+        
+        <p>That's where a bridal checklist helps. It holds everything in one spot so you don't have to.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Why your brain can't keep it all</h2>
+        
+        <p>There are more moving pieces than you expect.</p>
+        
+        <p>Dress fittings. Shoes. Alterations. Jewelry.</p>
+        
+        <p>Hair. Makeup. Trials. Confirmations.</p>
+        
+        <p>Then the little things. Undergarments. Emergency kit items. Gifts.</p>
+        
+        <p>This sounds obvious, but the volume adds up fast.</p>
+        
+        <p>You can't rely on memory once it gets busy.</p>
+        
+        <p>Writing things down is not overreacting. It's practical.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">What actually belongs on a bridal list</h2>
+        
+        <p>A lot of brides start with big items.</p>
+        
+        <p>Find a dress. Book makeup. Choose shoes.</p>
+        
+        <p>But the smaller pieces matter just as much.</p>
+        
+        <p>Confirm alteration dates.</p>
+        
+        <p>Pick up the dress.</p>
+        
+        <p>Steam it if needed.</p>
+        
+        <p>Break in the shoes.</p>
+        
+        <p>Pack touch-up products.</p>
+        
+        <p>The bridal checklist isn't just about decisions. It's about follow-through.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Keeping it personal instead of generic</h2>
+        
+        <p>Every bride's list looks different.</p>
+        
+        <p>Some are planning locally. Some are traveling.</p>
+        
+        <p>Some are changing outfits mid-reception.</p>
+        
+        <p>Some are keeping it simple.</p>
+        
+        <p>Here's the thing. Your list should reflect your actual wedding, not someone else's template.</p>
+        
+        <p>If something doesn't apply to you, remove it.</p>
+        
+        <p>If something feels important, add it.</p>
+        
+        <p>This is your list. Not a performance.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">The emotional side no one mentions</h2>
+        
+        <p>Planning isn't just logistics. It's emotional too.</p>
+        
+        <p>There are moments when everything feels exciting.</p>
+        
+        <p>There are moments when everything feels heavy.</p>
+        
+        <p>On heavy days, small tasks feel bigger than they are.</p>
+        
+        <p>I remember a bride who almost cried over forgetting to order a veil.</p>
+        
+        <p>It wasn't about the veil.</p>
+        
+        <p>It was about feeling behind.</p>
+        
+        <p>A bridal checklist doesn't fix emotions. But it gives structure when things feel messy.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Buying without forgetting</h2>
+        
+        <p>Wedding purchases rarely happen all at once.</p>
+        
+        <p>You buy the dress months ahead.</p>
+        
+        <p>You buy accessories later.</p>
+        
+        <p>Then undergarments closer to the fitting.</p>
+        
+        <p>Then something you forgot the week before.</p>
+        
+        <p>Tracking purchases in one place keeps you from double buying.</p>
+        
+        <p>It also helps when you're looking at budget tracking overall.</p>
+        
+        <p>Small items add up. Fast.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Appointments and confirmations</h2>
+        
+        <p>Appointments are easy to schedule.</p>
+        
+        <p>They're easier to forget.</p>
+        
+        <p>Hair trials. Makeup trials. Final fittings.</p>
+        
+        <p>Follow-up messages.</p>
+        
+        <p>Confirm times the week of.</p>
+        
+        <p>This sounds obvious, but writing down confirmation reminders prevents last-minute stress.</p>
+        
+        <p>It keeps everything visible.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">How it connects to the rest of planning</h2>
+        
+        <p>Your bridal checklist doesn't exist in isolation.</p>
+        
+        <p>It connects to guest list management when you're planning showers or events.</p>
+        
+        <p>It connects to RSVP management when you're confirming attendance for beauty appointments around key dates.</p>
+        
+        <p>Vendor organization matters when you're coordinating dress deliveries or styling services.</p>
+        
+        <p>Budget tracking matters when small beauty purchases start stacking up.</p>
+        
+        <p>Everything touches something else.</p>
+        
+        <p>Seeing that clearly helps you breathe.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">Avoiding perfection pressure</h2>
+        
+        <p>Social media makes bridal prep look polished.</p>
+        
+        <p>It rarely is.</p>
+        
+        <p>Most brides are juggling work, family, and planning at the same time.</p>
+        
+        <p>You don't need a flawless system.</p>
+        
+        <p>You need something you'll actually use.</p>
+        
+        <p>If that's a simple list you check at night, that's enough.</p>
+        
+        <p>Consistency beats perfection.</p>
+        
+        <h2 class="text-2xl font-bold text-pink-primary mt-10 mb-4">One place feels lighter</h2>
+        
+        <p>Scattered notes create scattered stress.</p>
+        
+        <p>One clear list creates calm.</p>
+        
+        <p>Not because it removes tasks.</p>
+        
+        <p>Because it makes them visible.</p>
+        
+        <p>When you can see everything, you can prioritize.</p>
+        
+        <p>When you can prioritize, you stop spiraling.</p>
+        
+        <p>A bridal checklist isn't glamorous.</p>
+        
+        <p>But it makes the process steadier.</p>
+      `,
+      faqs: [
+        {
+          question: 'What is a bridal checklist',
+          answer: 'It\'s a list that tracks everything a bride needs to do, buy, schedule, or confirm before the wedding. It keeps personal tasks in one place. It helps reduce mental overload.'
+        },
+        {
+          question: 'When should I start my bridal checklist',
+          answer: 'As soon as you begin planning. Early tracking prevents forgotten details later. You can always adjust it as plans change.'
+        },
+        {
+          question: 'What should I include on my bridal checklist',
+          answer: 'Include dress appointments, accessory purchases, beauty trials, and confirmations. Add anything specific to your ceremony or reception. The list should match your wedding.'
+        },
+        {
+          question: 'How detailed should a bridal checklist be',
+          answer: 'Detailed enough that you don\'t rely on memory. Small reminders help more than you think. If you tend to forget confirmations, include them.'
+        },
+        {
+          question: 'Does a bridal checklist help with budgeting',
+          answer: 'Yes, especially for beauty and outfit purchases. Tracking small items makes budget tracking more accurate. It prevents surprise expenses.'
+        },
+        {
+          question: 'How does Hunnimoon support bridal planning',
+          answer: 'Hunnimoon keeps guest list management, RSVP management, vendor organization, and budget tracking in one place. That structure supports personal planning too.'
+        },
+        {
+          question: 'Can I connect my bridal checklist to Hunnimoon',
+          answer: 'Yes, many brides use it alongside their guest list management and budget tracking. Keeping everything organized reduces stress across the board.'
+        },
+        {
+          question: 'Why does staying organized matter so much before a wedding',
+          answer: 'Organization lowers mental load. When guest details, vendors, and spending are clear, your personal planning feels lighter. It all connects.'
+        }
+      ]
+    }
   }
 ]
 
